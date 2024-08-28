@@ -2,6 +2,7 @@ package dev.slne.spawn.trader.command;
 
 import dev.slne.spawn.trader.SpawnTrader;
 import dev.slne.spawn.trader.entity.impl.TraderBukkitEntity;
+import dev.slne.spawn.trader.entity.impl.TraderNPC;
 import dev.slne.spawn.trader.user.User;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,7 +30,8 @@ public class SpawnTraderCommand implements CommandExecutor, TabCompleter {
                     user.sendMessage("Reload complete.");
                 } else if (args[0].equalsIgnoreCase("spawn")) {
                     if (SpawnTrader.instance().citizens()) {
-                        //TODO: Spawn NPC Trader
+                        new TraderNPC().spawn(player.getX(), player.getY(), player.getZ());
+
                         User.user(player).sendMessage("Der Citizens-Trade-NPC wurde gespawnt.");
                     } else {
                         new TraderBukkitEntity().spawn(player.getX(), player.getY(), player.getZ());
@@ -38,7 +40,8 @@ public class SpawnTraderCommand implements CommandExecutor, TabCompleter {
                     }
                 } else if (args[0].equalsIgnoreCase("clear")) {
                     if (SpawnTrader.instance().citizens()) {
-                        //TODO: Clear NPC Trader
+                        new TraderNPC().clear();
+
                         user.sendMessage("Die Citizens-Trade-NPCs wurden entfernt.");
                     } else {
                         new TraderBukkitEntity().clear();

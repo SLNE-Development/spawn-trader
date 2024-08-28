@@ -77,7 +77,4 @@ public class SpawnTrader extends JavaPlugin {
 			this.saveResource("storage.yml", false);
 		}
 	}
-
-
-	//TODO: Cooldown is ressetted when reopen inv [BUG]
 }
