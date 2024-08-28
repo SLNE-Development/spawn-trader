@@ -2,6 +2,7 @@ package dev.slne.spawn.trader.entity;
 
 import dev.slne.spawn.trader.SpawnTrader;
 import dev.slne.spawn.trader.entity.impl.TraderBukkitEntity;
+import dev.slne.spawn.trader.entity.impl.TraderNPC;
 import dev.slne.spawn.trader.user.User;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
@@ -16,6 +17,12 @@ public class EntityInteractListener implements Listener {
 
         if(entity.getScoreboardTags().contains(new TraderBukkitEntity().ENTITY_TAG())){
             SpawnTrader.instance().spawnTraderInterface().open(user.player());
+            return;
+        }
+
+        if(entity.getScoreboardTags().contains(new TraderNPC().ENTITY_TAG())){
+            SpawnTrader.instance().spawnTraderInterface().open(user.player());
+            return;
         }
     }
 }
