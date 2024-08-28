@@ -18,13 +18,21 @@ repositories {
         name = "papermc-repo"
     }
 
-    maven("https://repo.slne.dev/repository/maven-external-developers/") {
-        name = "maven-external-developers"
+    maven ("https://maven.citizensnpcs.co/repo") {
+        name = "citizens-repo"
     }
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
+    compileOnly("org.projectlombok:lombok:1.18.30")
+    compileOnly("net.citizensnpcs:citizens-main:2.0.35-SNAPSHOT"){
+        exclude( "*", "*")
+    }
+
+    annotationProcessor("org.projectlombok:lombok:1.18.30");
+    implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.17")
+
 //    compileOnly("dev.slne:surf-transaction-api:1.21+")
 }
 
