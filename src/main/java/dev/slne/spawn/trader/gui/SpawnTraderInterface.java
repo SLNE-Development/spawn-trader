@@ -38,7 +38,7 @@ public class SpawnTraderInterface {
         OutlinePane frameStatusPane = new OutlinePane(5, 3, 1, 1);
 
         ItemStack lightItem = new ItemBuilder(Material.LIGHT)
-                .setName(SpawnTrader.deserialize("<yellow>20x Licht Blöcke"))
+                .setName(SpawnTrader.deserialize("<yellow>20x Licht Bloecke"))
                 .addLoreLine(SpawnTrader.deserialize("<gray>Preis: <white>20x Redstone-Lampe und 5x Smaragt"))
                 .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
                 .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
@@ -52,13 +52,13 @@ public class SpawnTraderInterface {
                 .build();
 
         ItemStack available = new ItemBuilder(Material.GREEN_CONCRETE_POWDER)
-                .setName(SpawnTrader.deserialize("<green>Verfügbar"))
+                .setName(SpawnTrader.deserialize("<green>Verfuegbar"))
                 .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
                 .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
                 .build();
 
         ItemStack locked = new ItemBuilder(Material.RED_CONCRETE_POWDER)
-                .setName(SpawnTrader.deserialize("<red>Nicht Verfügbar"))
+                .setName(SpawnTrader.deserialize("<red>Nicht Verfuegbar"))
                 .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
                 .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
                 .build();
