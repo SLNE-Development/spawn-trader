@@ -109,11 +109,11 @@ public class TradeManager {
             switch (trade){
                 case ITEM_FRAME -> {
                     player.getInventory().addItem(itemFrameReward);
-                    User.user(player).sendMessage("Danke für den Einkauf von 20x Item-Rahmen!");
+                    User.user(player).sendMessage("Danke fuer den Einkauf von 20x Item-Rahmen!");
                 }
                 case LIGHT_BLOCK -> {
                     player.getInventory().addItem(lightBlockReward);
-                    User.user(player).sendMessage("Danke für den Einkauf von 20x Licht-Blöcken!");
+                    User.user(player).sendMessage("Danke fuer den Einkauf von 20x Licht-Bloecken!");
                 }
             }
             return true;
