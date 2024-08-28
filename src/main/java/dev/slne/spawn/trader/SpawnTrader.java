@@ -79,6 +79,5 @@ public class SpawnTrader extends JavaPlugin {
 	}
 
 
-	//TODO: You can buy stuff, when have nothing [BUG]
 	//TODO: Cooldown is ressetted when reopen inv [BUG]
 }

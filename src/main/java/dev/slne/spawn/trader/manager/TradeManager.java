@@ -104,12 +104,17 @@ public class TradeManager {
 
         if(items.size() >= 36){
             User.user(player).sendMessage("<red>Du hast nicht ausreichend Platz im Inventar.");
-
             return false;
         }else{
             switch (trade){
-                case ITEM_FRAME -> player.getInventory().addItem(itemFrameReward);
-                case LIGHT_BLOCK -> player.getInventory().addItem(lightBlockReward);
+                case ITEM_FRAME -> {
+                    player.getInventory().addItem(itemFrameReward);
+                    User.user(player).sendMessage("Danke für den Einkauf von 20x Item-Rahmen!");
+                }
+                case LIGHT_BLOCK -> {
+                    player.getInventory().addItem(lightBlockReward);
+                    User.user(player).sendMessage("Danke für den Einkauf von 20x Licht-Blöcken!");
+                }
             }
             return true;
         }

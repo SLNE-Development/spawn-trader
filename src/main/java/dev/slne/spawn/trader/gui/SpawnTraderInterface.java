@@ -15,8 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
-import java.time.LocalDateTime;
-
 public class SpawnTraderInterface {
     private final TradeManager tradeManager = SpawnTrader.instance().tradeManager();
 
@@ -27,7 +25,7 @@ public class SpawnTraderInterface {
         gui.setOnGlobalClick(event -> event.setCancelled(true));
 
         OutlinePane background = new OutlinePane(0, 0, 9, 6, Pane.Priority.LOWEST);
-        background.addItem(new GuiItem(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).addItemFlag(ItemFlag.HIDE_ATTRIBUTES).addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP).build()));
+        background.addItem(new GuiItem(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).setName(SpawnTrader.deserialize("<gray>Haendler")).addItemFlag(ItemFlag.HIDE_ATTRIBUTES).addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP).build()));
         background.setRepeat(true);
 
         gui.addPane(background);
