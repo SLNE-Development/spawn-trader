@@ -32,7 +32,7 @@ public class SpawnTrader extends JavaPlugin {
 	private static SpawnTrader instance;
 
 	private boolean citizens = this.getConfig().getBoolean("citizens");
-	private int tradeCooldown = this.getConfig().getInt("trade-cooldown");
+	private long tradeCooldown = this.getConfig().getLong("trade-cooldown");
 	private String prefix = "<gray>>> <gold>Trader <dark_gray>| <white>";
 
 	private File storageFile = new File(this.getDataFolder() + "/storage.yml");

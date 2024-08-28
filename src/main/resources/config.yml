@@ -1,2 +1,2 @@
-citizens: false
-trade-cooldown: 10
+citizens: true
+trade-cooldown: 75600000

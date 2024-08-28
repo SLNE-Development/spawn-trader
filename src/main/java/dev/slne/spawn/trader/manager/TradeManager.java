@@ -44,12 +44,6 @@ public class TradeManager {
         long current = System.currentTimeMillis();
 
         if(configValue <= current){
-            SpawnTrader.instance().storage().set(player.getUniqueId().toString(), null);
-            try {
-                SpawnTrader.instance().storage().save(SpawnTrader.instance().storageFile());
-            } catch (IOException e) {
-                Bukkit.getConsoleSender().sendMessage(e.getMessage());
-            }
             return false;
         }
 

@@ -24,7 +24,7 @@ public class SpawnTraderCommand implements CommandExecutor, TabCompleter {
             if (args.length == 1) {
                 if (args[0].equalsIgnoreCase("reload") || args[0].equalsIgnoreCase("rl")) {
                     SpawnTrader.instance().citizens(SpawnTrader.instance().getConfig().getBoolean("citizens"));
-                    SpawnTrader.instance().tradeCooldown(SpawnTrader.instance().getConfig().getInt("trade-cooldown"));
+                    SpawnTrader.instance().tradeCooldown(SpawnTrader.instance().getConfig().getLong("trade-cooldown"));
 
                     user.sendMessage("Reload complete.");
                 } else if (args[0].equalsIgnoreCase("spawn")) {
