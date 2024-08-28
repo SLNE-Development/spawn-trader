@@ -10,8 +10,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Witch;
 
-
-@Deprecated
 public class TraderBukkitEntity implements CustomTrader {
     @Override
     public String ENTITY_TAG() {
