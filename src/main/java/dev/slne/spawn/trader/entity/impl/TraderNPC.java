@@ -25,6 +25,7 @@ public class TraderNPC implements CustomTrader {
     @Override
     public void spawn(double x, double y, double z){
         NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "Trader"); npc.spawn(new Location(this.world(), x, y, z));
+        npc.shouldRemoveFromTabList();
         npc.getEntity().addScoreboardTag(ENTITY_TAG());
         npc.setProtected(true);
         npc.setUseMinecraftAI(false);
