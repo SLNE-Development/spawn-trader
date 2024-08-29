@@ -1,93 +1,58 @@
 package dev.slne.spawn.trader.manager;
 
 import dev.slne.spawn.trader.SpawnTrader;
+import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.user.User;
-import dev.slne.spawn.trader.util.ItemBuilder;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class TradeManager {
-    private final ItemStack itemFramePrice1 = new ItemBuilder(Material.ITEM_FRAME, 20).build();
-    private final ItemStack itemFramePrice2 = new ItemBuilder(Material.EMERALD, 5).build();
-    private final ItemStack itemFrameReward = new ItemBuilder(Material.ITEM_FRAME, 20).build();
-
-    private final ItemStack lightBlockPrice1 = new ItemBuilder(Material.REDSTONE_LAMP, 20).build();
-    private final ItemStack lightBlockPrice2 = new ItemBuilder(Material.EMERALD, 5).build();
-    private final ItemStack lightBlockReward = new ItemBuilder(Material.LIGHT, 20).build();
+    private final FileConfiguration storage = SpawnTrader.instance().storage();
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yyyy-HH:mm:ss");
 
 
     public void setCooldown(Player player, Trade trade){
         LocalDateTime time = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yyyy-HH:mm:ss");
 
-
-        SpawnTrader.instance().storage().set(player.getUniqueId() + "." + trade + ".cooldown", System.currentTimeMillis() + SpawnTrader.instance().tradeCooldown());
-        SpawnTrader.instance().storage().set(player.getUniqueId() + "." + trade + ".last-updated", time.format(formatter));
-
-        try {
-            SpawnTrader.instance().storage().save(SpawnTrader.instance().storageFile());
-        } catch (IOException e) {
-            Bukkit.getConsoleSender().sendMessage(e.getMessage());
-        }
+        storage.set(player.getUniqueId() + "." + trade.id() + ".cooldown", System.currentTimeMillis() + SpawnTrader.instance().tradeCooldown());
+        storage.set(player.getUniqueId() + "." + trade.id() + ".last-updated", time.format(formatter));
     }
 
     public boolean isOnCooldown(Player player, Trade trade){
-        long configValue = SpawnTrader.instance().storage().getLong(player.getUniqueId() + "." + trade.toString() + ".cooldown");
+        long configValue = storage.getLong(player.getUniqueId() + "." + trade.id() + ".cooldown");
         long current = System.currentTimeMillis();
 
-        if(configValue <= current){
-            return false;
-        }
-
-        return true;
+        return configValue <= current;
     }
 
 
     public void removeRequirements(Player player, Trade trade){
         if(this.hasEnoughRequirements(player, trade)){
-            switch (trade){
-                case ITEM_FRAME -> {
-                    this.removeItem(player, this.itemFramePrice1);
-                    this.removeItem(player, this.itemFramePrice2);
-                }
-
-                case LIGHT_BLOCK -> {
-                    this.removeItem(player, this.lightBlockPrice1);
-                    this.removeItem(player, this.lightBlockPrice2);
-                }
-            }
+            trade.requirements().forEach(item -> this.removeItem(player, item));
         }else{
-            User.user(player).sendMessage("<red>Du hast nicht ausreichend Materialien dabei.");
+            UserManager.instance().getUser(player.getUniqueId()).sendMessage("<red>Du hast nicht ausreichend Materialien dabei.");
         }
     }
 
     public boolean hasEnoughRequirements(Player player, Trade trade){
-        switch (trade){
-            case ITEM_FRAME -> {
-                if(this.hasItem(player, itemFramePrice1) && this.hasItem(player, itemFramePrice2)){
-                    return true;
-                }
-            }
-
-            case LIGHT_BLOCK -> {
-                if(this.hasItem(player, lightBlockPrice1) && this.hasItem(player, lightBlockPrice2)){
-                    return true;
-                }
+        for (ItemStack requirement : trade.requirements()) {
+            if(!this.hasItem(player, requirement)){
+                return false;
             }
         }
-        return false;
+        return true;
     }
 
     public boolean giveReward(Player player, Trade trade){
         List<ItemStack> items = new ArrayList<>();
+        User user = UserManager.instance().getUser(player.getUniqueId());
 
         for (ItemStack itemStack : player.getInventory().getStorageContents()) {
             if(itemStack != null && itemStack.getType() != Material.AIR){
@@ -97,19 +62,11 @@ public class TradeManager {
 
 
         if(items.size() >= 36){
-            User.user(player).sendMessage("<red>Du hast nicht ausreichend Platz im Inventar.");
+            user.sendMessage("<red>Du hast nicht ausreichend Platz im Inventar.");
             return false;
         }else{
-            switch (trade){
-                case ITEM_FRAME -> {
-                    player.getInventory().addItem(itemFrameReward);
-                    User.user(player).sendMessage("Danke fuer den Einkauf von 20x Item-Rahmen!");
-                }
-                case LIGHT_BLOCK -> {
-                    player.getInventory().addItem(lightBlockReward);
-                    User.user(player).sendMessage("Danke fuer den Einkauf von 20x Licht-Bloecken!");
-                }
-            }
+            trade.rewards().forEach(reward -> player.getInventory().addItem(reward));
+            user.sendMessage(trade.rewardMessage());
             return true;
         }
     }
@@ -148,6 +105,26 @@ public class TradeManager {
                     }
                 }
             }
+        }
+    }
+
+
+
+    public void buy(User user, Trade trade){
+        Player player = user.player();
+
+        if(this.isOnCooldown(player, trade)){
+            user.sendMessage("<red>Bitte warte noch.");
+            return;
+        }
+
+        if(this.hasEnoughRequirements(player, trade)) {
+            if (this.giveReward(player, trade)) {
+                this.removeRequirements(player, trade);
+                this.setCooldown(player, trade);
+            }
+        }else{
+            user.sendMessage("<red>Du hast nicht ausreichend Materialien!");
         }
     }
 }

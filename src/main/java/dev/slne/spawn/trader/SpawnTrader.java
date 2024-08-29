@@ -1,13 +1,12 @@
 package dev.slne.spawn.trader;
 
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.slne.spawn.trader.command.SpawnTraderCommand;
 import dev.slne.spawn.trader.entity.EntityInteractListener;
 import dev.slne.spawn.trader.entity.impl.TraderBukkitEntity;
 import dev.slne.spawn.trader.entity.impl.TraderNPC;
-import dev.slne.spawn.trader.gui.SpawnTraderInterface;
 import dev.slne.spawn.trader.manager.TradeManager;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -19,6 +18,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * The Spawn trader.
@@ -41,31 +41,35 @@ public class SpawnTrader extends JavaPlugin {
 	private TraderNPC traderNPC;
 	private TradeManager tradeManager;
 	private TraderBukkitEntity traderBukkitEntity;
-	private SpawnTraderInterface spawnTraderInterface;
 
 	@Override
 	public void onLoad() {
 		instance = this;
+
+		CommandAPI.onLoad(new CommandAPIBukkitConfig(this).usePluginNamespace().silentLogs(true));
 	}
 
 	@Override
 	public void onEnable() {
+		CommandAPI.onEnable();
+
 		this.saveDefaultConfig();
 		this.saveDefaultStorage();
 
 		this.tradeManager = new TradeManager();
-		this.spawnTraderInterface = new SpawnTraderInterface();
 		this.traderNPC = new TraderNPC();
 		this.traderBukkitEntity = new TraderBukkitEntity();
 
-		this.getCommand("spawntrader").setExecutor(new SpawnTraderCommand());
+		new SpawnTraderCommand("spawntrader").register();
 
 		Bukkit.getPluginManager().registerEvents(new EntityInteractListener(), this);
 	}
 
 	@Override
 	public void onDisable() {
-		//Text as placeholder :O
+		this.saveStorage();
+
+        //Text as placeholder :O
 	}
 
 	public static Component deserialize(String message){
@@ -77,4 +81,14 @@ public class SpawnTrader extends JavaPlugin {
 			this.saveResource("storage.yml", false);
 		}
 	}
+
+	public void saveStorage(){
+		try {
+			this.storage.save(this.storageFile);
+		} catch (IOException e) {
+			Bukkit.getConsoleSender().sendMessage(e.getMessage());
+		}
+	}
+
+	//TODO: Fix reload
 }

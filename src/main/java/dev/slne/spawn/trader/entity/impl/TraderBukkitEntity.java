@@ -12,7 +12,7 @@ import org.bukkit.entity.Witch;
 
 public class TraderBukkitEntity implements CustomTrader {
     @Override
-    public String ENTITY_TAG() {
+    public String entityTag() {
         return "9784986896784573945876097684576457864";
     }
 
@@ -25,7 +25,7 @@ public class TraderBukkitEntity implements CustomTrader {
     public void spawn(double x, double y, double z){
         Witch witch = (Witch) world().spawnEntity(new Location(world(), x, y, z), EntityType.WITCH);
 
-        witch.addScoreboardTag(ENTITY_TAG());
+        witch.addScoreboardTag(entityTag());
         witch.setInvulnerable(true);
         witch.setAggressive(false);
         witch.setAI(false);
@@ -39,7 +39,7 @@ public class TraderBukkitEntity implements CustomTrader {
     @Override
     public void clear() {
         for (Entity entity : this.world().getEntities()) {
-            if(entity.getScoreboardTags().contains(this.ENTITY_TAG())){
+            if(entity.getScoreboardTags().contains(this.entityTag())){
                 entity.remove();
             }
         }

@@ -3,7 +3,7 @@ package dev.slne.spawn.trader.entity;
 import org.bukkit.World;
 
 public interface CustomTrader {
-    String ENTITY_TAG();
+    String entityTag();
     World world();
 
     void spawn(double x, double y, double z);

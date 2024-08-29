@@ -13,7 +13,7 @@ import org.bukkit.entity.EntityType;
 
 public class TraderNPC implements CustomTrader {
     @Override
-    public String ENTITY_TAG() {
+    public String entityTag() {
         return "97067989679834453656";
     }
 
@@ -26,7 +26,7 @@ public class TraderNPC implements CustomTrader {
     public void spawn(double x, double y, double z){
         NPC npc = CitizensAPI.getNPCRegistry().createNPC(EntityType.PLAYER, "Trader"); npc.spawn(new Location(this.world(), x, y, z));
         npc.shouldRemoveFromTabList();
-        npc.getEntity().addScoreboardTag(ENTITY_TAG());
+        npc.getEntity().addScoreboardTag(entityTag());
         npc.setProtected(true);
         npc.setUseMinecraftAI(false);
     }
@@ -34,7 +34,7 @@ public class TraderNPC implements CustomTrader {
     @Override
     public void clear() {
         for (Entity entity : this.world().getEntities()) {
-            if(entity.getScoreboardTags().contains(this.ENTITY_TAG())){
+            if(entity.getScoreboardTags().contains(this.entityTag())){
                 entity.remove();
             }
         }

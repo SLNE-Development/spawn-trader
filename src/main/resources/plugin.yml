@@ -7,6 +7,3 @@ authors: [SLNE Development, TheBjoRedCraft]
 softdepend:
   - Citizens
 commands:
-  spawntrader:
-    permission-message: Du hast keine Berechtigung, diesen Command auszufuehren!
-    permission: spawntrader.spawntrader.command
