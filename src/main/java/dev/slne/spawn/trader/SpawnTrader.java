@@ -1,7 +1,5 @@
 package dev.slne.spawn.trader;
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.slne.spawn.trader.command.SpawnTraderCommand;
 import dev.slne.spawn.trader.entity.EntityInteractListener;
 import dev.slne.spawn.trader.entity.impl.TraderBukkitEntity;
