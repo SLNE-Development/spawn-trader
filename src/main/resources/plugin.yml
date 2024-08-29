@@ -4,6 +4,8 @@ main: dev.slne.spawn.trader.SpawnTrader
 api-version: '1.21'
 prefix: SpawnTrader
 authors: [SLNE Development, TheBjoRedCraft]
+
+depend:
+  - CommandAPI
 softdepend:
   - Citizens
-commands:

@@ -3,7 +3,7 @@ plugins {
     `maven-publish`
     `java-library`
 
-    id("com.github.johnrengelman.shadow") version "8.1.1"
+    id("com.gradleup.shadow") version "8.3.0"
     id("org.hibernate.build.maven-repo-auth") version "3.0.4"
 }
 
@@ -60,13 +60,8 @@ tasks.processResources {
 }
 
 tasks.shadowJar {
-    dependencies {
-        include("dev.jorel:commandapi-bukkit-shade:9.5.2");
-    }
-
     relocate("com.github.stefvanschie.inventoryframework", "dev.slne.spawn.trader.inventoryframework")
     relocate("com.github.ben-manes.caffeine", "dev.slne.spawn.trader.caffeine")
-    relocate("dev.jorel.commandapi", "dev.slne.spawn.trader.commandapi")
 }
 
 tasks.build {

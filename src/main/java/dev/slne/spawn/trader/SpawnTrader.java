@@ -45,13 +45,10 @@ public class SpawnTrader extends JavaPlugin {
 	@Override
 	public void onLoad() {
 		instance = this;
-
-		CommandAPI.onLoad(new CommandAPIBukkitConfig(this).usePluginNamespace().silentLogs(true));
 	}
 
 	@Override
 	public void onEnable() {
-		CommandAPI.onEnable();
 
 		this.saveDefaultConfig();
 		this.saveDefaultStorage();
