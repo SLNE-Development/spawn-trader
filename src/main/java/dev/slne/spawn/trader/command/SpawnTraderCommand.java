@@ -3,6 +3,7 @@ package dev.slne.spawn.trader.command;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.slne.spawn.trader.command.subcommand.SpawnTraderClearCommand;
 import dev.slne.spawn.trader.command.subcommand.SpawnTraderReloadCommand;
+import dev.slne.spawn.trader.command.subcommand.SpawnTraderSetCooldownCommand;
 import dev.slne.spawn.trader.command.subcommand.SpawnTraderSpawnCommand;
 
 public class SpawnTraderCommand extends CommandAPICommand {
@@ -15,5 +16,6 @@ public class SpawnTraderCommand extends CommandAPICommand {
         withSubcommand(new SpawnTraderSpawnCommand("spawn"));
         withSubcommand(new SpawnTraderReloadCommand("reload"));
         withSubcommand(new SpawnTraderClearCommand("clear"));
+        withSubcommand(new SpawnTraderSetCooldownCommand("setcooldown"));
     }
 }

@@ -2,7 +2,9 @@ package dev.slne.spawn.trader.manager;
 
 import dev.slne.spawn.trader.SpawnTrader;
 import dev.slne.spawn.trader.manager.object.Trade;
+import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
 import dev.slne.spawn.trader.user.User;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -23,13 +25,15 @@ public class TradeManager {
 
         storage.set(player.getUniqueId() + "." + trade.id() + ".cooldown", System.currentTimeMillis() + SpawnTrader.instance().tradeCooldown());
         storage.set(player.getUniqueId() + "." + trade.id() + ".last-updated", time.format(formatter));
+
+        SpawnTrader.instance().saveStorage();
     }
 
     public boolean isOnCooldown(Player player, Trade trade){
-        long configValue = storage.getLong(player.getUniqueId() + "." + trade.id() + ".cooldown");
+        long storageValue = storage.getLong(player.getUniqueId() + "." + trade.id() + ".cooldown");
         long current = System.currentTimeMillis();
 
-        return configValue <= current;
+        return storageValue >= current;
     }
 
 
@@ -66,6 +70,11 @@ public class TradeManager {
             return false;
         }else{
             trade.rewards().forEach(reward -> player.getInventory().addItem(reward));
+
+            if(trade.id().equals(new FrameTrade().id())){
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + player.getName() +  " item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}] 1");
+            }
+
             user.sendMessage(trade.rewardMessage());
             return true;
         }

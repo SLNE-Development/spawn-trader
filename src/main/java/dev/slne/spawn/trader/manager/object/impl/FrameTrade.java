@@ -1,20 +1,28 @@
 package dev.slne.spawn.trader.manager.object.impl;
 
-import dev.slne.spawn.trader.SpawnTrader;
 import dev.slne.spawn.trader.manager.object.Trade;
-import net.kyori.adventure.text.Component;
+import dev.slne.spawn.trader.util.ItemBuilder;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
 public class FrameTrade implements Trade {
+    //private final ItemStack invisibleItemFrame = new ItemBuilder(Material.ITEM_FRAME, 20).build();
+
+
     @Override
     public List<ItemStack> requirements() {
-        return List.of();
+        return List.of(new ItemBuilder(Material.EMERALD, 5).build(), new ItemBuilder(Material.ITEM_FRAME, 20).build());
     }
 
     @Override
     public List<ItemStack> rewards() {
+        /*NBT.modify(invisibleItemFrame, nbt -> {
+            nbt.setBoolean("Invisible", true);
+        });
+         */
+
         return List.of();
     }
 
@@ -24,7 +32,7 @@ public class FrameTrade implements Trade {
     }
 
     @Override
-    public Component rewardMessage() {
-        return SpawnTrader.deserialize("");
+    public String rewardMessage() {
+        return "Danke fuer den Einkauf von 20x Item-Rahmen!";
     }
 }

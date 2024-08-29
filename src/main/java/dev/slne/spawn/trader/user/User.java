@@ -24,10 +24,6 @@ public class User {
         this.player().sendMessage(MiniMessage.miniMessage().deserialize(SpawnTrader.instance().prefix() + message));
     }
 
-    public void sendMessage(Component message){
-        this.player().sendMessage(message);
-    }
-
     public Player player(){
         return Bukkit.getPlayer(uuid);
     }

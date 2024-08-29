@@ -1,9 +1,7 @@
 package dev.slne.spawn.trader.manager.object.impl;
 
-import dev.slne.spawn.trader.SpawnTrader;
 import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.util.ItemBuilder;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -26,7 +24,7 @@ public class LightTrade implements Trade {
     }
 
     @Override
-    public Component rewardMessage() {
-        return SpawnTrader.deserialize("");
+    public String rewardMessage() {
+        return "Danke fuer den Einkauf von 20x Licht-Bloecken!";
     }
 }

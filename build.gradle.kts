@@ -23,6 +23,7 @@ repositories {
     maven ("https://maven.citizensnpcs.co/repo") {
         name = "citizens-repo"
     }
+
 }
 
 dependencies {

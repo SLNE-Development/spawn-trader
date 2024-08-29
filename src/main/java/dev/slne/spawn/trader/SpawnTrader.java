@@ -62,8 +62,6 @@ public class SpawnTrader extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		this.saveStorage();
-
         //Text as placeholder :O
 	}
 

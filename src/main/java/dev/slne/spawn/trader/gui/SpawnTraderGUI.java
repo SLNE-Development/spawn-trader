@@ -48,12 +48,14 @@ public class SpawnTraderGUI extends ChestGui {
 
         lightPane.addItem(new GuiItem(lightItem, event -> {
             tradeManager.buy(user, lightTrade);
+            this.setStatusItems();
 
             this.update();
         }));
 
         framePane.addItem(new GuiItem(frameItem, event -> {
             tradeManager.buy(user, frameTrade);
+            this.setStatusItems();
 
             this.update();
 
@@ -65,11 +67,6 @@ public class SpawnTraderGUI extends ChestGui {
         this.addPane(frameStatusPane);
         this.addPane(lightStatusPane);
 
-        this.setStatusItems();
-    }
-
-    @Override
-    public void update() {
         this.setStatusItems();
     }
 
