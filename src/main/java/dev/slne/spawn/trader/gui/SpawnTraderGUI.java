@@ -64,6 +64,8 @@ public class SpawnTraderGUI extends ChestGui {
         this.addPane(lightPane);
         this.addPane(frameStatusPane);
         this.addPane(lightStatusPane);
+
+        this.setStatusItems();
     }
 
     @Override
