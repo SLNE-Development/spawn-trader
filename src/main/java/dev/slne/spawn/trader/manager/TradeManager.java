@@ -1,39 +1,63 @@
 package dev.slne.spawn.trader.manager;
 
 import dev.slne.spawn.trader.SpawnTrader;
+import dev.slne.spawn.trader.manager.object.CooldownPair;
 import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
 import dev.slne.spawn.trader.user.User;
+import lombok.Getter;
+import lombok.experimental.Accessors;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
+@Getter
+@Accessors(fluent = true)
 public class TradeManager {
     private final FileConfiguration storage = SpawnTrader.instance().storage();
     private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yyyy-HH:mm:ss");
+    private final Map<UUID, CooldownPair> cooldownStorage = new HashMap<>();
 
 
-    public void setCooldown(Player player, Trade trade){
-        LocalDateTime time = LocalDateTime.now();
+    public void setCooldown(Player player, Trade trade) {
+        UUID uuid = player.getUniqueId();
+        CooldownPair cooldownPair = this.cooldownStorage.getOrDefault(uuid, new CooldownPair(0L, 0L));
 
-        storage.set(player.getUniqueId() + "." + trade.id() + ".cooldown", System.currentTimeMillis() + SpawnTrader.instance().tradeCooldown());
-        storage.set(player.getUniqueId() + "." + trade.id() + ".last-updated", time.format(formatter));
+        long currentTime = System.currentTimeMillis();
+        long cooldownEndTime = currentTime + SpawnTrader.instance().tradeCooldown();
 
-        SpawnTrader.instance().saveStorage();
+        if (trade.id() == 0) {
+            cooldownPair = new CooldownPair(cooldownEndTime, cooldownPair.getTrade1());
+        } else if (trade.id() == 1) {
+            cooldownPair = new CooldownPair(cooldownPair.getTrade0(), cooldownEndTime);
+        }
+
+        this.cooldownStorage.remove(uuid);
+        this.cooldownStorage.put(uuid, cooldownPair);
     }
 
-    public boolean isOnCooldown(Player player, Trade trade){
-        long storageValue = storage.getLong(player.getUniqueId() + "." + trade.id() + ".cooldown");
-        long current = System.currentTimeMillis();
+    public boolean isOnCooldown(Player player, Trade trade) {
+        UUID playerId = player.getUniqueId();
+        CooldownPair cooldownPair = cooldownStorage.get(playerId);
 
-        return storageValue >= current;
+        long currentTime = System.currentTimeMillis();
+
+        if (cooldownPair == null) {
+            return false;
+        }
+
+        if (trade.id() == 0) {
+            return cooldownPair.getTrade0() >= currentTime;
+        } else if (trade.id() == 1) {
+            return cooldownPair.getTrade1() >= currentTime;
+        }
+
+        return false;
     }
 
 
@@ -72,7 +96,7 @@ public class TradeManager {
             trade.rewards().forEach(reward -> player.getInventory().addItem(reward));
 
             if(trade.id().equals(new FrameTrade().id())){
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + player.getName() +  " item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}] 1");
+                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + player.getName() +  " item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}] 20");
             }
 
             user.sendMessage(trade.rewardMessage());

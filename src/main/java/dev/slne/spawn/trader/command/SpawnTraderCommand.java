@@ -11,11 +11,11 @@ public class SpawnTraderCommand extends CommandAPICommand {
     public SpawnTraderCommand(String name) {
         super(name);
 
-        withPermission("spawn-trader.spawntrader.command");
+        this.withPermission("spawn-trader.spawntrader.command");
 
-        withSubcommand(new SpawnTraderSpawnCommand("spawn"));
-        withSubcommand(new SpawnTraderReloadCommand("reload"));
-        withSubcommand(new SpawnTraderClearCommand("clear"));
-        withSubcommand(new SpawnTraderSetCooldownCommand("setcooldown"));
+        this.withSubcommand(new SpawnTraderSpawnCommand("spawn"));
+        this.withSubcommand(new SpawnTraderReloadCommand("reload"));
+        this.withSubcommand(new SpawnTraderClearCommand("clear"));
+        this.withSubcommand(new SpawnTraderSetCooldownCommand("setcooldown"));
     }
 }

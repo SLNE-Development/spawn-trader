@@ -27,9 +27,10 @@ public class FrameTrade implements Trade {
     }
 
     @Override
-    public String id() {
-        return "invisible_item_frame";
+    public Integer id() {
+        return 0;
     }
+
 
     @Override
     public String rewardMessage() {

@@ -19,8 +19,8 @@ public class LightTrade implements Trade {
     }
 
     @Override
-    public String id() {
-        return "light_block";
+    public Integer id() {
+        return 1;
     }
 
     @Override

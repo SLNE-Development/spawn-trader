@@ -8,6 +8,6 @@ public interface Trade {
     List<ItemStack> requirements();
     List<ItemStack> rewards();
 
-    String id();
+    Integer id();
     String rewardMessage();
 }
