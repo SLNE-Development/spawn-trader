@@ -6,16 +6,24 @@ import dev.slne.spawn.trader.command.subcommand.SpawnTraderReloadCommand;
 import dev.slne.spawn.trader.command.subcommand.SpawnTraderSetCooldownCommand;
 import dev.slne.spawn.trader.command.subcommand.SpawnTraderSpawnCommand;
 
+/**
+ * The type Spawn trader command.
+ */
 public class SpawnTraderCommand extends CommandAPICommand {
 
-    public SpawnTraderCommand(String name) {
-        super(name);
+  /**
+   * Instantiates a new Spawn trader command.
+   *
+   * @param name the name
+   */
+  public SpawnTraderCommand(String name) {
+    super(name);
 
-        this.withPermission("spawn-trader.spawntrader.command");
+    this.withPermission("spawn-trader.spawntrader.command");
 
-        this.withSubcommand(new SpawnTraderSpawnCommand("spawn"));
-        this.withSubcommand(new SpawnTraderReloadCommand("reload"));
-        this.withSubcommand(new SpawnTraderClearCommand("clear"));
-        this.withSubcommand(new SpawnTraderSetCooldownCommand("setcooldown"));
-    }
+    this.withSubcommand(new SpawnTraderSpawnCommand("spawn"));
+    this.withSubcommand(new SpawnTraderReloadCommand("reload"));
+    this.withSubcommand(new SpawnTraderClearCommand("clear"));
+    this.withSubcommand(new SpawnTraderSetCooldownCommand("setcooldown"));
+  }
 }

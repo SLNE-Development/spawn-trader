@@ -17,66 +17,96 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * The type Spawn trader gui.
+ */
 public class SpawnTraderGUI extends ChestGui {
-    private final TradeManager tradeManager = SpawnTrader.instance().tradeManager();
-    private final ItemStack available = new ItemBuilder(Material.GREEN_CONCRETE_POWDER).setName(SpawnTrader.deserialize("<green>Verfuegbar")).addItemFlag(ItemFlag.HIDE_ATTRIBUTES).addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP).build();
-    private final ItemStack locked = new ItemBuilder(Material.RED_CONCRETE_POWDER).setName(SpawnTrader.deserialize("<red>Nicht Verfuegbar")).addItemFlag(ItemFlag.HIDE_ATTRIBUTES).addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP).build();
-    private final OutlinePane lightStatusPane = new OutlinePane(3, 3, 1, 1);
-    private final OutlinePane frameStatusPane = new OutlinePane(5, 3, 1, 1);
 
-    private final FrameTrade frameTrade = new FrameTrade();
-    private final LightTrade lightTrade = new LightTrade();
+  public static final ItemStack LIGHT_BLOCK_ITEMSTACK = new ItemBuilder(Material.LIGHT).setName(
+          SpawnTrader.deserialize("<yellow>20x Licht Blöcke")).addLoreLine(
+          SpawnTrader.deserialize("<gray>Preis: <white>20x Redstone-Lampe und 5x Smaragt"))
+      .addItemFlag(ItemFlag.HIDE_ATTRIBUTES).addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
+      .build();
 
-    private final Player player;
+  public static final ItemStack FRAME_ITEM_STACK = new ItemBuilder(Material.ITEM_FRAME).setName(
+          SpawnTrader.deserialize("<yellow>20x Unsichtbarer Item Rahmen"))
+      .addLoreLine(SpawnTrader.deserialize("<gray>Preis: <white>20x Item-Rahmen und 5x Smaragt"))
+      .addItemFlag(ItemFlag.HIDE_ATTRIBUTES).addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
+      .build();
 
-    public SpawnTraderGUI(Player player) {
-        super(6, ComponentHolder.of(SpawnTrader.deserialize("<black>Haendler")));
-        this.player = player;
+  private final TradeManager tradeManager = SpawnTrader.instance().tradeManager();
+  private final ItemStack available = new ItemBuilder(Material.GREEN_CONCRETE_POWDER).setName(
+          SpawnTrader.deserialize("<green>Verfügbar")).addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
+      .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP).build();
+  private final ItemStack locked = new ItemBuilder(Material.RED_CONCRETE_POWDER).setName(
+          SpawnTrader.deserialize("<red>Nicht Verfügbar")).addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
+      .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP).build();
+  
+  private final OutlinePane lightStatusPane = new OutlinePane(3, 3, 1, 1);
+  private final OutlinePane frameStatusPane = new OutlinePane(5, 3, 1, 1);
 
-        User user = UserManager.instance().getUser(player.getUniqueId());
-        ItemStack lightItem = new ItemBuilder(Material.LIGHT).setName(SpawnTrader.deserialize("<yellow>20x Licht Bloecke")).addLoreLine(SpawnTrader.deserialize("<gray>Preis: <white>20x Redstone-Lampe und 5x Smaragt")).addItemFlag(ItemFlag.HIDE_ATTRIBUTES).addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP).build();
-        ItemStack frameItem = new ItemBuilder(Material.ITEM_FRAME).setName(SpawnTrader.deserialize("<yellow>20x Unsichtbarer Item Rahmen")).addLoreLine(SpawnTrader.deserialize("<gray>Preis: <white>20x Item-Rahmen und 5x Smaragt")).addItemFlag(ItemFlag.HIDE_ATTRIBUTES).addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP).build();
-        OutlinePane lightPane = new OutlinePane(3, 2, 1, 1, Pane.Priority.LOW);
-        OutlinePane framePane = new OutlinePane(5, 2, 1, 1, Pane.Priority.LOW);
-        OutlinePane background = new OutlinePane(0, 0, 9, 6, Pane.Priority.LOWEST);
+  private final FrameTrade frameTrade = new FrameTrade();
+  private final LightTrade lightTrade = new LightTrade();
 
-        this.setOnGlobalClick(event -> event.setCancelled(true));
-        this.setOnGlobalDrag(event -> event.setCancelled(true));
+  private final Player player;
 
-        background.addItem(new GuiItem(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).setName("").addItemFlag(ItemFlag.HIDE_ATTRIBUTES).addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP).build()));
-        background.setRepeat(true);
+  /**
+   * Instantiates a new Spawn trader gui.
+   *
+   * @param player the player
+   */
+  public SpawnTraderGUI(Player player) {
+    super(6, ComponentHolder.of(SpawnTrader.deserialize("<black>Händler")));
 
-        lightPane.addItem(new GuiItem(lightItem, event -> {
-            tradeManager.buy(user, lightTrade);
-            this.setStatusItems();
-        }));
+    this.player = player;
 
-        framePane.addItem(new GuiItem(frameItem, event -> {
-            tradeManager.buy(user, frameTrade);
-            this.setStatusItems();
+    final User user = UserManager.instance().getUser(player.getUniqueId());
 
-        }));
+    final OutlinePane lightPane = new OutlinePane(3, 2, 1, 1, Pane.Priority.LOW);
+    final OutlinePane framePane = new OutlinePane(5, 2, 1, 1, Pane.Priority.LOW);
+    final OutlinePane background = new OutlinePane(0, 0, 9, 6, Pane.Priority.LOWEST);
 
-        this.addPane(background);
-        this.addPane(framePane);
-        this.addPane(lightPane);
-        this.addPane(frameStatusPane);
-        this.addPane(lightStatusPane);
+    this.setOnGlobalClick(event -> event.setCancelled(true));
+    this.setOnGlobalDrag(event -> event.setCancelled(true));
 
-        this.setStatusItems();
+    background.addItem(new GuiItem(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).setName("")
+        .addItemFlag(ItemFlag.HIDE_ATTRIBUTES).addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
+        .build()));
+    background.setRepeat(true);
+
+    lightPane.addItem(new GuiItem(LIGHT_BLOCK_ITEMSTACK, event -> {
+      tradeManager.buy(user, lightTrade);
+      this.setStatusItems();
+    }));
+
+    framePane.addItem(new GuiItem(FRAME_ITEM_STACK, event -> {
+      tradeManager.buy(user, frameTrade);
+      this.setStatusItems();
+    }));
+
+    this.addPane(background);
+    this.addPane(framePane);
+    this.addPane(lightPane);
+    this.addPane(frameStatusPane);
+    this.addPane(lightStatusPane);
+
+    this.setStatusItems();
+  }
+
+  /**
+   * Sets status items.
+   */
+  public void setStatusItems() {
+    if (tradeManager.isOnCooldown(player, lightTrade)) {
+      lightStatusPane.addItem(new GuiItem(locked));
+    } else {
+      lightStatusPane.addItem(new GuiItem(available));
     }
 
-    public void setStatusItems(){
-        if(tradeManager.isOnCooldown(player, lightTrade)){
-            lightStatusPane.addItem(new GuiItem(locked));
-        }else{
-            lightStatusPane.addItem(new GuiItem(available));
-        }
-
-        if(tradeManager.isOnCooldown(player, frameTrade)){
-            frameStatusPane.addItem(new GuiItem(locked));
-        }else{
-            frameStatusPane.addItem(new GuiItem(available));
-        }
+    if (tradeManager.isOnCooldown(player, frameTrade)) {
+      frameStatusPane.addItem(new GuiItem(locked));
+    } else {
+      frameStatusPane.addItem(new GuiItem(available));
     }
+  }
 }

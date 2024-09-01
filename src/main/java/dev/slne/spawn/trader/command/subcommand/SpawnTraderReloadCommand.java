@@ -5,23 +5,32 @@ import dev.slne.spawn.trader.SpawnTrader;
 import dev.slne.spawn.trader.manager.UserManager;
 import dev.slne.spawn.trader.user.User;
 
+/**
+ * The type Spawn trader reload command.
+ */
 public class SpawnTraderReloadCommand extends CommandAPICommand {
-    private final SpawnTrader instance = SpawnTrader.instance();
 
-    public SpawnTraderReloadCommand(String name) {
-        super(name);
+  private final SpawnTrader instance = SpawnTrader.instance();
 
-        executesPlayer((player, args) -> {
-            User user = UserManager.instance().getUser(player.getUniqueId());
+  /**
+   * Instantiates a new Spawn trader reload command.
+   *
+   * @param name the name
+   */
+  public SpawnTraderReloadCommand(String name) {
+    super(name);
 
-            instance.citizens(SpawnTrader.instance().getConfig().getBoolean("citizens"));
-            instance.tradeCooldown(SpawnTrader.instance().getConfig().getLong("trade-cooldown"));
+    executesPlayer((player, args) -> {
+      final User user = UserManager.instance().getUser(player.getUniqueId());
 
-            instance.saveStorage();
+      instance.citizens(SpawnTrader.instance().getConfig().getBoolean("citizens"));
+      instance.tradeCooldown(SpawnTrader.instance().getConfig().getLong("trade-cooldown"));
 
-            user.sendMessage("Reload erfolgreich.");
-        });
+      instance.saveStorage();
 
-        withAliases("rl");
-    }
+      user.sendMessage("Reload erfolgreich.");
+    });
+
+    withAliases("rl");
+  }
 }

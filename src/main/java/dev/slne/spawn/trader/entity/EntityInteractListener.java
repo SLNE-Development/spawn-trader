@@ -8,20 +8,30 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 
+/**
+ * The type Entity interact listener.
+ */
 public class EntityInteractListener implements Listener {
-    @EventHandler
-    public void onEvent(PlayerInteractAtEntityEvent event){
-        Entity entity = event.getRightClicked();
-        Player player = event.getPlayer();
-        SpawnTrader instance = SpawnTrader.instance();
 
-        if(entity.getScoreboardTags().contains(instance.traderBukkitEntity().entityTag())){
-            new SpawnTraderGUI(player).show(player);
-            return;
-        }
+  /**
+   * On event.
+   *
+   * @param event the event
+   */
+  @EventHandler
+  public void onEvent(PlayerInteractAtEntityEvent event) {
+    final Entity entity = event.getRightClicked();
+    final Player player = event.getPlayer();
+    final SpawnTrader instance = SpawnTrader.instance();
 
-        if(entity.getScoreboardTags().contains(instance.traderNPC().entityTag())){
-            new SpawnTraderGUI(player).show(player);
-        }
+    if (entity.getScoreboardTags().contains(instance.traderBukkitEntity().entityTag())) {
+      new SpawnTraderGUI(player).show(player);
+      
+      return;
     }
+
+    if (entity.getScoreboardTags().contains(instance.traderNPC().entityTag())) {
+      new SpawnTraderGUI(player).show(player);
+    }
+  }
 }

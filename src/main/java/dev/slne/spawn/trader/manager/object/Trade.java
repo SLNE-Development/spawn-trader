@@ -1,13 +1,38 @@
 package dev.slne.spawn.trader.manager.object;
 
+import java.util.List;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
-
+/**
+ * The interface Trade.
+ */
 public interface Trade {
-    List<ItemStack> requirements();
-    List<ItemStack> rewards();
 
-    Integer id();
-    String rewardMessage();
+  /**
+   * Requirements list.
+   *
+   * @return the list
+   */
+  List<ItemStack> requirements();
+
+  /**
+   * Rewards list.
+   *
+   * @return the list
+   */
+  List<ItemStack> rewards();
+
+  /**
+   * Id integer.
+   *
+   * @return the integer
+   */
+  Integer id();
+
+  /**
+   * Reward message string.
+   *
+   * @return the string
+   */
+  String rewardMessage();
 }
