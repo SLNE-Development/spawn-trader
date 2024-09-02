@@ -130,7 +130,7 @@ public class SpawnTrader extends JavaPlugin {
     }
     if (storage.contains("cooldowns")) {
       if(storage.getConfigurationSection("cooldowns") == null){
-        Bukkit.getConsoleSender().sendMessage("[SpawnTrader] <red>Error while loading storage.");
+        Bukkit.getConsoleSender().sendMessage("[SpawnTrader] <red>Error while loading storage. The section: cooldowns does not exist.");
         return;
       }
 
