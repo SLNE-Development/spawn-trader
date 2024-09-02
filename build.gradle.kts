@@ -1,8 +1,12 @@
+import net.minecrell.pluginyml.bukkit.BukkitPluginDescription
+import net.minecrell.pluginyml.paper.PaperPluginDescription
+
 plugins {
     `kotlin-dsl`
     `maven-publish`
     `java-library`
 
+    id("net.minecrell.plugin-yml.paper") version "0.6.0"
     id("com.gradleup.shadow") version "8.3.0"
     id("org.hibernate.build.maven-repo-auth") version "3.0.4"
 }
@@ -37,8 +41,30 @@ dependencies {
     annotationProcessor("org.projectlombok:lombok:1.18.30");
     implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.17")
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
+}
 
-//    compileOnly("dev.slne:surf-transaction-api:1.21+")
+
+paper{
+    name = "spawn-trader"
+    main = "dev.slne.spawn.trader.SpawnTrader"
+    apiVersion = "1.21"
+    authors = listOf("SLNE Development", "TheBjoRedCraft")
+    prefix = "SpawnTrader"
+    defaultPermission = BukkitPluginDescription.Permission.Default.OP
+    version = "1.21.1-1.0.0-SNAPSHOT"
+
+
+    serverDependencies{
+        register("CommandAPI") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = true
+        }
+
+        register("Citizens") {
+            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
+            required = false
+        }
+    }
 }
 
 java {
