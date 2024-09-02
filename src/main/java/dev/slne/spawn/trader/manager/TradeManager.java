@@ -5,17 +5,16 @@ import dev.slne.spawn.trader.manager.object.CooldownPair;
 import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
 import dev.slne.spawn.trader.manager.object.impl.LightTrade;
-import dev.slne.spawn.trader.user.User;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.experimental.Accessors;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -91,8 +90,7 @@ public class TradeManager {
     if (this.hasEnoughRequirements(player, trade)) {
       trade.requirements().forEach(item -> this.removeItem(player, item));
     } else {
-      UserManager.instance().getUser(player.getUniqueId())
-          .sendMessage("<red>Du hast nicht ausreichend Materialien dabei.");
+      player.sendMessage(SpawnTrader.prefix().append(Component.text("Du hast nicht ausreichend Materialien!").color(NamedTextColor.RED)));
     }
   }
 
@@ -120,14 +118,13 @@ public class TradeManager {
    * @param trade  the trade
    */
   public void giveReward(Player player, Trade trade) {
-    final User user = UserManager.instance().getUser(player.getUniqueId());
 
     for (ItemStack reward : trade.rewards()) {
       HashMap<Integer, ItemStack> remainingItems = player.getInventory().addItem(reward);
 
-      player.getWorld().dropItem(player.getLocation(), reward);
+      player.getWorld().dropItem(player.getLocation(), reward).setOwner(player.getUniqueId());
 
-      user.sendMessage(trade.rewardMessage());
+      player.sendMessage(SpawnTrader.prefix().append(Component.text(trade.rewardMessage())));
 
       if (trade instanceof FrameTrade) {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + player.getName() +
@@ -188,14 +185,12 @@ public class TradeManager {
   /**
    * Buy.
    *
-   * @param user  the user
+   * @param player  the player
    * @param trade the trade
    */
-  public void buy(User user, Trade trade) {
-    final Player player = user.player();
-
+  public void buy(Player player, Trade trade) {
     if (this.isOnCooldown(player, trade)) {
-      user.sendMessage("<red>Bitte warte noch.");
+      player.sendMessage(SpawnTrader.prefix().append(Component.text("Bitte warte noch.").color(NamedTextColor.RED)));
       return;
     }
 
@@ -204,7 +199,7 @@ public class TradeManager {
         this.removeRequirements(player, trade);
         this.setCooldown(player, trade);
     } else {
-      user.sendMessage("<red>Du hast nicht ausreichend Materialien!");
+      player.sendMessage(SpawnTrader.prefix().append(Component.text("Du hast nicht ausreichend Materialien.").color(NamedTextColor.RED)));
     }
   }
 }

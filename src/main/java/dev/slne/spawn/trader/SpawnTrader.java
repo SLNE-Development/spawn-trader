@@ -14,6 +14,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -27,7 +29,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 @Setter
 @Accessors(fluent = true)
 public class SpawnTrader extends JavaPlugin {
-  private final String prefix = "<gray>>> <gold>Trader <dark_gray>| <white>";
+  @Getter
+  private static final Component prefix = Component.text(">> ").color(NamedTextColor.GRAY)
+          .append(Component.text("Trader").color(NamedTextColor.GOLD))
+          .append(Component.text(" |").color(NamedTextColor.DARK_GRAY))
+          .append(Component.text(" ").color(NamedTextColor.WHITE));
 
   private boolean citizens;
   private long tradeCooldown;
@@ -78,16 +84,6 @@ public class SpawnTrader extends JavaPlugin {
 
   public static SpawnTrader instance(){
     return getPlugin(SpawnTrader.class);
-  }
-
-  /**
-   * Deserialize component.
-   *
-   * @param message the message
-   * @return the component
-   */
-  public static Component deserialize(String message) {
-    return MiniMessage.miniMessage().deserialize(message);
   }
 
   /**

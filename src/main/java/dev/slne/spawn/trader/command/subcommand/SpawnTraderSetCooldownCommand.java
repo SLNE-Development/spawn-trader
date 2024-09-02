@@ -5,19 +5,18 @@ import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.*;
 import dev.slne.spawn.trader.SpawnTrader;
 import dev.slne.spawn.trader.manager.TradeManager;
-import dev.slne.spawn.trader.manager.UserManager;
 import dev.slne.spawn.trader.manager.object.CooldownPair;
 import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
 import dev.slne.spawn.trader.manager.object.impl.LightTrade;
-import dev.slne.spawn.trader.user.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -45,7 +44,6 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
     executesPlayer((player, args) -> {
       final Player target = Bukkit.getPlayer(
               args.getOrDefaultUnchecked("target", player.getName()));
-      final User user = UserManager.instance().getUser(player.getUniqueId());
       final long amount = args.getOrDefaultUnchecked("amount",
               SpawnTrader.instance().tradeCooldown());
 
@@ -65,7 +63,7 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
       }
 
       if (target == null) {
-        user.sendMessage("<red>Der Spieler wurde nicht gefunden.");
+      player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Spieler wurde nicht gefunden.").color(NamedTextColor.RED)));
         return;
       }
 
@@ -83,7 +81,7 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
       }
 
       tradeManager.cooldownStorage().put(uuid, cooldownPair);
-      user.sendMessage("Der Cooldown für den Trade wurde erfolgreich neu gesetzt.");
+      player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Cooldown für den Trade wurde erfolgreich neu gesetzt.")));
     });
   }
 
@@ -92,7 +90,7 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
       Trade trade = Trade.getTrade(info.input());
 
       if (trade == null) {
-        throw CustomArgument.CustomArgumentException.fromAdventureComponent(SpawnTrader.deserialize("<red>Der Trade wurde nicht gefunden."));
+        throw CustomArgument.CustomArgumentException.fromAdventureComponent(Component.text("Der Trade wurde nicht gefunden.").color(NamedTextColor.RED));
       } else {
         return trade;
       }
