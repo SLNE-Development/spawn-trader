@@ -1,5 +1,6 @@
 package dev.slne.spawn.trader.command.subcommand;
 
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.jorel.commandapi.arguments.LongArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
@@ -11,6 +12,10 @@ import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
 import dev.slne.spawn.trader.manager.object.impl.LightTrade;
 import dev.slne.spawn.trader.user.User;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -21,6 +26,8 @@ import org.bukkit.entity.Player;
 public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
 
   private final TradeManager tradeManager = SpawnTrader.instance().tradeManager();
+  private final List<String> availableTradeNames = new ArrayList<>();
+  private final List<Trade> availableTrades = new ArrayList<>();
 
   /**
    * Instantiates a new Spawn trader set cooldown command.
@@ -44,9 +51,13 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
       Trade trade;
       final String tradeName = args.getUnchecked("trade");
 
-      if (tradeName == null) {
-        user.sendMessage("<red>Der Trade wurde nicht gefunden.");
-        return;
+      availableTrades.add(new LightTrade());
+      availableTrades.add(new FrameTrade());
+      availableTrades.forEach(someTrade -> availableTradeNames.add(someTrade.name()));
+
+
+      if(!availableTradeNames.contains(tradeName)){
+        throw CommandAPI.failWithString("Der Trade wurde nicht gefunden!");
       }
 
       switch (tradeName) {
@@ -55,13 +66,12 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
         default -> trade = null;
       }
 
-      if (target == null) {
-        user.sendMessage("<red>Der Spieler wurde nicht gefunden.");
-        return;
+      if(!availableTrades.contains(trade)){
+        throw CommandAPI.failWithString("Der Trade wurde nicht gefunden!");
       }
 
-      if (trade == null) {
-        user.sendMessage("<red>Der Trade wurde nicht gefunden.");
+      if (target == null) {
+        user.sendMessage("<red>Der Spieler wurde nicht gefunden.");
         return;
       }
 

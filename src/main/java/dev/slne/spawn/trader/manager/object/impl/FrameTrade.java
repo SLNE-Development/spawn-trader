@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
  * The type Frame trade.
  */
 public class FrameTrade implements Trade {
-  //private final ItemStack invisibleItemFrame = new ItemBuilder(Material.ITEM_FRAME, 20).build();
 
 
   @Override
@@ -21,17 +20,18 @@ public class FrameTrade implements Trade {
 
   @Override
   public List<ItemStack> rewards() {
-        /*NBT.modify(invisibleItemFrame, nbt -> {
-            nbt.setBoolean("Invisible", true);
-        });
-         */
-
+    // per command: invisible item frame x20
     return List.of();
   }
 
   @Override
   public Integer id() {
     return 0;
+  }
+
+  @Override
+  public String name() {
+    return "invisible-item-frame";
   }
 
 

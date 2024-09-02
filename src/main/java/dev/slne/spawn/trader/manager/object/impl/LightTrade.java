@@ -28,6 +28,11 @@ public class LightTrade implements Trade {
   }
 
   @Override
+  public String name() {
+    return "light-block";
+  }
+
+  @Override
   public String rewardMessage() {
     return "Danke für den Einkauf von 20x Licht-Blöcken!";
   }

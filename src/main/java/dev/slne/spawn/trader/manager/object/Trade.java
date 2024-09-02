@@ -30,6 +30,13 @@ public interface Trade {
   Integer id();
 
   /**
+   * Name String.
+   *
+   * @return the name
+   */
+  String name();
+
+  /**
    * Reward message string.
    *
    * @return the string
