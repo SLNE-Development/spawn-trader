@@ -27,9 +27,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 @Setter
 @Accessors(fluent = true)
 public class SpawnTrader extends JavaPlugin {
-
-  @Getter
-  private static SpawnTrader instance;
   private final String prefix = "<gray>>> <gold>Trader <dark_gray>| <white>";
 
   private boolean citizens;
@@ -44,8 +41,6 @@ public class SpawnTrader extends JavaPlugin {
 
   @Override
   public void onLoad() {
-    instance = this;
-
     citizens = this.getConfig().getBoolean("citizens");
     tradeCooldown = this.getConfig().getLong("trade-cooldown");
 
@@ -73,6 +68,16 @@ public class SpawnTrader extends JavaPlugin {
   public void onDisable() {
     this.saveStorage();
     //Text as placeholder :O
+  }
+
+  /**
+   * The Plugin instance.
+   *
+   * @return the plugin instance
+   */
+
+  public static SpawnTrader instance(){
+    return getPlugin(SpawnTrader.class);
   }
 
   /**
