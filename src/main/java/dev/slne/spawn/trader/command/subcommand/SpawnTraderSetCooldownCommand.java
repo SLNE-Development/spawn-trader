@@ -11,6 +11,7 @@ import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
 import dev.slne.spawn.trader.manager.object.impl.LightTrade;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -19,6 +20,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.gradle.internal.impldep.org.codehaus.plexus.util.cli.Arg;
 
 /**
  * The type Spawn trader set cooldown command.
@@ -26,7 +28,6 @@ import org.bukkit.entity.Player;
 public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
 
   private final TradeManager tradeManager = SpawnTrader.instance().tradeManager();
-  private final List<String> availableTradeNames = new ArrayList<>();
   private final List<String> availableTrades = new ArrayList<>();
 
   /**
@@ -37,8 +38,13 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
   public SpawnTraderSetCooldownCommand(String name) {
     super(name);
 
-    withArguments(new StringArgument("target"));
-    withArguments(tradeArgument());
+
+    List<String> online = new ArrayList<>();
+
+    Bukkit.getOnlinePlayers().forEach(somePlayer -> online.add(somePlayer.getName()));
+
+    withArguments(new StringArgument("target").replaceSuggestions(ArgumentSuggestions.strings(online)));
+    withArguments(tradeArgument().replaceSuggestions(ArgumentSuggestions.strings("light-block", "invisible-item-frame")));
     withArguments(new LongArgument("amount"));
 
     executesPlayer((player, args) -> {
@@ -51,14 +57,8 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
 
       availableTrades.add(new LightTrade().name());
       availableTrades.add(new FrameTrade().name());
-      availableTrades.forEach(someTrade -> availableTradeNames.add(Trade.getTrade(someTrade).name()));
 
-      if (!availableTradeNames.contains(trade.name())) {
-        throw CommandAPI.failWithString("Der Trade wurde nicht gefunden!");
-      }
-
-      if (!availableTrades.contains(trade.id())) {
-        Bukkit.broadcast(Component.text(trade.toString()));
+      if (!availableTrades.contains(trade.name())) {
         throw CommandAPI.failWithString("Der Trade wurde nicht gefunden!");
       }
 
