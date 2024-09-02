@@ -82,9 +82,9 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
       final long currentTime = System.currentTimeMillis();
       final long cooldownEndTime = currentTime + amount;
 
-      if (trade.id() == 0) {
+      if (trade instanceof FrameTrade) {
         cooldownPair = new CooldownPair(cooldownEndTime, cooldownPair.getTrade1());
-      } else if (trade.id() == 1) {
+      } else if (trade instanceof LightTrade) {
         cooldownPair = new CooldownPair(cooldownPair.getTrade0(), cooldownEndTime);
       }
 

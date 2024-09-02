@@ -129,7 +129,7 @@ public class TradeManager {
 
       user.sendMessage(trade.rewardMessage());
 
-      if (trade.id().equals(new FrameTrade().id())) {
+      if (trade instanceof FrameTrade) {
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + player.getName() +
                 " item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}] 20");
       }
