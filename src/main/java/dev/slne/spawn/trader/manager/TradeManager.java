@@ -118,18 +118,17 @@ public class TradeManager {
    * @param trade  the trade
    */
   public void giveReward(Player player, Trade trade) {
-
     for (ItemStack reward : trade.rewards()) {
       HashMap<Integer, ItemStack> remainingItems = player.getInventory().addItem(reward);
 
       player.getWorld().dropItem(player.getLocation(), reward).setOwner(player.getUniqueId());
 
       player.sendMessage(SpawnTrader.prefix().append(Component.text(trade.rewardMessage())));
+    }
 
-      if (trade instanceof FrameTrade) {
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + player.getName() +
-                " item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}] 20");
-      }
+    if (trade instanceof FrameTrade) {
+      Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + player.getName() +
+              " item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}] 20");
     }
   }
 
