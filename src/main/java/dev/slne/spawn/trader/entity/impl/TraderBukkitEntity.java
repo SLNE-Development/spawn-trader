@@ -27,8 +27,7 @@ public class TraderBukkitEntity implements CustomTrader {
 
   @Override
   public void spawn(double x, double y, double z) {
-    final Witch witch = (Witch) world().spawnEntity(new Location(world(), x, y, z),
-        EntityType.WITCH);
+    final Witch witch = (Witch) world().spawn(new Location(world(), x, y, z), Witch.class);
 
     witch.addScoreboardTag(entityTag());
     witch.setInvulnerable(true);
