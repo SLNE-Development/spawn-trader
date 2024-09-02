@@ -20,7 +20,7 @@ public class TraderNPC implements CustomTrader {
 
   @Override
   public World world() {
-    return Bukkit.createWorld(new WorldCreator("world"));
+    return Bukkit.getWorlds().getFirst();
   }
 
   @Override
