@@ -26,7 +26,7 @@ import org.bukkit.inventory.ItemStack;
 public class SpawnTraderGUI extends ChestGui {
 
   public static final ItemStack LIGHT_BLOCK_ITEMSTACK = new ItemBuilder(Material.LIGHT)
-          .setName(Component.text("20x Licht Blöcke").color(NamedTextColor.YELLOW))
+          .setName(Component.text("20x Licht Bl\u00F6cke").color(NamedTextColor.YELLOW))
           .addLoreLine(Component.text("Preis: ")
                   .color(NamedTextColor.GRAY)
                   .append(Component.text("20x Redstone-Lampe und 5x Smaragt").color(NamedTextColor.WHITE))
@@ -47,13 +47,13 @@ public class SpawnTraderGUI extends ChestGui {
 
   private final TradeManager tradeManager = SpawnTrader.instance().tradeManager();
   private final ItemStack available = new ItemBuilder(Material.GREEN_CONCRETE_POWDER)
-          .setName(Component.text("Verfügbar").color(NamedTextColor.GREEN))
+          .setName(Component.text("Verf\u00FCgbar").color(NamedTextColor.GREEN))
           .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
           .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
           .build();
 
   private final ItemStack locked = new ItemBuilder(Material.RED_CONCRETE_POWDER)
-          .setName(Component.text("Nicht Verfügbar").color(NamedTextColor.RED))
+          .setName(Component.text("Nicht Verf\u00FCgbar").color(NamedTextColor.RED))
           .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
           .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
           .build();
@@ -72,7 +72,7 @@ public class SpawnTraderGUI extends ChestGui {
    * @param player the player
    */
   public SpawnTraderGUI(Player player) {
-    super(6, ComponentHolder.of(Component.text("Händler").color(NamedTextColor.BLACK)));
+    super(6, ComponentHolder.of(Component.text("H\u00E4ndler").color(NamedTextColor.BLACK)));
 
     this.player = player;
 

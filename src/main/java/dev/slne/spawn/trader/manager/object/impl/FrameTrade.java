@@ -37,6 +37,6 @@ public class FrameTrade implements Trade {
 
   @Override
   public String rewardMessage() {
-    return "Danke für den Einkauf von 20x Item-Rahmen!";
+    return "Danke f\u00FCr den Einkauf von 20x Item-Rahmen!";
   }
 }
