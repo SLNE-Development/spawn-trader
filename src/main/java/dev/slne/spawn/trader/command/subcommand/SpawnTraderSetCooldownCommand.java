@@ -2,8 +2,7 @@ package dev.slne.spawn.trader.command.subcommand;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.arguments.LongArgument;
-import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.arguments.*;
 import dev.slne.spawn.trader.SpawnTrader;
 import dev.slne.spawn.trader.manager.TradeManager;
 import dev.slne.spawn.trader.manager.UserManager;
@@ -38,7 +37,7 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
     super(name);
 
     withArguments(new StringArgument("target"));
-    withArguments(new StringArgument("trade"));
+    withArguments(tradeArgument("trade"));
     withArguments(new LongArgument("amount"));
 
     executesPlayer((player, args) -> {
@@ -48,7 +47,7 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
       final long amount = args.getOrDefaultUnchecked("amount",
           SpawnTrader.instance().tradeCooldown());
 
-      Trade trade;
+      Trade trade = (Trade) args.get("trade");
       final String tradeName = args.getUnchecked("trade");
 
       availableTrades.add(new LightTrade());
@@ -58,12 +57,6 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
 
       if(!availableTradeNames.contains(tradeName)){
         throw CommandAPI.failWithString("Der Trade wurde nicht gefunden!");
-      }
-
-      switch (tradeName) {
-        case "invisible-item-frame" -> trade = new FrameTrade();
-        case "light-block" -> trade = new LightTrade();
-        default -> trade = null;
       }
 
       if(!availableTrades.contains(trade)){
@@ -90,6 +83,18 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
 
       tradeManager.cooldownStorage().put(uuid, cooldownPair);
       user.sendMessage("Der Cooldown für den Trade wurde erfolgreich neu gesetzt.");
+    });
+  }
+
+  private Argument<Trade> tradeArgument(String name){
+    return new CustomArgument<Trade, String>(new StringArgument(name), info -> {
+      Trade trade = Trade.getTrade(name);
+
+      if (trade == null) {
+        throw CustomArgument.CustomArgumentException.fromAdventureComponent(SpawnTrader.deserialize("<red>Der Trade wurde nicht gefunden."));
+      } else {
+        return trade;
+      }
     });
   }
 }

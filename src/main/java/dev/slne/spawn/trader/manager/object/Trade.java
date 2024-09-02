@@ -1,6 +1,9 @@
 package dev.slne.spawn.trader.manager.object;
 
 import java.util.List;
+
+import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
+import dev.slne.spawn.trader.manager.object.impl.LightTrade;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -42,4 +45,19 @@ public interface Trade {
    * @return the string
    */
   String rewardMessage();
+
+
+  static Trade getTrade(String name){
+    switch (name){
+      case "invisible-item-frame" -> {
+        return new FrameTrade();
+      }
+      case "light-block" -> {
+        return new LightTrade();
+      }
+      default -> {
+        return null;
+      }
+    }
+  }
 }
