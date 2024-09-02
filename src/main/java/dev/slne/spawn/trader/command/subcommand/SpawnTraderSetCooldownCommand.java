@@ -13,7 +13,6 @@ import dev.slne.spawn.trader.manager.object.impl.LightTrade;
 import dev.slne.spawn.trader.user.User;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import org.bukkit.Bukkit;
@@ -37,7 +36,7 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
     super(name);
 
     withArguments(new StringArgument("target"));
-    withArguments(tradeArgument("trade"));
+    withArguments(tradeArgument());
     withArguments(new LongArgument("amount"));
 
     executesPlayer((player, args) -> {
@@ -47,7 +46,7 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
       final long amount = args.getOrDefaultUnchecked("amount",
           SpawnTrader.instance().tradeCooldown());
 
-      Trade trade = (Trade) args.get("trade");
+      Trade trade = Trade.getTrade((String) args.get("trade"));
       final String tradeName = args.getUnchecked("trade");
 
       availableTrades.add(new LightTrade());
@@ -86,15 +85,15 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
     });
   }
 
-  private Argument<Trade> tradeArgument(String name){
-    return new CustomArgument<Trade, String>(new StringArgument(name), info -> {
-      Trade trade = Trade.getTrade(name);
+  private Argument<Trade> tradeArgument(){
+    return new CustomArgument<>(new StringArgument("trade"), info -> {
+        Trade trade = Trade.getTrade(info.input());
 
-      if (trade == null) {
-        throw CustomArgument.CustomArgumentException.fromAdventureComponent(SpawnTrader.deserialize("<red>Der Trade wurde nicht gefunden."));
-      } else {
-        return trade;
-      }
+        if (trade == null) {
+            throw CustomArgument.CustomArgumentException.fromAdventureComponent(SpawnTrader.deserialize("<red>Der Trade wurde nicht gefunden."));
+        } else {
+            return trade;
+        }
     });
   }
 }
