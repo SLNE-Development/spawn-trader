@@ -4,6 +4,7 @@ import dev.slne.spawn.trader.SpawnTrader;
 import dev.slne.spawn.trader.manager.object.CooldownPair;
 import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
+import dev.slne.spawn.trader.manager.object.impl.LightTrade;
 import dev.slne.spawn.trader.user.User;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -44,9 +45,9 @@ public class TradeManager {
     final long currentTime = System.currentTimeMillis();
     final long cooldownEndTime = currentTime + SpawnTrader.instance().tradeCooldown();
 
-    if (trade.id() == 0) {
+    if (trade instanceof FrameTrade) {
       cooldownPair = new CooldownPair(cooldownEndTime, cooldownPair.getTrade1());
-    } else if (trade.id() == 1) {
+    } else if (trade instanceof LightTrade) {
       cooldownPair = new CooldownPair(cooldownPair.getTrade0(), cooldownEndTime);
     }
 
@@ -71,9 +72,9 @@ public class TradeManager {
       return false;
     }
 
-    if (trade.id() == 0) {
+    if (trade instanceof FrameTrade) {
       return cooldownPair.getTrade0() >= currentTime;
-    } else if (trade.id() == 1) {
+    } else if (trade instanceof LightTrade) {
       return cooldownPair.getTrade1() >= currentTime;
     }
 
@@ -117,32 +118,21 @@ public class TradeManager {
    *
    * @param player the player
    * @param trade  the trade
-   * @return the boolean
    */
-  public boolean giveReward(Player player, Trade trade) {
-    final List<ItemStack> items = new ArrayList<>();
+  public void giveReward(Player player, Trade trade) {
     final User user = UserManager.instance().getUser(player.getUniqueId());
 
-    for (final ItemStack itemStack : player.getInventory().getStorageContents()) {
-      if (itemStack != null && itemStack.getType() != Material.AIR) {
-        items.add(itemStack);
-      }
-    }
+    for (ItemStack reward : trade.rewards()) {
+      HashMap<Integer, ItemStack> remainingItems = player.getInventory().addItem(reward);
 
-    if (items.size() >= 36) {
-      user.sendMessage("<red>Du hast nicht ausreichend Platz im Inventar.");
-      return false;
-    } else {
-      trade.rewards().forEach(reward -> player.getInventory().addItem(reward));
-
-      if (trade.id().equals(new FrameTrade().id())) {
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + player.getName() +
-            " item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}] 20");
-      }
+      player.getWorld().dropItem(player.getLocation(), reward);
 
       user.sendMessage(trade.rewardMessage());
 
-      return true;
+      if (trade.id().equals(new FrameTrade().id())) {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + player.getName() +
+                " item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}] 20");
+      }
     }
   }
 
@@ -210,10 +200,9 @@ public class TradeManager {
     }
 
     if (this.hasEnoughRequirements(player, trade)) {
-      if (this.giveReward(player, trade)) {
+        this.giveReward(player, trade);
         this.removeRequirements(player, trade);
         this.setCooldown(player, trade);
-      }
     } else {
       user.sendMessage("<red>Du hast nicht ausreichend Materialien!");
     }
