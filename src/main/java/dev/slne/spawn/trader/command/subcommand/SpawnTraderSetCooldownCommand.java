@@ -13,8 +13,11 @@ import dev.slne.spawn.trader.manager.object.impl.LightTrade;
 import dev.slne.spawn.trader.user.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -25,7 +28,7 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
 
   private final TradeManager tradeManager = SpawnTrader.instance().tradeManager();
   private final List<String> availableTradeNames = new ArrayList<>();
-  private final List<Trade> availableTrades = new ArrayList<>();
+  private final List<String> availableTrades = new ArrayList<>();
 
   /**
    * Instantiates a new Spawn trader set cooldown command.
@@ -41,24 +44,23 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
 
     executesPlayer((player, args) -> {
       final Player target = Bukkit.getPlayer(
-          args.getOrDefaultUnchecked("target", player.getName()));
+              args.getOrDefaultUnchecked("target", player.getName()));
       final User user = UserManager.instance().getUser(player.getUniqueId());
       final long amount = args.getOrDefaultUnchecked("amount",
-          SpawnTrader.instance().tradeCooldown());
+              SpawnTrader.instance().tradeCooldown());
 
-      Trade trade = Trade.getTrade((String) args.get("trade"));
-      final String tradeName = args.getUnchecked("trade");
+      Trade trade = args.getUnchecked("trade");
 
-      availableTrades.add(new LightTrade());
-      availableTrades.add(new FrameTrade());
-      availableTrades.forEach(someTrade -> availableTradeNames.add(someTrade.name()));
+      availableTrades.add(new LightTrade().name());
+      availableTrades.add(new FrameTrade().name());
+      availableTrades.forEach(someTrade -> availableTradeNames.add(Trade.getTrade(someTrade).name()));
 
-
-      if(!availableTradeNames.contains(tradeName)){
+      if (!availableTradeNames.contains(trade.name())) {
         throw CommandAPI.failWithString("Der Trade wurde nicht gefunden!");
       }
 
-      if(!availableTrades.contains(trade)){
+      if (!availableTrades.contains(trade.id())) {
+        Bukkit.broadcast(Component.text(trade.toString()));
         throw CommandAPI.failWithString("Der Trade wurde nicht gefunden!");
       }
 
@@ -69,7 +71,7 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
 
       final UUID uuid = target.getUniqueId();
       CooldownPair cooldownPair = tradeManager.cooldownStorage()
-          .getOrDefault(uuid, new CooldownPair(0L, 0L));
+              .getOrDefault(uuid, new CooldownPair(0L, 0L));
 
       final long currentTime = System.currentTimeMillis();
       final long cooldownEndTime = currentTime + amount;
@@ -85,15 +87,15 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
     });
   }
 
-  private Argument<Trade> tradeArgument(){
+  private Argument<Trade> tradeArgument() {
     return new CustomArgument<>(new StringArgument("trade"), info -> {
-        Trade trade = Trade.getTrade(info.input());
+      Trade trade = Trade.getTrade(info.input());
 
-        if (trade == null) {
-            throw CustomArgument.CustomArgumentException.fromAdventureComponent(SpawnTrader.deserialize("<red>Der Trade wurde nicht gefunden."));
-        } else {
-            return trade;
-        }
+      if (trade == null) {
+        throw CustomArgument.CustomArgumentException.fromAdventureComponent(SpawnTrader.deserialize("<red>Der Trade wurde nicht gefunden."));
+      } else {
+        return trade;
+      }
     });
   }
 }
