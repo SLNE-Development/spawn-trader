@@ -128,8 +128,13 @@ public class SpawnTrader extends JavaPlugin {
 
       return;
     }
-
     if (storage.contains("cooldowns")) {
+      if(storage.getConfigurationSection("cooldowns") == null){
+        Bukkit.getConsoleSender().sendMessage("[SpawnTrader] <red>Error while loading storage.");
+        return;
+      }
+
+
       for (final String uuidString : storage.getConfigurationSection("cooldowns").getKeys(false)) {
         UUID uuid = UUID.fromString(uuidString);
         long trade0 = storage.getLong("cooldowns." + uuidString + ".trade0");
@@ -138,5 +143,5 @@ public class SpawnTrader extends JavaPlugin {
         tradeManager.cooldownStorage().put(uuid, new CooldownPair(trade0, trade1));
       }
     }
-  }//TODO: Fix reload
+  }
 }
