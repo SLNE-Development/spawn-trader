@@ -76,6 +76,15 @@ java {
     withJavadocJar()
 }
 
+tasks.compileJava{
+    options.encoding = Charsets.UTF_8.name()
+    options.compilerArgs.add("-parameters")
+}
+
+tasks.javadoc {
+    options.encoding = Charsets.UTF_8.name()
+}
+
 tasks.shadowJar {
     relocate("com.github.stefvanschie.inventoryframework", "dev.slne.spawn.trader.inventoryframework")
     relocate("com.github.ben-manes.caffeine", "dev.slne.spawn.trader.caffeine")
