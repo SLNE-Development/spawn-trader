@@ -76,16 +76,6 @@ java {
     withJavadocJar()
 }
 
-tasks.processResources {
-    val props = mapOf("version" to version)
-
-    inputs.properties(props)
-    filteringCharset = "UTF-8"
-    filesMatching("plugin.yml") {
-        expand(props)
-    }
-}
-
 tasks.shadowJar {
     relocate("com.github.stefvanschie.inventoryframework", "dev.slne.spawn.trader.inventoryframework")
     relocate("com.github.ben-manes.caffeine", "dev.slne.spawn.trader.caffeine")
