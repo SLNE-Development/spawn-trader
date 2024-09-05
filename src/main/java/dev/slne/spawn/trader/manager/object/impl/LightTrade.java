@@ -3,6 +3,8 @@ package dev.slne.spawn.trader.manager.object.impl;
 import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.util.ItemBuilder;
 import java.util.List;
+
+import it.unimi.dsi.fastutil.objects.ObjectList;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,14 +14,14 @@ import org.bukkit.inventory.ItemStack;
 public class LightTrade implements Trade {
 
   @Override
-  public List<ItemStack> requirements() {
-    return List.of(new ItemBuilder(Material.EMERALD, 5).build(),
+  public ObjectList<ItemStack> requirements() {
+    return ObjectList.of(new ItemBuilder(Material.EMERALD, 5).build(),
         new ItemBuilder(Material.REDSTONE_LAMP, 20).build());
   }
 
   @Override
-  public List<ItemStack> rewards() {
-    return List.of(new ItemBuilder(Material.LIGHT, 20).build());
+  public ObjectList<ItemStack> rewards() {
+    return ObjectList.of(new ItemBuilder(Material.LIGHT, 20).build());
   }
 
   @Override

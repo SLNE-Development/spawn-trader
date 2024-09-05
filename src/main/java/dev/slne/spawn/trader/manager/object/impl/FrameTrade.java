@@ -3,6 +3,8 @@ package dev.slne.spawn.trader.manager.object.impl;
 import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.util.ItemBuilder;
 import java.util.List;
+
+import it.unimi.dsi.fastutil.objects.ObjectList;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,15 +15,15 @@ public class FrameTrade implements Trade {
 
 
   @Override
-  public List<ItemStack> requirements() {
-    return List.of(new ItemBuilder(Material.EMERALD, 5).build(),
+  public ObjectList<ItemStack> requirements() {
+    return ObjectList.of(new ItemBuilder(Material.EMERALD, 5).build(),
         new ItemBuilder(Material.ITEM_FRAME, 20).build());
   }
 
   @Override
-  public List<ItemStack> rewards() {
+  public ObjectList<ItemStack> rewards() {
     // per command: invisible item frame x20
-    return List.of();
+    return ObjectList.of();
   }
 
   @Override

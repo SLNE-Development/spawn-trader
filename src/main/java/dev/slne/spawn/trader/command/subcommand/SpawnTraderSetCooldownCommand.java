@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.ObjectList;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
@@ -27,7 +29,7 @@ import org.bukkit.entity.Player;
 public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
 
   private final TradeManager tradeManager = SpawnTrader.instance().tradeManager();
-  private final List<String> availableTrades = new ArrayList<>();
+  private final ObjectList<String> availableTrades = new ObjectArrayList<>();
 
   /**
    * Instantiates a new Spawn trader set cooldown command.
@@ -38,7 +40,7 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
     super(name);
 
 
-    List<String> online = new ArrayList<>();
+    ObjectList<String> online = new ObjectArrayList<>();
 
     Bukkit.getOnlinePlayers().forEach(somePlayer -> online.add(somePlayer.getName()));
 

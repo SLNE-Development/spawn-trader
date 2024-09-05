@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
@@ -31,7 +33,7 @@ public class TradeManager {
 
   private final FileConfiguration storage = SpawnTrader.instance().storage();
   private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yyyy-HH:mm:ss");
-  private final Map<UUID, CooldownPair> cooldownStorage = new HashMap<>();
+  private final Object2ObjectMap<UUID, CooldownPair> cooldownStorage = new Object2ObjectOpenHashMap<>();
 
   /**
    * Sets cooldown.
