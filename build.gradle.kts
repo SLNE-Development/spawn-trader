@@ -9,6 +9,7 @@ plugins {
     id("net.minecrell.plugin-yml.paper") version "0.6.0"
     id("com.gradleup.shadow") version "8.3.0"
     id("org.hibernate.build.maven-repo-auth") version "3.0.4"
+    id ("io.freefair.lombok") version "8.10"
 }
 
 group = "dev.slne.spawn"
@@ -33,12 +34,9 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
     compileOnly ("dev.jorel:commandapi-bukkit-core:9.5.2")
-    compileOnly("org.projectlombok:lombok:1.18.30")
     compileOnly("net.citizensnpcs:citizens-main:2.0.35-SNAPSHOT"){
         exclude( "*", "*")
     }
-
-    annotationProcessor("org.projectlombok:lombok:1.18.30");
     implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.17")
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 }
