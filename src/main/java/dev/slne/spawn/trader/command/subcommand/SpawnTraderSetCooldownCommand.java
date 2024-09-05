@@ -2,24 +2,23 @@ package dev.slne.spawn.trader.command.subcommand;
 
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.arguments.*;
-
+import dev.jorel.commandapi.arguments.Argument;
+import dev.jorel.commandapi.arguments.ArgumentSuggestions;
+import dev.jorel.commandapi.arguments.CustomArgument;
+import dev.jorel.commandapi.arguments.LongArgument;
+import dev.jorel.commandapi.arguments.PlayerArgument;
+import dev.jorel.commandapi.arguments.StringArgument;
 import dev.slne.spawn.trader.SpawnTrader;
 import dev.slne.spawn.trader.manager.TradeManager;
 import dev.slne.spawn.trader.manager.object.CooldownPair;
 import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
 import dev.slne.spawn.trader.manager.object.impl.LightTrade;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
+import java.util.UUID;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -39,20 +38,16 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
   public SpawnTraderSetCooldownCommand(String name) {
     super(name);
 
-
-    ObjectList<String> online = new ObjectArrayList<>();
-
-    Bukkit.getOnlinePlayers().forEach(somePlayer -> online.add(somePlayer.getName()));
-
-    withArguments(new StringArgument("target").replaceSuggestions(ArgumentSuggestions.strings(online)));
-    withArguments(tradeArgument().replaceSuggestions(ArgumentSuggestions.strings("light-block", "invisible-item-frame")));
+    withArguments(new PlayerArgument("target"));
+    withArguments(tradeArgument().replaceSuggestions(
+        ArgumentSuggestions.strings("light-block", "invisible-item-frame")));
     withArguments(new LongArgument("amount"));
 
     executesPlayer((player, args) -> {
       final Player target = Bukkit.getPlayer(
-              args.getOrDefaultUnchecked("target", player.getName()));
+          args.getOrDefaultUnchecked("target", player.getName()));
       final long amount = args.getOrDefaultUnchecked("amount",
-              SpawnTrader.instance().tradeCooldown());
+          SpawnTrader.instance().tradeCooldown());
 
       Trade trade = args.getUnchecked("trade");
 
@@ -64,13 +59,14 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
       }
 
       if (target == null) {
-        player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Spieler wurde nicht gefunden.").color(NamedTextColor.RED)));
+        player.sendMessage(SpawnTrader.prefix()
+            .append(Component.text("Der Spieler wurde nicht gefunden.").color(NamedTextColor.RED)));
         return;
       }
 
       final UUID uuid = target.getUniqueId();
       CooldownPair cooldownPair = tradeManager.cooldownStorage()
-              .getOrDefault(uuid, new CooldownPair(0L, 0L));
+          .getOrDefault(uuid, new CooldownPair(0L, 0L));
 
       final long currentTime = System.currentTimeMillis();
       final long cooldownEndTime = currentTime + amount;
@@ -82,7 +78,8 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
       }
 
       tradeManager.cooldownStorage().put(uuid, cooldownPair);
-      player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Cooldown f\u00FCr den Trade wurde erfolgreich neu gesetzt.")));
+      player.sendMessage(SpawnTrader.prefix().append(
+          Component.text("Der Cooldown f\u00FCr den Trade wurde erfolgreich neu gesetzt.")));
     });
   }
 
@@ -91,7 +88,8 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
       Trade trade = Trade.getTrade(info.input());
 
       if (trade == null) {
-        throw CustomArgument.CustomArgumentException.fromAdventureComponent(Component.text("Der Trade wurde nicht gefunden.").color(NamedTextColor.RED));
+        throw CustomArgument.CustomArgumentException.fromAdventureComponent(
+            Component.text("Der Trade wurde nicht gefunden.").color(NamedTextColor.RED));
       } else {
         return trade;
       }
