@@ -5,20 +5,15 @@ import dev.slne.spawn.trader.manager.object.CooldownPair;
 import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
 import dev.slne.spawn.trader.manager.object.impl.LightTrade;
-
-import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.experimental.Accessors;
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -95,7 +90,8 @@ public class TradeManager {
     if (this.hasEnoughRequirements(player, trade)) {
       trade.requirements().forEach(item -> this.removeItem(player, item));
     } else {
-      player.sendMessage(SpawnTrader.prefix().append(Component.text("Du hast nicht ausreichend Materialien!").color(NamedTextColor.RED)));
+      player.sendMessage(SpawnTrader.prefix()
+          .append(Component.text("Du benötigst weitere Materialien!").color(NamedTextColor.RED)));
     }
   }
 
@@ -125,7 +121,7 @@ public class TradeManager {
   public void giveReward(Player player, Trade trade) {
     if (trade instanceof FrameTrade) {
       Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + player.getName() +
-              " item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}] 20");
+          " item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}] 20");
     }
 
     player.sendMessage(SpawnTrader.prefix().append(Component.text(trade.rewardMessage())));
@@ -133,7 +129,7 @@ public class TradeManager {
     for (ItemStack reward : trade.rewards()) {
       HashMap<Integer, ItemStack> remainingItems = player.getInventory().addItem(reward);
 
-      for(ItemStack stack : remainingItems.values()){
+      for (ItemStack stack : remainingItems.values()) {
         player.getWorld().dropItem(player.getLocation(), stack).setOwner(player.getUniqueId());
       }
     }
@@ -191,21 +187,24 @@ public class TradeManager {
   /**
    * Buy.
    *
-   * @param player  the player
-   * @param trade the trade
+   * @param player the player
+   * @param trade  the trade
    */
   public void buy(Player player, Trade trade) {
     if (this.isOnCooldown(player, trade)) {
-      player.sendMessage(SpawnTrader.prefix().append(Component.text("Bitte warte noch.").color(NamedTextColor.RED)));
+      player.sendMessage(SpawnTrader.prefix()
+          .append(Component.text("Bitte komm später wieder, aktuell habe ich nichts für dich.")
+              .color(NamedTextColor.RED)));
       return;
     }
 
     if (this.hasEnoughRequirements(player, trade)) {
-        this.giveReward(player, trade);
-        this.removeRequirements(player, trade);
-        this.setCooldown(player, trade);
+      this.giveReward(player, trade);
+      this.removeRequirements(player, trade);
+      this.setCooldown(player, trade);
     } else {
-      player.sendMessage(SpawnTrader.prefix().append(Component.text("Du hast nicht ausreichend Materialien.").color(NamedTextColor.RED)));
+      player.sendMessage(SpawnTrader.prefix().append(
+          Component.text("Du benötigst weitere Materialien!").color(NamedTextColor.RED)));
     }
   }
 }
