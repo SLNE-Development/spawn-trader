@@ -39,15 +39,12 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
     super(name);
 
     withArguments(new PlayerArgument("target"));
-    withArguments(tradeArgument().replaceSuggestions(
-        ArgumentSuggestions.strings("light-block", "invisible-item-frame")));
+    withArguments(tradeArgument().replaceSuggestions(ArgumentSuggestions.strings("light-block", "invisible-item-frame")));
     withArguments(new LongArgument("amount"));
 
     executesPlayer((player, args) -> {
-      final Player target = Bukkit.getPlayer(
-          args.getOrDefaultUnchecked("target", player.getName()));
-      final long amount = args.getOrDefaultUnchecked("amount",
-          SpawnTrader.instance().tradeCooldown());
+      final Player target = args.getOrDefaultUnchecked("target", player);
+      final long amount = args.getOrDefaultUnchecked("amount", SpawnTrader.instance().tradeCooldown());
 
       Trade trade = args.getUnchecked("trade");
 
@@ -59,14 +56,12 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
       }
 
       if (target == null) {
-        player.sendMessage(SpawnTrader.prefix()
-            .append(Component.text("Der Spieler wurde nicht gefunden.").color(NamedTextColor.RED)));
+        player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Spieler wurde nicht gefunden.").color(NamedTextColor.RED)));
         return;
       }
 
       final UUID uuid = target.getUniqueId();
-      CooldownPair cooldownPair = tradeManager.cooldownStorage()
-          .getOrDefault(uuid, new CooldownPair(0L, 0L));
+      CooldownPair cooldownPair = tradeManager.cooldownStorage().getOrDefault(uuid, new CooldownPair(0L, 0L));
 
       final long currentTime = System.currentTimeMillis();
       final long cooldownEndTime = currentTime + amount;
@@ -78,8 +73,7 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
       }
 
       tradeManager.cooldownStorage().put(uuid, cooldownPair);
-      player.sendMessage(SpawnTrader.prefix().append(
-          Component.text("Der Cooldown f\u00FCr den Trade wurde erfolgreich neu gesetzt.")));
+      player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Cooldown f\u00FCr den Trade wurde erfolgreich neu gesetzt.")));
     });
   }
 

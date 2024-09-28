@@ -4,8 +4,10 @@ import com.github.stefvanschie.inventoryframework.adventuresupport.ComponentHold
 import com.github.stefvanschie.inventoryframework.gui.GuiItem;
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui;
 import com.github.stefvanschie.inventoryframework.pane.OutlinePane;
+import com.github.stefvanschie.inventoryframework.pane.PaginatedPane;
 import com.github.stefvanschie.inventoryframework.pane.Pane;
 
+import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import dev.slne.spawn.trader.SpawnTrader;
 import dev.slne.spawn.trader.manager.TradeManager;
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
@@ -33,6 +35,7 @@ public class SpawnTraderGUI extends ChestGui {
           )
           .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
           .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
+          .setCustomModelData(42)
           .build();
 
   public static final ItemStack FRAME_ITEM_STACK = new ItemBuilder(Material.ITEM_FRAME)
@@ -41,25 +44,28 @@ public class SpawnTraderGUI extends ChestGui {
                   .color(NamedTextColor.GRAY)
                   .append(Component.text("20x Item-Rahmen und 5x Smaragd").color(NamedTextColor.WHITE))
           )
+          .setCustomModelData(42)
           .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
           .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
           .build();
 
   private final TradeManager tradeManager = SpawnTrader.instance().tradeManager();
-  private final ItemStack available = new ItemBuilder(Material.GREEN_CONCRETE_POWDER)
+  private final ItemStack available = new ItemBuilder(Material.LIME_DYE)
           .setName(Component.text("Verf\u00FCgbar").color(NamedTextColor.GREEN))
           .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
           .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
+          .setCustomModelData(42)
           .build();
 
-  private final ItemStack locked = new ItemBuilder(Material.RED_CONCRETE_POWDER)
+  private final ItemStack locked = new ItemBuilder(Material.RED_DYE)
           .setName(Component.text("Nicht Verf\u00FCgbar").color(NamedTextColor.RED))
           .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
           .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
+          .setCustomModelData(42)
           .build();
 
-  private final OutlinePane lightStatusPane = new OutlinePane(3, 3, 1, 1);
-  private final OutlinePane frameStatusPane = new OutlinePane(5, 3, 1, 1);
+  private final OutlinePane lightStatusPane = new OutlinePane(2, 3, 1, 1);
+  private final OutlinePane frameStatusPane = new OutlinePane(6, 3, 1, 1);
 
   private final FrameTrade frameTrade = new FrameTrade();
   private final LightTrade lightTrade = new LightTrade();
@@ -76,19 +82,19 @@ public class SpawnTraderGUI extends ChestGui {
 
     this.player = player;
 
-    final OutlinePane lightPane = new OutlinePane(3, 2, 1, 1, Pane.Priority.LOW);
-    final OutlinePane framePane = new OutlinePane(5, 2, 1, 1, Pane.Priority.LOW);
-    final OutlinePane background = new OutlinePane(0, 0, 9, 6, Pane.Priority.LOWEST);
+    final OutlinePane lightPane = new OutlinePane(2, 2, 1, 1, Pane.Priority.LOW);
+    final OutlinePane framePane = new OutlinePane(6, 2, 1, 1, Pane.Priority.LOW);
+    final OutlinePane footer = new OutlinePane(0, 5, 9, 1, Pane.Priority.LOW);
+    final OutlinePane header = new OutlinePane(0, 0, 9, 1, Pane.Priority.LOW);
 
     this.setOnGlobalClick(event -> event.setCancelled(true));
     this.setOnGlobalDrag(event -> event.setCancelled(true));
 
-    background.addItem(new GuiItem(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE)
-            .setName(Component.text(""))
-            .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
-            .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
-            .build()));
-    background.setRepeat(true);
+    header.addItem(new GuiItem(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).setName("").build()));
+    header.setRepeat(true);
+
+    footer.addItem(new GuiItem(new ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).setName("").build()));
+    footer.setRepeat(true);
 
     lightPane.addItem(new GuiItem(LIGHT_BLOCK_ITEMSTACK, event -> {
       tradeManager.buy(player, lightTrade);
@@ -100,11 +106,12 @@ public class SpawnTraderGUI extends ChestGui {
       this.setStatusItems();
     }));
 
-    this.addPane(background);
     this.addPane(framePane);
     this.addPane(lightPane);
     this.addPane(frameStatusPane);
     this.addPane(lightStatusPane);
+    this.addPane(header);
+    this.addPane(footer);
 
     this.setStatusItems();
   }
@@ -112,7 +119,7 @@ public class SpawnTraderGUI extends ChestGui {
   /**
    * Sets status items.
    */
-  public void setStatusItems() {
+  private void setStatusItems() {
     lightStatusPane.clear();
     frameStatusPane.clear();
 
