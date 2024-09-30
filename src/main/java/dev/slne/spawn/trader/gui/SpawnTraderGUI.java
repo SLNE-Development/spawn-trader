@@ -11,6 +11,7 @@ import com.github.stefvanschie.inventoryframework.pane.StaticPane;
 import dev.slne.spawn.trader.SpawnTrader;
 import dev.slne.spawn.trader.manager.TradeManager;
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
+import dev.slne.spawn.trader.manager.object.impl.GlobeTrade;
 import dev.slne.spawn.trader.manager.object.impl.LightTrade;
 import dev.slne.spawn.trader.util.ItemBuilder;
 
@@ -49,6 +50,17 @@ public class SpawnTraderGUI extends ChestGui {
           .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
           .build();
 
+  public static final ItemStack GLOBE_BANNER_STACK = new ItemBuilder(Material.GLOBE_BANNER_PATTERN)
+          .setName(Component.text("1x Globe Banner Vorlage").color(NamedTextColor.YELLOW))
+          .addLoreLine(Component.text("Preis: ")
+                  .color(NamedTextColor.GRAY)
+                  .append(Component.text("20x Papier und 5x Smaragd").color(NamedTextColor.WHITE))
+          )
+          .setCustomModelData(42)
+          .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
+          .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
+          .build();
+
   private final TradeManager tradeManager = SpawnTrader.instance().tradeManager();
   private final ItemStack available = new ItemBuilder(Material.LIME_DYE)
           .setName(Component.text("Verf\u00FCgbar").color(NamedTextColor.GREEN))
@@ -66,9 +78,11 @@ public class SpawnTraderGUI extends ChestGui {
 
   private final OutlinePane lightStatusPane = new OutlinePane(2, 3, 1, 1);
   private final OutlinePane frameStatusPane = new OutlinePane(6, 3, 1, 1);
+  private final OutlinePane globeStatusPane = new OutlinePane(4, 3, 1, 1);
 
   private final FrameTrade frameTrade = new FrameTrade();
   private final LightTrade lightTrade = new LightTrade();
+  private final GlobeTrade globeTrade = new GlobeTrade();
 
   private final Player player;
 
@@ -84,6 +98,7 @@ public class SpawnTraderGUI extends ChestGui {
 
     final OutlinePane lightPane = new OutlinePane(2, 2, 1, 1, Pane.Priority.LOW);
     final OutlinePane framePane = new OutlinePane(6, 2, 1, 1, Pane.Priority.LOW);
+    final OutlinePane globePane = new OutlinePane(4, 2, 1, 1, Pane.Priority.LOW);
     final OutlinePane footer = new OutlinePane(0, 5, 9, 1, Pane.Priority.LOW);
     final OutlinePane header = new OutlinePane(0, 0, 9, 1, Pane.Priority.LOW);
 
@@ -106,10 +121,17 @@ public class SpawnTraderGUI extends ChestGui {
       this.setStatusItems();
     }));
 
+    globePane.addItem(new GuiItem(GLOBE_BANNER_STACK, event -> {
+      tradeManager.buy(player, globeTrade);
+      this.setStatusItems();
+    }));
+
     this.addPane(framePane);
     this.addPane(lightPane);
+    this.addPane(globePane);
     this.addPane(frameStatusPane);
     this.addPane(lightStatusPane);
+    this.addPane(globeStatusPane);
     this.addPane(header);
     this.addPane(footer);
 
@@ -133,6 +155,12 @@ public class SpawnTraderGUI extends ChestGui {
       frameStatusPane.addItem(new GuiItem(locked));
     } else {
       frameStatusPane.addItem(new GuiItem(available));
+    }
+
+    if (tradeManager.isOnCooldown(player, globeTrade)) {
+      globeStatusPane.addItem(new GuiItem(locked));
+    } else {
+      globeStatusPane.addItem(new GuiItem(available));
     }
   }
 }

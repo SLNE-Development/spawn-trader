@@ -103,6 +103,7 @@ public class SpawnTrader extends JavaPlugin {
 
       storage.set("cooldowns." + uuid + ".trade0", cooldownPair.getTrade0());
       storage.set("cooldowns." + uuid + ".trade1", cooldownPair.getTrade1());
+      storage.set("cooldowns." + uuid + ".trade2", cooldownPair.getTrade2());
     }
 
     try {
@@ -133,8 +134,9 @@ public class SpawnTrader extends JavaPlugin {
         UUID uuid = UUID.fromString(uuidString);
         long trade0 = storage.getLong("cooldowns." + uuidString + ".trade0");
         long trade1 = storage.getLong("cooldowns." + uuidString + ".trade1");
+        long trade2 = storage.getLong("cooldowns." + uuidString + ".trade2");
 
-        tradeManager.cooldownStorage().put(uuid, new CooldownPair(trade0, trade1));
+        tradeManager.cooldownStorage().put(uuid, new CooldownPair(trade0, trade1, trade2));
       }
     }
   }

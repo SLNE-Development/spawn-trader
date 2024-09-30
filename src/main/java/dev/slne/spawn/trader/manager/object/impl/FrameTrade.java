@@ -16,8 +16,7 @@ public class FrameTrade implements Trade {
 
   @Override
   public ObjectList<ItemStack> requirements() {
-    return ObjectList.of(new ItemBuilder(Material.EMERALD, 5).build(),
-        new ItemBuilder(Material.ITEM_FRAME, 20).build());
+    return ObjectList.of(new ItemBuilder(Material.EMERALD, 5).build(), new ItemBuilder(Material.ITEM_FRAME, 20).build());
   }
 
   @Override

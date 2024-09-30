@@ -3,6 +3,7 @@ package dev.slne.spawn.trader.manager.object;
 import java.util.List;
 
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
+import dev.slne.spawn.trader.manager.object.impl.GlobeTrade;
 import dev.slne.spawn.trader.manager.object.impl.LightTrade;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import org.bukkit.inventory.ItemStack;
@@ -55,6 +56,9 @@ public interface Trade {
       }
       case "light-block" -> {
         return new LightTrade();
+      }
+      case "globe-banner-pattern" -> {
+        return new GlobeTrade();
       }
       default -> {
         return null;

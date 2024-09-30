@@ -13,13 +13,13 @@ import dev.slne.spawn.trader.manager.TradeManager;
 import dev.slne.spawn.trader.manager.object.CooldownPair;
 import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
+import dev.slne.spawn.trader.manager.object.impl.GlobeTrade;
 import dev.slne.spawn.trader.manager.object.impl.LightTrade;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -39,7 +39,7 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
     super(name);
 
     withArguments(new PlayerArgument("target"));
-    withArguments(tradeArgument().replaceSuggestions(ArgumentSuggestions.strings("light-block", "invisible-item-frame")));
+    withArguments(tradeArgument().replaceSuggestions(ArgumentSuggestions.strings("light-block", "invisible-item-frame", "globe-banner-pattern")));
     withArguments(new LongArgument("amount"));
 
     executesPlayer((player, args) -> {
@@ -50,6 +50,7 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
 
       availableTrades.add(new LightTrade().name());
       availableTrades.add(new FrameTrade().name());
+      availableTrades.add(new GlobeTrade().name());
 
       if (!availableTrades.contains(trade.name())) {
         throw CommandAPI.failWithString("Der Trade wurde nicht gefunden!");
@@ -61,16 +62,21 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
       }
 
       final UUID uuid = target.getUniqueId();
-      CooldownPair cooldownPair = tradeManager.cooldownStorage().getOrDefault(uuid, new CooldownPair(0L, 0L));
+      CooldownPair cooldownPair = tradeManager.cooldownStorage().getOrDefault(uuid, new CooldownPair(0L, 0L, 0L));
 
       final long currentTime = System.currentTimeMillis();
       final long cooldownEndTime = currentTime + amount;
 
-      if (trade instanceof FrameTrade) {
-        cooldownPair = new CooldownPair(cooldownEndTime, cooldownPair.getTrade1());
-      } else if (trade instanceof LightTrade) {
-        cooldownPair = new CooldownPair(cooldownPair.getTrade0(), cooldownEndTime);
-      }
+        switch (trade) {
+            case FrameTrade frameTrade ->
+                    cooldownPair = new CooldownPair(cooldownEndTime, cooldownPair.getTrade1(), cooldownPair.getTrade2());
+            case LightTrade lightTrade ->
+                    cooldownPair = new CooldownPair(cooldownPair.getTrade0(), cooldownEndTime, cooldownPair.getTrade2());
+            case GlobeTrade globeTrade ->
+                    cooldownPair = new CooldownPair(cooldownPair.getTrade0(), cooldownPair.getTrade1(), cooldownEndTime);
+            default -> {
+            }
+        }
 
       tradeManager.cooldownStorage().put(uuid, cooldownPair);
       player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Cooldown f\u00FCr den Trade wurde erfolgreich neu gesetzt.")));

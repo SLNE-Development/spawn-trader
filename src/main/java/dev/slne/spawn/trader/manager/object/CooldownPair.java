@@ -13,4 +13,5 @@ public class CooldownPair {
 
   private Long trade0;// ITEM FRAME
   private Long trade1;// LIGHT BLOCK
+  private Long trade2;// GLOBE BANNER PATTERN
 }

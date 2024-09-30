@@ -4,6 +4,7 @@ import dev.slne.spawn.trader.SpawnTrader;
 import dev.slne.spawn.trader.manager.object.CooldownPair;
 import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
+import dev.slne.spawn.trader.manager.object.impl.GlobeTrade;
 import dev.slne.spawn.trader.manager.object.impl.LightTrade;
 import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
@@ -39,15 +40,17 @@ public class TradeManager {
   public void setCooldown(Player player, Trade trade) {
     final UUID uuid = player.getUniqueId();
     CooldownPair cooldownPair = this.cooldownStorage.getOrDefault(uuid,
-        new CooldownPair(0L, 0L));
+        new CooldownPair(0L, 0L, 0L));
 
     final long currentTime = System.currentTimeMillis();
     final long cooldownEndTime = currentTime + SpawnTrader.instance().tradeCooldown();
 
     if (trade instanceof FrameTrade) {
-      cooldownPair = new CooldownPair(cooldownEndTime, cooldownPair.getTrade1());
+      cooldownPair = new CooldownPair(cooldownEndTime, cooldownPair.getTrade1(), cooldownPair.getTrade2());
     } else if (trade instanceof LightTrade) {
-      cooldownPair = new CooldownPair(cooldownPair.getTrade0(), cooldownEndTime);
+      cooldownPair = new CooldownPair(cooldownPair.getTrade0(), cooldownEndTime, cooldownPair.getTrade2());
+    } else if (trade instanceof GlobeTrade) {
+      cooldownPair = new CooldownPair(cooldownPair.getTrade0(), cooldownPair.getTrade1(), cooldownEndTime);
     }
 
     this.cooldownStorage.remove(uuid);
@@ -75,6 +78,8 @@ public class TradeManager {
       return cooldownPair.getTrade0() >= currentTime;
     } else if (trade instanceof LightTrade) {
       return cooldownPair.getTrade1() >= currentTime;
+    } else if (trade instanceof GlobeTrade) {
+      return cooldownPair.getTrade2() >= currentTime;
     }
 
     return false;
