@@ -6,15 +6,17 @@ import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
 import dev.slne.spawn.trader.manager.object.impl.GlobeTrade;
 import dev.slne.spawn.trader.manager.object.impl.LightTrade;
-import it.unimi.dsi.fastutil.objects.Object2ObjectMap;
-import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.UUID;
+
 import lombok.Getter;
 import lombok.experimental.Accessors;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -29,7 +31,6 @@ public class TradeManager {
 
   private final FileConfiguration storage = SpawnTrader.instance().storage();
   private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yyyy-HH:mm:ss");
-  private final Object2ObjectMap<UUID, CooldownPair> cooldownStorage = new Object2ObjectOpenHashMap<>();
 
   /**
    * Sets cooldown.
@@ -38,23 +39,10 @@ public class TradeManager {
    * @param trade  the trade
    */
   public void setCooldown(Player player, Trade trade) {
-    final UUID uuid = player.getUniqueId();
-    CooldownPair cooldownPair = this.cooldownStorage.getOrDefault(uuid,
-        new CooldownPair(0L, 0L, 0L));
-
     final long currentTime = System.currentTimeMillis();
     final long cooldownEndTime = currentTime + SpawnTrader.instance().tradeCooldown();
 
-    if (trade instanceof FrameTrade) {
-      cooldownPair = new CooldownPair(cooldownEndTime, cooldownPair.getTrade1(), cooldownPair.getTrade2());
-    } else if (trade instanceof LightTrade) {
-      cooldownPair = new CooldownPair(cooldownPair.getTrade0(), cooldownEndTime, cooldownPair.getTrade2());
-    } else if (trade instanceof GlobeTrade) {
-      cooldownPair = new CooldownPair(cooldownPair.getTrade0(), cooldownPair.getTrade1(), cooldownEndTime);
-    }
-
-    this.cooldownStorage.remove(uuid);
-    this.cooldownStorage.put(uuid, cooldownPair);
+    this.saveCooldown(player, trade, cooldownEndTime);
   }
 
   /**
@@ -65,24 +53,7 @@ public class TradeManager {
    * @return the boolean
    */
   public boolean isOnCooldown(Player player, Trade trade) {
-    final UUID playerId = player.getUniqueId();
-    final CooldownPair cooldownPair = cooldownStorage.get(playerId);
-
-    final long currentTime = System.currentTimeMillis();
-
-    if (cooldownPair == null) {
-      return false;
-    }
-
-    if (trade instanceof FrameTrade) {
-      return cooldownPair.getTrade0() >= currentTime;
-    } else if (trade instanceof LightTrade) {
-      return cooldownPair.getTrade1() >= currentTime;
-    } else if (trade instanceof GlobeTrade) {
-      return cooldownPair.getTrade2() >= currentTime;
-    }
-
-    return false;
+      return this.getCooldown(player, trade) >= System.currentTimeMillis();
   }
 
   /**
@@ -211,5 +182,29 @@ public class TradeManager {
       player.sendMessage(SpawnTrader.prefix().append(
           Component.text("Du benötigst weitere Materialien!").color(NamedTextColor.RED)));
     }
+  }
+
+  /**
+   * Saves a cooldown to a trade.
+   *
+   * @param player the player
+   * @param trade  the trade
+   * @param time  the time
+   */
+
+  public void saveCooldown(Player player, Trade trade, Long time){
+    SpawnTrader.instance().saveCooldown(player, trade, time);
+  }
+
+  /**
+   * Get a cooldown from a trade by a player.
+   *
+   * @param player the player
+   * @param trade  the trade
+   * @return the cooldown from pdc - 0x8000000000000000L if not existing
+   */
+
+  public Long getCooldown(Player player, Trade trade) {
+    return SpawnTrader.instance().getCooldown(player, trade);
   }
 }

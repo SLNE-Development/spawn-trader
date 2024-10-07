@@ -61,24 +61,10 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
         return;
       }
 
-      final UUID uuid = target.getUniqueId();
-      CooldownPair cooldownPair = tradeManager.cooldownStorage().getOrDefault(uuid, new CooldownPair(0L, 0L, 0L));
-
       final long currentTime = System.currentTimeMillis();
       final long cooldownEndTime = currentTime + amount;
 
-        switch (trade) {
-            case FrameTrade frameTrade ->
-                    cooldownPair = new CooldownPair(cooldownEndTime, cooldownPair.getTrade1(), cooldownPair.getTrade2());
-            case LightTrade lightTrade ->
-                    cooldownPair = new CooldownPair(cooldownPair.getTrade0(), cooldownEndTime, cooldownPair.getTrade2());
-            case GlobeTrade globeTrade ->
-                    cooldownPair = new CooldownPair(cooldownPair.getTrade0(), cooldownPair.getTrade1(), cooldownEndTime);
-            default -> {
-            }
-        }
-
-      tradeManager.cooldownStorage().put(uuid, cooldownPair);
+      SpawnTrader.instance().saveCooldown(target, trade, cooldownEndTime);
       player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Cooldown f\u00FCr den Trade wurde erfolgreich neu gesetzt.")));
     });
   }

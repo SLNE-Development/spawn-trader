@@ -9,7 +9,7 @@ import org.bukkit.inventory.ItemStack;
 public class GlobeTrade implements Trade {
     @Override
     public ObjectList<ItemStack> requirements() {
-        return ObjectList.of(new ItemBuilder(Material.EMERALD, 5).build(), new ItemBuilder(Material.PAPER, 20).build());
+        return ObjectList.of(new ItemBuilder(Material.EMERALD, 20).build(), new ItemBuilder(Material.PAPER, 20).build());
     }
 
     @Override

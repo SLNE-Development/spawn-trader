@@ -54,7 +54,7 @@ public class SpawnTraderGUI extends ChestGui {
           .setName(Component.text("1x Globe Banner Vorlage").color(NamedTextColor.YELLOW))
           .addLoreLine(Component.text("Preis: ")
                   .color(NamedTextColor.GRAY)
-                  .append(Component.text("20x Papier und 5x Smaragd").color(NamedTextColor.WHITE))
+                  .append(Component.text("20x Papier und 20x Smaragd").color(NamedTextColor.WHITE))
           )
           .setCustomModelData(42)
           .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
@@ -141,6 +141,7 @@ public class SpawnTraderGUI extends ChestGui {
   /**
    * Sets status items.
    */
+
   private void setStatusItems() {
     lightStatusPane.clear();
     frameStatusPane.clear();

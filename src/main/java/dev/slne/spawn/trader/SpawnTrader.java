@@ -6,18 +6,31 @@ import dev.slne.spawn.trader.entity.impl.TraderBukkitEntity;
 import dev.slne.spawn.trader.entity.impl.TraderNPC;
 import dev.slne.spawn.trader.manager.TradeManager;
 import dev.slne.spawn.trader.manager.object.CooldownPair;
+import dev.slne.spawn.trader.manager.object.Trade;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
+
+
+import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
+import dev.slne.spawn.trader.manager.object.impl.GlobeTrade;
+import dev.slne.spawn.trader.manager.object.impl.LightTrade;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -27,6 +40,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 @Setter
 @Accessors(fluent = true)
 public class SpawnTrader extends JavaPlugin {
+  private final NamespacedKey cooldownKeyTradeFrame = new NamespacedKey(this, "trader-cooldown-item-frame");
+  private final NamespacedKey cooldownKeyTradeLight = new NamespacedKey(this, "trader-cooldown-light-block");
+  private final NamespacedKey cooldownKeyTradeGlobe = new NamespacedKey(this, "trader-cooldown-globe");
+
   @Getter
   private static final Component prefix = Component.text(">> ").color(NamedTextColor.GRAY)
           .append(Component.text("Trader").color(NamedTextColor.GOLD))
@@ -61,8 +78,6 @@ public class SpawnTrader extends JavaPlugin {
     this.traderNPC = new TraderNPC();
     this.traderBukkitEntity = new TraderBukkitEntity();
 
-    this.loadStorage();
-
     new SpawnTraderCommand("spawntrader").register();
 
     Bukkit.getPluginManager().registerEvents(new EntityInteractListener(), this);
@@ -70,7 +85,6 @@ public class SpawnTrader extends JavaPlugin {
 
   @Override
   public void onDisable() {
-    this.saveStorage();
     //Text as placeholder :O
   }
 
@@ -94,50 +108,56 @@ public class SpawnTrader extends JavaPlugin {
   }
 
   /**
-   * Save storage.
+   * Saves a cooldown to a trade.
+   *
+   * @param player the player
+   * @param trade  the trade
+   * @param time  the time
    */
-  public void saveStorage() {
-    for (final Map.Entry<UUID, CooldownPair> entry : tradeManager.cooldownStorage().entrySet()) {
-      final String uuid = entry.getKey().toString();
-      final CooldownPair cooldownPair = entry.getValue();
 
-      storage.set("cooldowns." + uuid + ".trade0", cooldownPair.getTrade0());
-      storage.set("cooldowns." + uuid + ".trade1", cooldownPair.getTrade1());
-      storage.set("cooldowns." + uuid + ".trade2", cooldownPair.getTrade2());
-    }
+  public void saveCooldown(Player player, Trade trade, Long time){
+    PersistentDataContainer pdc = player.getPersistentDataContainer();
 
-    try {
-      storage.save(storageFile);
-    } catch (IOException e) {
-      Bukkit.getConsoleSender().sendMessage(e.getMessage());
+    if(trade instanceof FrameTrade){
+      pdc.set(cooldownKeyTradeFrame, PersistentDataType.LONG, time);
+    }else if(trade instanceof LightTrade){
+      pdc.set(cooldownKeyTradeLight, PersistentDataType.LONG, time);
+    }else if(trade instanceof GlobeTrade){
+      pdc.set(cooldownKeyTradeGlobe, PersistentDataType.LONG, time);
     }
   }
 
   /**
-   * Load storage.
+   * Get a cooldown from a trade by a player.
+   *
+   * @param player the player
+   * @param trade  the trade
+   * @return the cooldown from pdc - 0x8000000000000000L if not existing
    */
-  public void loadStorage() {
-    if (!storageFile.exists()) {
-      this.saveDefaultStorage();
-      this.loadStorage();
 
-      return;
-    }
-    if (storage.contains("cooldowns")) {
-      if(storage.getConfigurationSection("cooldowns") == null){
-        Bukkit.getConsoleSender().sendMessage("[SpawnTrader] <red>Error while loading storage. The section: cooldowns does not exist.");
-        return;
+  public Long getCooldown(Player player, Trade trade) {
+    PersistentDataContainer pdc = player.getPersistentDataContainer();
+
+    if (trade instanceof FrameTrade) {
+      if(pdc.get(cooldownKeyTradeFrame, PersistentDataType.LONG) == null){
+        return Long.MIN_VALUE;
       }
 
-
-      for (final String uuidString : storage.getConfigurationSection("cooldowns").getKeys(false)) {
-        UUID uuid = UUID.fromString(uuidString);
-        long trade0 = storage.getLong("cooldowns." + uuidString + ".trade0");
-        long trade1 = storage.getLong("cooldowns." + uuidString + ".trade1");
-        long trade2 = storage.getLong("cooldowns." + uuidString + ".trade2");
-
-        tradeManager.cooldownStorage().put(uuid, new CooldownPair(trade0, trade1, trade2));
+      return pdc.get(cooldownKeyTradeFrame, PersistentDataType.LONG);
+    } else if (trade instanceof LightTrade) {
+      if(pdc.get(cooldownKeyTradeLight, PersistentDataType.LONG) == null){
+        return Long.MIN_VALUE;
       }
+
+      return pdc.get(cooldownKeyTradeLight, PersistentDataType.LONG);
+    } else if (trade instanceof GlobeTrade) {
+      if(pdc.get(cooldownKeyTradeGlobe, PersistentDataType.LONG) == null){
+        return Long.MIN_VALUE;
+      }
+
+      return pdc.get(cooldownKeyTradeGlobe, PersistentDataType.LONG);
     }
+
+    return Long.MIN_VALUE;
   }
 }
