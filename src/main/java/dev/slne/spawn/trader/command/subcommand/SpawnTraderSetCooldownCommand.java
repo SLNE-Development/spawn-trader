@@ -8,16 +8,16 @@ import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.LongArgument;
 import dev.jorel.commandapi.arguments.PlayerArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
+
 import dev.slne.spawn.trader.SpawnTrader;
-import dev.slne.spawn.trader.manager.TradeManager;
-import dev.slne.spawn.trader.manager.object.CooldownPair;
 import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
 import dev.slne.spawn.trader.manager.object.impl.GlobeTrade;
 import dev.slne.spawn.trader.manager.object.impl.LightTrade;
+
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import it.unimi.dsi.fastutil.objects.ObjectList;
-import java.util.UUID;
+
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.entity.Player;
@@ -26,8 +26,6 @@ import org.bukkit.entity.Player;
  * The type Spawn trader set cooldown command.
  */
 public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
-
-  private final TradeManager tradeManager = SpawnTrader.instance().tradeManager();
   private final ObjectList<String> availableTrades = new ObjectArrayList<>();
 
   /**
