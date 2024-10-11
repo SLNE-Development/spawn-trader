@@ -143,18 +143,22 @@ public class TradeManager {
    * @param item   the item
    */
   private void removeItem(Player player, ItemStack item) {
-    for (final ItemStack stack : player.getInventory().getContents()) {
-      if (stack != null) {
-        if (stack.isSimilar(item)) {
-          int stackAmount = stack.getAmount();
+    int amountToRemove = item.getAmount();
 
-          if (stackAmount > item.getAmount()) {
-            stack.setAmount(stackAmount - item.getAmount());
+    for (ItemStack stack : player.getInventory().getContents()) {
+      if (stack != null && stack.isSimilar(item)) {
+        int stackAmount = stack.getAmount();
 
-            break;
-          } else {
-            stack.setAmount(0);
-          }
+        if (stackAmount > amountToRemove) {
+          stack.setAmount(stackAmount - amountToRemove);
+          break;
+        } else {
+          amountToRemove -= stackAmount;
+          stack.setAmount(0);
+        }
+
+        if (amountToRemove <= 0) {
+          break;
         }
       }
     }

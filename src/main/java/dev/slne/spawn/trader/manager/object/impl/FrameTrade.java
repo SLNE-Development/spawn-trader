@@ -2,7 +2,6 @@ package dev.slne.spawn.trader.manager.object.impl;
 
 import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.util.ItemBuilder;
-import java.util.List;
 
 import it.unimi.dsi.fastutil.objects.ObjectList;
 import org.bukkit.Material;
