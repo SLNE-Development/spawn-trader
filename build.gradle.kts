@@ -41,7 +41,7 @@ dependencies {
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 }
 
-paper{
+paper {
     name = "spawn-trader"
     main = "dev.slne.spawn.trader.SpawnTrader"
     apiVersion = "1.21"
