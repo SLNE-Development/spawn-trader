@@ -37,7 +37,7 @@ dependencies {
     compileOnly("net.citizensnpcs:citizens-main:2.0.35-SNAPSHOT"){
         exclude( "*", "*")
     }
-    implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.17")
+    implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.19")
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 }
 
