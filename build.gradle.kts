@@ -32,8 +32,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.1-R0.1-SNAPSHOT")
-    compileOnly ("dev.jorel:commandapi-bukkit-core:9.5.2")
+    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
+    compileOnly ("dev.jorel:commandapi-bukkit-core:9.7.0")
     compileOnly("net.citizensnpcs:citizens-main:2.0.35-SNAPSHOT"){
         exclude( "*", "*")
     }
@@ -48,7 +48,7 @@ paper {
     authors = listOf("SLNE Development", "TheBjoRedCraft")
     prefix = "SpawnTrader"
     defaultPermission = BukkitPluginDescription.Permission.Default.OP
-    version = "1.21.1-1.0.0-SNAPSHOT"
+    version = "1.21.4-1.0.0-SNAPSHOT"
 
 
     serverDependencies{
