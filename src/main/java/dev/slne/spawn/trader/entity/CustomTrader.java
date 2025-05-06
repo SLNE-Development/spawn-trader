@@ -9,9 +9,7 @@ public interface CustomTrader {
   /**
    * Spawn.
    *
-   * @param x the x
-   * @param y the y
-   * @param z the z
+   * @param location the location
    */
   boolean spawn(Location location, String name);
 
