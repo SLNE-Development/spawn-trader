@@ -112,17 +112,17 @@ public class SpawnTraderGUI extends ChestGui {
 
     lightPane.addItem(new GuiItem(LIGHT_BLOCK_ITEMSTACK, event -> {
       tradeManager.buy(player, lightTrade);
-      this.setStatusItems();
+      new SpawnTraderGUI(player).show(player);
     }));
 
     framePane.addItem(new GuiItem(FRAME_ITEM_STACK, event -> {
       tradeManager.buy(player, frameTrade);
-      this.setStatusItems();
+      new SpawnTraderGUI(player).show(player);
     }));
 
     globePane.addItem(new GuiItem(GLOBE_BANNER_STACK, event -> {
       tradeManager.buy(player, globeTrade);
-      this.setStatusItems();
+      new SpawnTraderGUI(player).show(player);
     }));
 
     this.addPane(framePane);
