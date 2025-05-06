@@ -91,7 +91,7 @@ public class SpawnTraderGUI extends ChestGui {
    * @param player the player
    */
   public SpawnTraderGUI(Player player) {
-    super(6, ComponentHolder.of(Component.text("H\u00E4ndler").color(NamedTextColor.BLACK)));
+    super(6, ComponentHolder.of(Component.text("Händler").color(NamedTextColor.BLACK)));
 
     this.player = player;
 
