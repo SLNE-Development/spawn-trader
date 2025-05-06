@@ -51,13 +51,11 @@ public class SpawnTrader extends JavaPlugin {
 
   private TraderNPC traderNPC;
   private TradeManager tradeManager;
-  private TraderBukkitEntity traderBukkitEntity;
 
   @Override
   public void onEnable() {
     this.tradeManager = new TradeManager();
     this.traderNPC = new TraderNPC();
-    this.traderBukkitEntity = new TraderBukkitEntity();
 
     new SpawnTraderCommand("spawntrader").register();
 
