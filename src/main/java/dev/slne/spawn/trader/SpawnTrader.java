@@ -116,4 +116,38 @@ public class SpawnTrader extends JavaPlugin {
 
     return Long.MIN_VALUE;
   }
+
+  public String getFormattedCooldown(Player player, Trade trade) {
+      long remainingMillis = this.getCooldown(player, trade) - System.currentTimeMillis();
+
+      if (remainingMillis <= 0) {
+          return "/";
+      }
+
+      long seconds = (remainingMillis / 1000) % 60;
+      long minutes = (remainingMillis / (1000 * 60)) % 60;
+      long hours = (remainingMillis / (1000 * 60 * 60)) % 24;
+      long days = remainingMillis / (1000 * 60 * 60 * 24);
+
+      StringBuilder formattedTime = new StringBuilder();
+
+      if (days > 0) {
+          formattedTime.append(days).append(" Tage, ");
+      }
+      if (hours > 0) {
+          formattedTime.append(hours).append(" Stunden, ");
+      }
+      if (minutes > 0) {
+          formattedTime.append(minutes).append(" Minuten, ");
+      }
+      if (seconds > 0) {
+          formattedTime.append(seconds).append(" Sekunden");
+      }
+
+      if (formattedTime.toString().endsWith(", ")) {
+          formattedTime.setLength(formattedTime.length() - 2);
+      }
+
+      return formattedTime.toString();
+  }
 }

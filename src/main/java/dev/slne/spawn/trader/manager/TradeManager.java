@@ -1,11 +1,7 @@
 package dev.slne.spawn.trader.manager;
 
 import dev.slne.spawn.trader.SpawnTrader;
-import dev.slne.spawn.trader.manager.object.CooldownPair;
 import dev.slne.spawn.trader.manager.object.Trade;
-import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
-import dev.slne.spawn.trader.manager.object.impl.GlobeTrade;
-import dev.slne.spawn.trader.manager.object.impl.LightTrade;
 
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -21,8 +17,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -32,8 +26,6 @@ import org.bukkit.inventory.ItemStack;
 @Getter
 @Accessors(fluent = true)
 public class TradeManager {
-  private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yyyy-HH:mm:ss");
-
   /**
    * Sets cooldown.
    *
@@ -168,9 +160,12 @@ public class TradeManager {
    */
   public void buy(Player player, Trade trade) {
     if (this.isOnCooldown(player, trade)) {
-      player.sendActionBar(Component.text("ʙɪᴛᴛᴇ ᴋᴏᴍᴍ ѕᴘÄᴛᴇʀ ᴡɪᴇᴅᴇʀ, ᴀᴋᴛᴜᴇʟʟ ʜᴀʙᴇ ɪᴄʜ ɴɪᴄʜᴛѕ ꜰüʀ ᴅɪᴄʜ.", NamedTextColor.RED).decorate(TextDecoration.BOLD));
+      player.sendActionBar(Component.text("ʙɪᴛᴛᴇ ᴋᴏᴍᴍᴇ ɪɴ ", NamedTextColor.RED)
+          .append(Component.text(SpawnTrader.instance().getFormattedCooldown(player, trade), NamedTextColor.GOLD))
+          .append(Component.text(" ᴡɪᴇᴅᴇʀ, ᴀᴋᴛᴜᴇʟʟ ʜᴀʙᴇ ɪᴄʜ ɴɪᴄʜᴛѕ ꜰüʀ ᴅɪᴄʜ.", NamedTextColor.RED)).decorate(TextDecoration.BOLD)
+      );
       player.playSound(Sound.sound(org.bukkit.Sound.ENTITY_VILLAGER_NO, Source.PLAYER, 1f, 1f), Emitter.self());
-      player.sendMessage(SpawnTrader.prefix().append(Component.text("Bitte komm später wieder, aktuell habe ich nichts für dich.").color(NamedTextColor.RED)));
+      player.sendMessage(SpawnTrader.prefix().append(Component.text("Bitte komme in " + SpawnTrader.instance().getFormattedCooldown(player, trade) + " wieder, aktuell habe ich nichts für dich.").color(NamedTextColor.RED)));
       return;
     }
 
