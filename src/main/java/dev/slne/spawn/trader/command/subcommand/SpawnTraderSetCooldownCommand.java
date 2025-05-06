@@ -42,7 +42,7 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
 
     executesPlayer((player, args) -> {
       final Player target = args.getOrDefaultUnchecked("target", player);
-      final long amount = args.getOrDefaultUnchecked("amount", SpawnTrader.instance().tradeCooldown());
+      final Long amount = args.getUnchecked("amount");
 
       Trade trade = args.getUnchecked("trade");
 
@@ -60,7 +60,7 @@ public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
       }
 
       final long currentTime = System.currentTimeMillis();
-      final long cooldownEndTime = currentTime + amount;
+      final long cooldownEndTime = currentTime + amount.longValue();
 
       SpawnTrader.instance().saveCooldown(target, trade, cooldownEndTime);
       player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Cooldown f\u00FCr den Trade wurde erfolgreich neu gesetzt.")));

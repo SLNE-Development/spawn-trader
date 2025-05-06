@@ -38,7 +38,7 @@ public class TradeManager {
    */
   public void setCooldown(Player player, Trade trade) {
     final long currentTime = System.currentTimeMillis();
-    final long cooldownEndTime = currentTime + SpawnTrader.instance().tradeCooldown();
+    final long cooldownEndTime = currentTime + trade.cooldown();
 
     this.saveCooldown(player, trade, cooldownEndTime);
   }
@@ -92,11 +92,6 @@ public class TradeManager {
    * @param trade  the trade
    */
   public void giveReward(Player player, Trade trade) {
-    if (trade instanceof FrameTrade) {
-      Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + player.getName() +
-          " item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}] 20");
-    }
-
     player.sendMessage(SpawnTrader.prefix().append(Component.text(trade.rewardMessage())));
 
     for (ItemStack reward : trade.rewards()) {
@@ -169,6 +164,7 @@ public class TradeManager {
    */
   public void buy(Player player, Trade trade) {
     if (this.isOnCooldown(player, trade)) {
+      player.sendActionBar(Component.text("ʙɪᴛᴛᴇ ᴋᴏᴍᴍ ѕᴘÄᴛᴇʀ ᴡɪᴇᴅᴇʀ, ᴀᴋᴛᴜᴇʟʟ ʜᴀʙᴇ ɪᴄʜ ɴɪᴄʜᴛѕ ꜰüʀ ᴅɪᴄʜ.", NamedTextColor.RED));
       player.sendMessage(SpawnTrader.prefix().append(Component.text("Bitte komm später wieder, aktuell habe ich nichts für dich.").color(NamedTextColor.RED)));
       return;
     }
@@ -178,6 +174,7 @@ public class TradeManager {
       this.removeRequirements(player, trade);
       this.setCooldown(player, trade);
     } else {
+      player.sendActionBar(Component.text("ᴅᴜ ʜᴀѕᴛ ɴɪᴄʜᴛ ɢᴇɴüɢᴇɴᴅ ʀᴏʜѕᴛᴏꜰꜰᴇ.", NamedTextColor.RED));
       player.sendMessage(SpawnTrader.prefix().append(Component.text("Du benötigst weitere Materialien!").color(NamedTextColor.RED)));
     }
   }

@@ -5,13 +5,10 @@ import dev.slne.spawn.trader.entity.EntityInteractListener;
 import dev.slne.spawn.trader.entity.impl.TraderNPC;
 import dev.slne.spawn.trader.manager.TradeManager;
 import dev.slne.spawn.trader.manager.object.Trade;
-
-import java.io.File;
-
-
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
 import dev.slne.spawn.trader.manager.object.impl.GlobeTrade;
 import dev.slne.spawn.trader.manager.object.impl.LightTrade;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -21,7 +18,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -43,11 +39,6 @@ public class SpawnTrader extends JavaPlugin {
           .append(Component.text("Trader").color(NamedTextColor.GOLD))
           .append(Component.text(" |").color(NamedTextColor.DARK_GRAY))
           .append(Component.text(" ").color(NamedTextColor.WHITE));
-
-  private long tradeCooldown;
-
-  private File storageFile;
-  private FileConfiguration storage;
 
   private TraderNPC traderNPC;
   private TradeManager tradeManager;
