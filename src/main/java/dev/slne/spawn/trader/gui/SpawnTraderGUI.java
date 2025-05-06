@@ -27,52 +27,43 @@ import org.bukkit.inventory.ItemStack;
 public class SpawnTraderGUI extends ChestGui {
 
   public static final ItemStack LIGHT_BLOCK_ITEMSTACK = new ItemBuilder(Material.LIGHT)
-          .setName(Component.text("20x Licht Bl\u00F6cke").color(NamedTextColor.YELLOW))
-          .addLoreLine(Component.text("Preis: ")
-                  .color(NamedTextColor.GRAY)
-                  .append(Component.text("20x Redstone-Lampe und 5x Smaragd").color(NamedTextColor.WHITE))
-          )
-          .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
-          .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
-          .setCustomModelData(42)
-          .build();
+      .setName(Component.text("20x Licht Bl\u00F6cke").color(NamedTextColor.YELLOW))
+      .addLoreLine(Component.empty())
+      .addLoreLine(Component.text("Preis: ", NamedTextColor.GRAY).append(Component.text("20x Redstone-Lampe und 5x Smaragd", NamedTextColor.WHITE)))
+      .addLoreLine(Component.empty())
+      .addLoreLine(Component.text("Eine magische und unsichtbare Lampe, mit Lichtstärke 15.", NamedTextColor.GRAY))
+      .addLoreLine(Component.text("Hergestellt unter heißen Temperaturen in der tiefe des Vulkans.", NamedTextColor.GRAY))
+      .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
+      .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
+      .build();
 
   public static final ItemStack FRAME_ITEM_STACK = new ItemBuilder(Material.ITEM_FRAME)
-          .setName(Component.text("20x Unsichtbarer Item Rahmen").color(NamedTextColor.YELLOW))
-          .addLoreLine(Component.text("Preis: ")
-                  .color(NamedTextColor.GRAY)
-                  .append(Component.text("20x Item-Rahmen und 5x Smaragd").color(NamedTextColor.WHITE))
-          )
-          .setCustomModelData(42)
-          .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
-          .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
-          .build();
+      .setName(Component.text("20x Unsichtbarer Item Rahmen").color(NamedTextColor.YELLOW))
+      .addLoreLine(Component.text("Preis: ", NamedTextColor.GRAY).append(Component.text("20x Item-Rahmen und 5x Smaragd", NamedTextColor.WHITE)))
+      .setCustomModelData(42)
+      .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
+      .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
+      .build();
 
   public static final ItemStack GLOBE_BANNER_STACK = new ItemBuilder(Material.GLOBE_BANNER_PATTERN)
-          .setName(Component.text("1x Globe Banner Vorlage").color(NamedTextColor.YELLOW))
-          .addLoreLine(Component.text("Preis: ")
-                  .color(NamedTextColor.GRAY)
-                  .append(Component.text("20x Papier und 20x Smaragd").color(NamedTextColor.WHITE))
-          )
-          .setCustomModelData(42)
-          .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
-          .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
-          .build();
+      .setName(Component.text("1x Globe Banner Vorlage").color(NamedTextColor.YELLOW))
+      .addLoreLine(Component.text("Preis: ").color(NamedTextColor.GRAY).append(Component.text("20x Papier und 20x Smaragd").color(NamedTextColor.WHITE)))
+      .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
+      .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
+      .build();
 
   private final TradeManager tradeManager = SpawnTrader.instance().tradeManager();
   private final ItemStack available = new ItemBuilder(Material.LIME_DYE)
-          .setName(Component.text("Verf\u00FCgbar").color(NamedTextColor.GREEN))
-          .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
-          .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
-          .setCustomModelData(42)
-          .build();
+      .setName(Component.text("Verf\u00FCgbar").color(NamedTextColor.GREEN))
+      .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
+      .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
+      .build();
 
   private final ItemStack locked = new ItemBuilder(Material.RED_DYE)
-          .setName(Component.text("Nicht Verf\u00FCgbar").color(NamedTextColor.RED))
-          .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
-          .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
-          .setCustomModelData(42)
-          .build();
+      .setName(Component.text("Nicht Verf\u00FCgbar").color(NamedTextColor.RED))
+      .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
+      .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
+      .build();
 
   private final OutlinePane lightStatusPane = new OutlinePane(2, 3, 1, 1);
   private final OutlinePane frameStatusPane = new OutlinePane(6, 3, 1, 1);
