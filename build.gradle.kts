@@ -56,7 +56,7 @@ paper {
             required = true
         }
 
-        register("ZNpcsPlus") {
+        register("ZNPCsPlus") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = false
         }
