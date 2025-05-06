@@ -24,8 +24,11 @@ public class SpawnTraderClearCommand extends CommandAPICommand {
 
     executesPlayer((player, args) -> {
 
-      traderNPC.clear("spawn-trader");
-      player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Trader wurde entfernt.").color(NamedTextColor.GREEN)));
+      if(traderNPC.clear("spawn-trader")) {
+        player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Trader wurde entfernt.").color(NamedTextColor.GREEN)));
+      } else {
+        player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Trader existiert nicht, oder ein ZNPCsPlus Fehler ist aufgetreten.").color(NamedTextColor.RED)));
+      }
     });
   }
 }

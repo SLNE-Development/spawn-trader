@@ -13,10 +13,10 @@ public interface CustomTrader {
    * @param y the y
    * @param z the z
    */
-  void spawn(Location location, String name);
+  boolean spawn(Location location, String name);
 
   /**
    * Clear.
    */
-  void clear(String name);
+  boolean clear(String name);
 }

@@ -22,7 +22,7 @@ public class TraderNPC implements CustomTrader {
   public static final String STRING_NAME = "<b><gradient:#369d91:#306965>ѕᴘᴀᴡɴ ᴛʀᴀᴅᴇʀ";
 
   @Override
-  public void spawn(Location location, String name) {
+  public boolean spawn(Location location, String name) {
     NpcApi npcApi = NpcApiProvider.get();
     NpcType type = npcApi.getNpcTypeRegistry().getByName("player");
     EntityProperty<SkinDescriptor> skinProperty = npcApi.getPropertyRegistry().getByName("skin", SkinDescriptor.class);
@@ -30,7 +30,11 @@ public class TraderNPC implements CustomTrader {
     SkinDescriptor skin = npcApi.getSkinDescriptorFactory().createStaticDescriptor(texture, signature);
 
     if (type == null) {
-      throw new IllegalStateException("The player NPC type is not registered.");
+      return false;
+    }
+
+    if(npcApi.getNpcRegistry().getById(name) != null) {
+      return false;
     }
 
     NpcEntry entry = npcApi.getNpcRegistry().create(
@@ -44,15 +48,20 @@ public class TraderNPC implements CustomTrader {
     entry.getNpc().setProperty(skinProperty, skin);
     entry.getNpc().setProperty(lookProperty, LookType.PER_PLAYER);
     entry.enableEverything();
+
+    return true;
   }
 
   @Override
-  public void clear(String name) {
+  public boolean clear(String name) {
     NpcApi npcApi = NpcApiProvider.get();
     NpcEntry entry = npcApi.getNpcRegistry().getById(name);
 
     if (entry != null) {
       npcApi.getNpcRegistry().delete(name);
+      return true;
     }
+
+    return false;
   }
 }
