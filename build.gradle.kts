@@ -45,9 +45,8 @@ paper {
     name = "spawn-trader"
     main = "dev.slne.spawn.trader.SpawnTrader"
     apiVersion = "1.21"
-    authors = listOf("SLNE Development", "TheBjoRedCraft")
+    authors = listOf("red")
     prefix = "SpawnTrader"
-    defaultPermission = BukkitPluginDescription.Permission.Default.OP
     version = "1.21.4-1.0.0-SNAPSHOT"
 
 
@@ -84,7 +83,6 @@ tasks.javadoc {
 
 tasks.shadowJar {
     relocate("com.github.stefvanschie.inventoryframework", "dev.slne.spawn.trader.inventoryframework")
-    relocate("com.github.ben-manes.caffeine", "dev.slne.spawn.trader.caffeine")
 }
 
 tasks.build {
