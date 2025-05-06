@@ -20,6 +20,7 @@ import net.kyori.adventure.sound.Sound.Source;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -167,7 +168,7 @@ public class TradeManager {
    */
   public void buy(Player player, Trade trade) {
     if (this.isOnCooldown(player, trade)) {
-      player.sendActionBar(Component.text("ʙɪᴛᴛᴇ ᴋᴏᴍᴍ ѕᴘÄᴛᴇʀ ᴡɪᴇᴅᴇʀ, ᴀᴋᴛᴜᴇʟʟ ʜᴀʙᴇ ɪᴄʜ ɴɪᴄʜᴛѕ ꜰüʀ ᴅɪᴄʜ.", NamedTextColor.RED));
+      player.sendActionBar(Component.text("ʙɪᴛᴛᴇ ᴋᴏᴍᴍ ѕᴘÄᴛᴇʀ ᴡɪᴇᴅᴇʀ, ᴀᴋᴛᴜᴇʟʟ ʜᴀʙᴇ ɪᴄʜ ɴɪᴄʜᴛѕ ꜰüʀ ᴅɪᴄʜ.", NamedTextColor.RED).decorate(TextDecoration.BOLD));
       player.playSound(Sound.sound(org.bukkit.Sound.ENTITY_VILLAGER_NO, Source.PLAYER, 1f, 1f), Emitter.self());
       player.sendMessage(SpawnTrader.prefix().append(Component.text("Bitte komm später wieder, aktuell habe ich nichts für dich.").color(NamedTextColor.RED)));
       return;
@@ -180,7 +181,7 @@ public class TradeManager {
 
       player.playSound(Sound.sound(org.bukkit.Sound.ENTITY_WANDERING_TRADER_YES, Source.PLAYER, 1f, 1f), Emitter.self());
     } else {
-      player.sendActionBar(Component.text("ᴅᴜ ʜᴀѕᴛ ɴɪᴄʜᴛ ɢᴇɴüɢᴇɴᴅ ʀᴏʜѕᴛᴏꜰꜰᴇ.", NamedTextColor.RED));
+      player.sendActionBar(Component.text("ᴅᴜ ʜᴀѕᴛ ɴɪᴄʜᴛ ɢᴇɴüɢᴇɴᴅ ʀᴏʜѕᴛᴏꜰꜰᴇ.", NamedTextColor.RED).decorate(TextDecoration.BOLD));
       player.playSound(Sound.sound(org.bukkit.Sound.BLOCK_ANVIL_DESTROY, Source.PLAYER, 1f, 1f), Emitter.self());
       player.sendMessage(SpawnTrader.prefix().append(Component.text("Du benötigst weitere Materialien!").color(NamedTextColor.RED)));
     }
