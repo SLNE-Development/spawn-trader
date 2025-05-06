@@ -23,7 +23,7 @@ public class EntityInteractListener implements Listener {
         public void run() {
           new SpawnTraderGUI(player).show(player);
         }
-      }.runTaskLater(SpawnTrader.instance(), 1L);
+      }.runTaskLater(SpawnTrader.instance(), 0L);
     }
   }
 }
