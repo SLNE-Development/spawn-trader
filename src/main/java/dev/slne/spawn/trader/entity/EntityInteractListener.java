@@ -1,36 +1,22 @@
 package dev.slne.spawn.trader.entity;
 
-import dev.slne.spawn.trader.SpawnTrader;
 import dev.slne.spawn.trader.gui.SpawnTraderGUI;
-import org.bukkit.entity.Entity;
+
+import lol.pyr.znpcsplus.api.event.NpcInteractEvent;
+import lol.pyr.znpcsplus.api.npc.NpcEntry;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 
-/**
- * The type Entity interact listener.
- */
 public class EntityInteractListener implements Listener {
 
-  /**
-   * On event.
-   *
-   * @param event the event
-   */
   @EventHandler
-  public void onEvent(PlayerInteractAtEntityEvent event) {
-    final Entity entity = event.getRightClicked();
-    final Player player = event.getPlayer();
-    final SpawnTrader instance = SpawnTrader.instance();
+  public void onNpcInteract(NpcInteractEvent event) {
+    NpcEntry entry = event.getEntry();
+    Player player = event.getPlayer();
 
-    if (entity.getScoreboardTags().contains(instance.traderBukkitEntity().entityTag())) {
-      new SpawnTraderGUI(player).show(player);
-      
-      return;
-    }
-
-    if (entity.getScoreboardTags().contains(instance.traderNPC().entityTag())) {
+    if(entry.getId().equalsIgnoreCase("spawn-trader")) {
       new SpawnTraderGUI(player).show(player);
     }
   }
