@@ -121,7 +121,7 @@ public class SpawnTrader extends JavaPlugin {
       long remainingMillis = this.getCooldown(player, trade) - System.currentTimeMillis();
 
       if (remainingMillis <= 0) {
-          return "/";
+          return "N/A";
       }
 
       long seconds = (remainingMillis / 1000) % 60;
