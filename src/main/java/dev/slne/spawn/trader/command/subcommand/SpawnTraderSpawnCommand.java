@@ -20,7 +20,7 @@ public class SpawnTraderSpawnCommand extends CommandAPICommand {
       if(traderNPC.spawn(player.getLocation(), "spawn-trader")) {
         player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Trader wurde gespawned.").color(NamedTextColor.GREEN)));
       } else  {
-        player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Trader wurde existiert bereits, oder ein ZNPCsPlus Fehler ist aufgetreten.").color(NamedTextColor.RED)));
+        player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Trader existiert bereits, oder ein ZNPCsPlus-Fehler ist aufgetreten.").color(NamedTextColor.RED)));
       }
     });
   }
