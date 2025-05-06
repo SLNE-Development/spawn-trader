@@ -27,7 +27,7 @@ import org.bukkit.inventory.ItemStack;
 public class SpawnTraderGUI extends ChestGui {
 
   public static final ItemStack LIGHT_BLOCK_ITEMSTACK = new ItemBuilder(Material.LIGHT)
-      .setName(Component.text("20x Licht Bl\u00F6cke").color(NamedTextColor.YELLOW))
+      .setName(Component.text("20x Licht Blöcke").color(NamedTextColor.YELLOW))
       .addLoreLine(Component.empty())
       .addLoreLine(Component.text("Preis: ", NamedTextColor.GRAY).append(Component.text("20x Redstone-Lampe und 5x Smaragd", NamedTextColor.WHITE)))
       .addLoreLine(Component.empty())
@@ -39,28 +39,38 @@ public class SpawnTraderGUI extends ChestGui {
 
   public static final ItemStack FRAME_ITEM_STACK = new ItemBuilder(Material.ITEM_FRAME)
       .setName(Component.text("20x Unsichtbarer Item Rahmen").color(NamedTextColor.YELLOW))
+      .addLoreLine(Component.empty())
       .addLoreLine(Component.text("Preis: ", NamedTextColor.GRAY).append(Component.text("20x Item-Rahmen und 5x Smaragd", NamedTextColor.WHITE)))
+      .addLoreLine(Component.empty())
+      .addLoreLine(Component.text("Ein fast unsichtbarer Rahmen für geheime Präsentationen.", NamedTextColor.GRAY))
+      .addLoreLine(Component.text("Wurde mit Illusionsmagie von alten Bibliothekaren verzaubert.", NamedTextColor.GRAY))
       .setCustomModelData(42)
       .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
       .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
       .build();
 
+
   public static final ItemStack GLOBE_BANNER_STACK = new ItemBuilder(Material.GLOBE_BANNER_PATTERN)
       .setName(Component.text("1x Globe Banner Vorlage").color(NamedTextColor.YELLOW))
+      .addLoreLine(Component.empty())
       .addLoreLine(Component.text("Preis: ").color(NamedTextColor.GRAY).append(Component.text("20x Papier und 20x Smaragd").color(NamedTextColor.WHITE)))
+      .addLoreLine(Component.empty())
+      .addLoreLine(Component.text("Ein uraltes Symbol, das einst nur Königen vorbehalten war.", NamedTextColor.GRAY))
+      .addLoreLine(Component.text("Gefunden in den Ruinen einer vergessenen Zivilisation.", NamedTextColor.GRAY))
       .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
       .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
       .build();
 
+
   private final TradeManager tradeManager = SpawnTrader.instance().tradeManager();
   private final ItemStack available = new ItemBuilder(Material.LIME_DYE)
-      .setName(Component.text("Verf\u00FCgbar").color(NamedTextColor.GREEN))
+      .setName(Component.text("Verfügbar").color(NamedTextColor.GREEN))
       .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
       .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
       .build();
 
   private final ItemStack locked = new ItemBuilder(Material.RED_DYE)
-      .setName(Component.text("Nicht Verf\u00FCgbar").color(NamedTextColor.RED))
+      .setName(Component.text("Nicht Verfügbar").color(NamedTextColor.RED))
       .addItemFlag(ItemFlag.HIDE_ATTRIBUTES)
       .addItemFlag(ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
       .build();
