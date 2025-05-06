@@ -2,7 +2,6 @@ package dev.slne.spawn.trader.command.subcommand;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.slne.spawn.trader.SpawnTrader;
-import dev.slne.spawn.trader.entity.impl.TraderBukkitEntity;
 import dev.slne.spawn.trader.entity.impl.TraderNPC;
 import net.kyori.adventure.text.Component;
 

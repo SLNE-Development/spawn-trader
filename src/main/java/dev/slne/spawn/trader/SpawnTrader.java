@@ -2,16 +2,11 @@ package dev.slne.spawn.trader;
 
 import dev.slne.spawn.trader.command.SpawnTraderCommand;
 import dev.slne.spawn.trader.entity.EntityInteractListener;
-import dev.slne.spawn.trader.entity.impl.TraderBukkitEntity;
 import dev.slne.spawn.trader.entity.impl.TraderNPC;
 import dev.slne.spawn.trader.manager.TradeManager;
-import dev.slne.spawn.trader.manager.object.CooldownPair;
 import dev.slne.spawn.trader.manager.object.Trade;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-import java.util.UUID;
 
 
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
@@ -27,7 +22,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -50,7 +44,6 @@ public class SpawnTrader extends JavaPlugin {
           .append(Component.text(" |").color(NamedTextColor.DARK_GRAY))
           .append(Component.text(" ").color(NamedTextColor.WHITE));
 
-  private boolean citizens;
   private long tradeCooldown;
 
   private File storageFile;
@@ -61,19 +54,7 @@ public class SpawnTrader extends JavaPlugin {
   private TraderBukkitEntity traderBukkitEntity;
 
   @Override
-  public void onLoad() {
-    citizens = this.getConfig().getBoolean("citizens");
-    tradeCooldown = this.getConfig().getLong("trade-cooldown");
-
-    storageFile = new File(this.getDataFolder() + "/storage.yml");
-    storage = YamlConfiguration.loadConfiguration(storageFile);
-  }
-
-  @Override
   public void onEnable() {
-    this.saveDefaultConfig();
-    this.saveDefaultStorage();
-
     this.tradeManager = new TradeManager();
     this.traderNPC = new TraderNPC();
     this.traderBukkitEntity = new TraderBukkitEntity();
@@ -81,11 +62,6 @@ public class SpawnTrader extends JavaPlugin {
     new SpawnTraderCommand("spawntrader").register();
 
     Bukkit.getPluginManager().registerEvents(new EntityInteractListener(), this);
-  }
-
-  @Override
-  public void onDisable() {
-    //Text as placeholder :O
   }
 
   /**
@@ -96,15 +72,6 @@ public class SpawnTrader extends JavaPlugin {
 
   public static SpawnTrader instance(){
     return getPlugin(SpawnTrader.class);
-  }
-
-  /**
-   * Save default storage.
-   */
-  public void saveDefaultStorage() {
-    if (!this.storageFile().exists()) {
-      this.saveResource("storage.yml", false);
-    }
   }
 
   /**

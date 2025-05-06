@@ -1,26 +1,11 @@
 package dev.slne.spawn.trader.entity;
 
-import org.bukkit.World;
+import org.bukkit.Location;
 
 /**
  * The interface Custom trader.
  */
 public interface CustomTrader {
-
-  /**
-   * Entity tag string.
-   *
-   * @return the string
-   */
-  String entityTag();
-
-  /**
-   * World world.
-   *
-   * @return the world
-   */
-  World world();
-
   /**
    * Spawn.
    *
@@ -28,10 +13,10 @@ public interface CustomTrader {
    * @param y the y
    * @param z the z
    */
-  void spawn(double x, double y, double z);
+  void spawn(Location location, String name);
 
   /**
    * Clear.
    */
-  void clear();
+  void clear(String name);
 }

@@ -25,18 +25,18 @@ repositories {
 
     maven("https://repo.codemc.org/repository/maven-public/")
 
-    maven ("https://maven.citizensnpcs.co/repo") {
-        name = "citizens-repo"
+    maven ("https://repo.pyr.lol/snapshots") {
+        name = "pyrSnapshots"
     }
+
 
 }
 
 dependencies {
     compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
     compileOnly ("dev.jorel:commandapi-bukkit-core:9.7.0")
-    compileOnly("net.citizensnpcs:citizens-main:2.0.35-SNAPSHOT"){
-        exclude( "*", "*")
-    }
+    compileOnly("lol.pyr:znpcsplus-api:2.1.0-SNAPSHOT")
+
     implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.19")
     implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
 }
@@ -57,7 +57,7 @@ paper {
             required = true
         }
 
-        register("Citizens") {
+        register("ZNpcsPlus") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = false
         }

@@ -31,4 +31,9 @@ public class GlobeTrade implements Trade {
     public String rewardMessage() {
         return "Danke f\u00FCr den Einkauf von einer Globe Banner Vorlage!";
     }
+
+    @Override
+    public Long cooldown() {
+        return 75600000L;
+    }
 }

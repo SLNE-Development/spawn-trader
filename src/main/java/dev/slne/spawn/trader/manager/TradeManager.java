@@ -28,8 +28,6 @@ import org.bukkit.inventory.ItemStack;
 @Getter
 @Accessors(fluent = true)
 public class TradeManager {
-
-  private final FileConfiguration storage = SpawnTrader.instance().storage();
   private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yyyy-HH:mm:ss");
 
   /**
@@ -66,8 +64,7 @@ public class TradeManager {
     if (this.hasEnoughRequirements(player, trade)) {
       trade.requirements().forEach(item -> this.removeItem(player, item));
     } else {
-      player.sendMessage(SpawnTrader.prefix()
-          .append(Component.text("Du benötigst weitere Materialien!").color(NamedTextColor.RED)));
+      player.sendMessage(SpawnTrader.prefix().append(Component.text("Du benötigst weitere Materialien!").color(NamedTextColor.RED)));
     }
   }
 
@@ -172,9 +169,7 @@ public class TradeManager {
    */
   public void buy(Player player, Trade trade) {
     if (this.isOnCooldown(player, trade)) {
-      player.sendMessage(SpawnTrader.prefix()
-          .append(Component.text("Bitte komm später wieder, aktuell habe ich nichts für dich.")
-              .color(NamedTextColor.RED)));
+      player.sendMessage(SpawnTrader.prefix().append(Component.text("Bitte komm später wieder, aktuell habe ich nichts für dich.").color(NamedTextColor.RED)));
       return;
     }
 
@@ -183,8 +178,7 @@ public class TradeManager {
       this.removeRequirements(player, trade);
       this.setCooldown(player, trade);
     } else {
-      player.sendMessage(SpawnTrader.prefix().append(
-          Component.text("Du benötigst weitere Materialien!").color(NamedTextColor.RED)));
+      player.sendMessage(SpawnTrader.prefix().append(Component.text("Du benötigst weitere Materialien!").color(NamedTextColor.RED)));
     }
   }
 

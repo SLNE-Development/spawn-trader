@@ -4,7 +4,9 @@ import dev.slne.spawn.trader.manager.object.Trade;
 import dev.slne.spawn.trader.util.ItemBuilder;
 
 import it.unimi.dsi.fastutil.objects.ObjectList;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFactory;
 import org.bukkit.inventory.ItemStack;
 
 /**
@@ -20,8 +22,7 @@ public class FrameTrade implements Trade {
 
   @Override
   public ObjectList<ItemStack> rewards() {
-    // per command: invisible item frame x20
-    return ObjectList.of();
+    return ObjectList.of(new ItemBuilder(Bukkit.getItemFactory().createItemStack("item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}]")).setAmount(20).build());
   }
 
   @Override
@@ -38,5 +39,10 @@ public class FrameTrade implements Trade {
   @Override
   public String rewardMessage() {
     return "Danke f\u00FCr den Einkauf von 20x Item-Rahmen!";
+  }
+
+  @Override
+  public Long cooldown() {
+    return 75600000L;
   }
 }

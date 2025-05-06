@@ -37,4 +37,9 @@ public class LightTrade implements Trade {
   public String rewardMessage() {
     return "Danke f\u00FCr den Einkauf von 20x Licht-Bl\u00F6cken!";
   }
+
+  @Override
+  public Long cooldown() {
+    return 75600000L;
+  }
 }
