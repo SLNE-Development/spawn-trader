@@ -7,7 +7,6 @@ plugins {
 
     id("net.minecrell.plugin-yml.paper") version "0.6.0"
     id("com.gradleup.shadow") version "8.3.0"
-    id("org.hibernate.build.maven-repo-auth") version "3.0.4"
     id ("io.freefair.lombok") version "8.10"
 }
 
