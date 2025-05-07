@@ -368,7 +368,7 @@ public class ItemBuilder {
     if (im.hasLore()) {
       lore = new ArrayList<>(im.lore());
     }
-    lore.add(line);
+    lore.add(line.decoration(TextDecoration.ITALIC, false));
     im.lore(lore);
     itemStack.setItemMeta(im);
     return this;

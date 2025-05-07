@@ -1,24 +1,20 @@
 package dev.slne.spawn.trader.manager;
 
 import dev.slne.spawn.trader.SpawnTrader;
-import dev.slne.spawn.trader.manager.object.CooldownPair;
 import dev.slne.spawn.trader.manager.object.Trade;
-import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
-import dev.slne.spawn.trader.manager.object.impl.GlobeTrade;
-import dev.slne.spawn.trader.manager.object.impl.LightTrade;
 
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
-import java.util.UUID;
 
 import lombok.Getter;
 import lombok.experimental.Accessors;
 
+import net.kyori.adventure.sound.Sound;
+import net.kyori.adventure.sound.Sound.Emitter;
+import net.kyori.adventure.sound.Sound.Source;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 
-import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.FileConfiguration;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -28,10 +24,6 @@ import org.bukkit.inventory.ItemStack;
 @Getter
 @Accessors(fluent = true)
 public class TradeManager {
-
-  private final FileConfiguration storage = SpawnTrader.instance().storage();
-  private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd:MM:yyyy-HH:mm:ss");
-
   /**
    * Sets cooldown.
    *
@@ -40,7 +32,7 @@ public class TradeManager {
    */
   public void setCooldown(Player player, Trade trade) {
     final long currentTime = System.currentTimeMillis();
-    final long cooldownEndTime = currentTime + SpawnTrader.instance().tradeCooldown();
+    final long cooldownEndTime = currentTime + trade.cooldown();
 
     this.saveCooldown(player, trade, cooldownEndTime);
   }
@@ -66,8 +58,7 @@ public class TradeManager {
     if (this.hasEnoughRequirements(player, trade)) {
       trade.requirements().forEach(item -> this.removeItem(player, item));
     } else {
-      player.sendMessage(SpawnTrader.prefix()
-          .append(Component.text("Du benötigst weitere Materialien!").color(NamedTextColor.RED)));
+      player.sendMessage(SpawnTrader.prefix().append(Component.text("Du benötigst weitere Materialien!").color(NamedTextColor.RED)));
     }
   }
 
@@ -95,11 +86,6 @@ public class TradeManager {
    * @param trade  the trade
    */
   public void giveReward(Player player, Trade trade) {
-    if (trade instanceof FrameTrade) {
-      Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "give " + player.getName() +
-          " item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}] 20");
-    }
-
     player.sendMessage(SpawnTrader.prefix().append(Component.text(trade.rewardMessage())));
 
     for (ItemStack reward : trade.rewards()) {
@@ -172,9 +158,12 @@ public class TradeManager {
    */
   public void buy(Player player, Trade trade) {
     if (this.isOnCooldown(player, trade)) {
-      player.sendMessage(SpawnTrader.prefix()
-          .append(Component.text("Bitte komm später wieder, aktuell habe ich nichts für dich.")
-              .color(NamedTextColor.RED)));
+      player.sendActionBar(Component.text("ʙɪᴛᴛᴇ ᴋᴏᴍᴍᴇ ɪɴ ", NamedTextColor.RED)
+          .append(Component.text(SpawnTrader.instance().getFormattedCooldown(player, trade), NamedTextColor.GOLD))
+          .append(Component.text(" ᴡɪᴇᴅᴇʀ, ᴀᴋᴛᴜᴇʟʟ ʜᴀʙᴇ ɪᴄʜ ɴɪᴄʜᴛѕ ꜰüʀ ᴅɪᴄʜ.", NamedTextColor.RED)).decorate(TextDecoration.BOLD)
+      );
+      player.playSound(Sound.sound(org.bukkit.Sound.ENTITY_VILLAGER_NO, Source.PLAYER, 1f, 1f), Emitter.self());
+      player.sendMessage(SpawnTrader.prefix().append(Component.text("Bitte komme in " + SpawnTrader.instance().getFormattedCooldown(player, trade) + " wieder, aktuell habe ich nichts für dich.").color(NamedTextColor.RED)));
       return;
     }
 
@@ -182,9 +171,12 @@ public class TradeManager {
       this.giveReward(player, trade);
       this.removeRequirements(player, trade);
       this.setCooldown(player, trade);
+
+      player.playSound(Sound.sound(org.bukkit.Sound.ENTITY_WANDERING_TRADER_YES, Source.PLAYER, 1f, 1f), Emitter.self());
     } else {
-      player.sendMessage(SpawnTrader.prefix().append(
-          Component.text("Du benötigst weitere Materialien!").color(NamedTextColor.RED)));
+      player.sendActionBar(Component.text("ᴅᴜ ʜᴀѕᴛ ɴɪᴄʜᴛ ɢᴇɴüɢᴇɴᴅ ʀᴏʜѕᴛᴏꜰꜰᴇ.", NamedTextColor.RED).decorate(TextDecoration.BOLD));
+      player.playSound(Sound.sound(org.bukkit.Sound.BLOCK_ANVIL_DESTROY, Source.PLAYER, 1f, 1f), Emitter.self());
+      player.sendMessage(SpawnTrader.prefix().append(Component.text("Du benötigst weitere Materialien!").color(NamedTextColor.RED)));
     }
   }
 

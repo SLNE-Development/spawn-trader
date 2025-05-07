@@ -2,21 +2,13 @@ package dev.slne.spawn.trader;
 
 import dev.slne.spawn.trader.command.SpawnTraderCommand;
 import dev.slne.spawn.trader.entity.EntityInteractListener;
-import dev.slne.spawn.trader.entity.impl.TraderBukkitEntity;
 import dev.slne.spawn.trader.entity.impl.TraderNPC;
 import dev.slne.spawn.trader.manager.TradeManager;
-import dev.slne.spawn.trader.manager.object.CooldownPair;
 import dev.slne.spawn.trader.manager.object.Trade;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.Map;
-import java.util.UUID;
-
-
 import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
 import dev.slne.spawn.trader.manager.object.impl.GlobeTrade;
 import dev.slne.spawn.trader.manager.object.impl.LightTrade;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -26,8 +18,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -50,42 +40,17 @@ public class SpawnTrader extends JavaPlugin {
           .append(Component.text(" |").color(NamedTextColor.DARK_GRAY))
           .append(Component.text(" ").color(NamedTextColor.WHITE));
 
-  private boolean citizens;
-  private long tradeCooldown;
-
-  private File storageFile;
-  private FileConfiguration storage;
-
   private TraderNPC traderNPC;
   private TradeManager tradeManager;
-  private TraderBukkitEntity traderBukkitEntity;
-
-  @Override
-  public void onLoad() {
-    citizens = this.getConfig().getBoolean("citizens");
-    tradeCooldown = this.getConfig().getLong("trade-cooldown");
-
-    storageFile = new File(this.getDataFolder() + "/storage.yml");
-    storage = YamlConfiguration.loadConfiguration(storageFile);
-  }
 
   @Override
   public void onEnable() {
-    this.saveDefaultConfig();
-    this.saveDefaultStorage();
-
     this.tradeManager = new TradeManager();
     this.traderNPC = new TraderNPC();
-    this.traderBukkitEntity = new TraderBukkitEntity();
 
     new SpawnTraderCommand("spawntrader").register();
 
     Bukkit.getPluginManager().registerEvents(new EntityInteractListener(), this);
-  }
-
-  @Override
-  public void onDisable() {
-    //Text as placeholder :O
   }
 
   /**
@@ -96,15 +61,6 @@ public class SpawnTrader extends JavaPlugin {
 
   public static SpawnTrader instance(){
     return getPlugin(SpawnTrader.class);
-  }
-
-  /**
-   * Save default storage.
-   */
-  public void saveDefaultStorage() {
-    if (!this.storageFile().exists()) {
-      this.saveResource("storage.yml", false);
-    }
   }
 
   /**
@@ -159,5 +115,39 @@ public class SpawnTrader extends JavaPlugin {
     }
 
     return Long.MIN_VALUE;
+  }
+
+  public String getFormattedCooldown(Player player, Trade trade) {
+      long remainingMillis = this.getCooldown(player, trade) - System.currentTimeMillis();
+
+      if (remainingMillis <= 0) {
+          return "N/A";
+      }
+
+      long seconds = (remainingMillis / 1000) % 60;
+      long minutes = (remainingMillis / (1000 * 60)) % 60;
+      long hours = (remainingMillis / (1000 * 60 * 60)) % 24;
+      long days = remainingMillis / (1000 * 60 * 60 * 24);
+
+      StringBuilder formattedTime = new StringBuilder();
+
+      if (days > 0) {
+          formattedTime.append(days).append(" Tage, ");
+      }
+      if (hours > 0) {
+          formattedTime.append(hours).append(" Stunden, ");
+      }
+      if (minutes > 0) {
+          formattedTime.append(minutes).append(" Minuten, ");
+      }
+      if (seconds > 0) {
+          formattedTime.append(seconds).append(" Sekunden");
+      }
+
+      if (formattedTime.toString().endsWith(", ")) {
+          formattedTime.setLength(formattedTime.length() - 2);
+      }
+
+      return formattedTime.toString();
   }
 }

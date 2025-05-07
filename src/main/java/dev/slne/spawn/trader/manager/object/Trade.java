@@ -49,6 +49,14 @@ public interface Trade {
   String rewardMessage();
 
 
+  /**
+   * Get the cooldown for this trade.
+   *
+   * @return the cooldown in milliseconds
+   */
+  Long cooldown();
+
+
   static Trade getTrade(String name){
     switch (name){
       case "invisible-item-frame" -> {

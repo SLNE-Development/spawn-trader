@@ -2,9 +2,9 @@ package dev.slne.spawn.trader.command.subcommand;
 
 import dev.jorel.commandapi.CommandAPICommand;
 import dev.slne.spawn.trader.SpawnTrader;
-import dev.slne.spawn.trader.entity.impl.TraderBukkitEntity;
 import dev.slne.spawn.trader.entity.impl.TraderNPC;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 /**
  * The type Spawn trader clear command.
@@ -13,7 +13,6 @@ public class SpawnTraderClearCommand extends CommandAPICommand {
 
   private final SpawnTrader instance = SpawnTrader.instance();
   private final TraderNPC traderNPC = this.instance.traderNPC();
-  private final TraderBukkitEntity traderBukkitEntity = this.instance.traderBukkitEntity();
 
   /**
    * Instantiates a new Spawn trader clear command.
@@ -25,13 +24,10 @@ public class SpawnTraderClearCommand extends CommandAPICommand {
 
     executesPlayer((player, args) -> {
 
-      if (instance.citizens()) {
-        traderNPC.clear();
-
-        player.sendMessage(SpawnTrader.prefix().append(Component.text("Die Citizens-Trade-NPCs wurden entfernt.")));
+      if(traderNPC.clear("spawn-trader")) {
+        player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Trader wurde entfernt.").color(NamedTextColor.GREEN)));
       } else {
-        traderBukkitEntity.clear();
-        player.sendMessage(SpawnTrader.prefix().append(Component.text("Die Bukkit-Trade-NPCs wurden entfernt.")));
+        player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Trader existiert nicht, oder ein ZNPCsPlus Fehler ist aufgetreten.").color(NamedTextColor.RED)));
       }
     });
   }
