@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "dev.slne.spawn"
-version = "1.21.4-1.0.0-SNAPSHOT"
+version = "1.21.4-1.1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -26,8 +26,6 @@ repositories {
     maven ("https://repo.pyr.lol/snapshots") {
         name = "pyrSnapshots"
     }
-
-
 }
 
 dependencies {
@@ -35,8 +33,7 @@ dependencies {
     compileOnly ("dev.jorel:commandapi-bukkit-core:9.7.0")
     compileOnly("lol.pyr:znpcsplus-api:2.1.0-SNAPSHOT")
 
-    implementation ("com.github.stefvanschie.inventoryframework:IF:0.10.19")
-    implementation("com.github.ben-manes.caffeine:caffeine:3.1.8")
+    implementation("com.github.stefvanschie.inventoryframework:IF:0.10.19")
 }
 
 paper {
@@ -45,10 +42,10 @@ paper {
     apiVersion = "1.21"
     authors = listOf("red")
     prefix = "SpawnTrader"
-    version = "1.21.4-1.0.0-SNAPSHOT"
+    version = "1.21.4-1.1.0-SNAPSHOT"
 
 
-    serverDependencies{
+    serverDependencies {
         register("CommandAPI") {
             load = PaperPluginDescription.RelativeLoadOrder.BEFORE
             required = true
@@ -65,18 +62,11 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(21))
     }
-
-    withSourcesJar()
-    withJavadocJar()
 }
 
-tasks.compileJava{
+tasks.compileJava {
     options.encoding = Charsets.UTF_8.name()
     options.compilerArgs.add("-parameters")
-}
-
-tasks.javadoc {
-    options.encoding = Charsets.UTF_8.name()
 }
 
 tasks.shadowJar {
