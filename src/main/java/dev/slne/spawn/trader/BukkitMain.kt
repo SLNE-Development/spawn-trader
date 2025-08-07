@@ -46,24 +46,17 @@ class BukkitMain : JavaPlugin() {
         }
     }
 
-    fun getCooldown(player: Player, trade: Trade?): Long {
+    fun getCooldown(player: Player, trade: Trade): Long {
         val pdc = player.persistentDataContainer
 
-        when (trade) {
-            is FrameTrade -> pdc.get<Long, Long>(cooldownKeyTradeFrame, PersistentDataType.LONG)
-                ?: return Long.MIN_VALUE
-
-            is LightTrade -> pdc.get<Long, Long>(cooldownKeyTradeLight, PersistentDataType.LONG)
-                ?: return Long.MIN_VALUE
-
-            is GlobeTrade -> pdc.get<Long, Long>(cooldownKeyTradeGlobe, PersistentDataType.LONG)
-                ?: return Long.MIN_VALUE
-
-            else -> return Long.MIN_VALUE
-        }
-
-        return Long.MIN_VALUE
+        return when (trade) {
+            is FrameTrade -> pdc.get(cooldownKeyTradeFrame, PersistentDataType.LONG)
+            is LightTrade -> pdc.get(cooldownKeyTradeLight, PersistentDataType.LONG)
+            is GlobeTrade -> pdc.get(cooldownKeyTradeGlobe, PersistentDataType.LONG)
+            else -> null
+        } ?: Long.MIN_VALUE
     }
+
 
     fun getFormattedCooldown(player: Player, trade: Trade): String {
         val remainingMillis = this.getCooldown(player, trade) - System.currentTimeMillis()
