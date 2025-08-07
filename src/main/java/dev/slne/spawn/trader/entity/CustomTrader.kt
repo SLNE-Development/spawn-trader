@@ -1,20 +1,20 @@
-package dev.slne.spawn.trader.entity;
+package dev.slne.spawn.trader.entity
 
-import org.bukkit.Location;
+import org.bukkit.Location
 
 /**
  * The interface Custom trader.
  */
-public interface CustomTrader {
-  /**
-   * Spawn.
-   *
-   * @param location the location
-   */
-  boolean spawn(Location location, String name);
+interface CustomTrader {
+    /**
+     * Spawn.
+     *
+     * @param location the location
+     */
+    fun spawn(location: Location, name: String): Boolean
 
-  /**
-   * Clear.
-   */
-  boolean clear(String name);
+    /**
+     * Clear.
+     */
+    fun clear(name: String): Boolean
 }

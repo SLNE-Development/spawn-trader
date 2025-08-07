@@ -1,45 +1,31 @@
-package dev.slne.spawn.trader.manager.object.impl;
+package dev.slne.spawn.trader.manager.trade.impl
 
-import dev.slne.spawn.trader.manager.object.Trade;
-import dev.slne.spawn.trader.util.ItemBuilder;
+import dev.slne.spawn.trader.manager.trade.Trade
+import dev.slne.surf.surfapi.bukkit.api.builder.buildItem
+import dev.slne.surf.surfapi.core.api.util.mutableObjectListOf
+import org.bukkit.Material
 
-import it.unimi.dsi.fastutil.objects.ObjectList;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+class LightTrade : Trade {
+    override fun requirements() = mutableObjectListOf(
+        buildItem(Material.EMERALD, 5) {},
+        buildItem(Material.REDSTONE_LAMP, 20) {}
+    )
 
-/**
- * The type Light trade.
- */
-public class LightTrade implements Trade {
+    override fun rewards() = mutableObjectListOf(buildItem(Material.LIGHT, 20) {})
 
-  @Override
-  public ObjectList<ItemStack> requirements() {
-    return ObjectList.of(new ItemBuilder(Material.EMERALD, 5).build(),
-        new ItemBuilder(Material.REDSTONE_LAMP, 20).build());
-  }
+    override fun id(): Int {
+        return 1
+    }
 
-  @Override
-  public ObjectList<ItemStack> rewards() {
-    return ObjectList.of(new ItemBuilder(Material.LIGHT, 20).build());
-  }
+    override fun name(): String {
+        return "light-block"
+    }
 
-  @Override
-  public Integer id() {
-    return 1;
-  }
+    override fun rewardMessage(): String {
+        return "Danke für den Einkauf von 20x Licht-Blöcken!"
+    }
 
-  @Override
-  public String name() {
-    return "light-block";
-  }
-
-  @Override
-  public String rewardMessage() {
-    return "Danke f\u00FCr den Einkauf von 20x Licht-Bl\u00F6cken!";
-  }
-
-  @Override
-  public Long cooldown() {
-    return 75600000L;
-  }
+    override fun cooldown(): Long {
+        return 75600000L
+    }
 }

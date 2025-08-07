@@ -1,82 +1,93 @@
-package dev.slne.spawn.trader.command.subcommand;
+package dev.slne.spawn.trader.command.subcommand
 
-import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.ArgumentSuggestions;
-import dev.jorel.commandapi.arguments.CustomArgument;
-import dev.jorel.commandapi.arguments.LongArgument;
-import dev.jorel.commandapi.arguments.PlayerArgument;
-import dev.jorel.commandapi.arguments.StringArgument;
+import dev.jorel.commandapi.CommandAPICommand
+import dev.jorel.commandapi.arguments.Argument
+import dev.jorel.commandapi.arguments.ArgumentSuggestions
+import dev.jorel.commandapi.arguments.CustomArgument
+import dev.jorel.commandapi.arguments.StringArgument
+import dev.jorel.commandapi.kotlindsl.longArgument
+import dev.jorel.commandapi.kotlindsl.playerArgument
+import dev.jorel.commandapi.kotlindsl.playerExecutor
+import dev.slne.spawn.trader.manager.trade.Trade
+import dev.slne.spawn.trader.manager.trade.impl.FrameTrade
+import dev.slne.spawn.trader.manager.trade.impl.GlobeTrade
+import dev.slne.spawn.trader.manager.trade.impl.LightTrade
+import dev.slne.spawn.trader.plugin
+import dev.slne.spawn.trader.util.TraderPermissionRegistry
+import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
+import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
+import dev.slne.surf.surfapi.core.api.util.mutableObjectListOf
+import org.bukkit.command.CommandSender
 
-import dev.slne.spawn.trader.SpawnTrader;
-import dev.slne.spawn.trader.manager.object.Trade;
-import dev.slne.spawn.trader.manager.object.impl.FrameTrade;
-import dev.slne.spawn.trader.manager.object.impl.GlobeTrade;
-import dev.slne.spawn.trader.manager.object.impl.LightTrade;
+class SpawnTraderSetCooldownCommand(name: String) : CommandAPICommand(name) {
+    private val availableTrades = mutableObjectListOf<String>()
 
-import it.unimi.dsi.fastutil.objects.ObjectArrayList;
-import it.unimi.dsi.fastutil.objects.ObjectList;
+    init {
+        withPermission(TraderPermissionRegistry.COMMAND_SET_COOLDOWN)
+        playerArgument("target")
+        withArguments(
+            tradeArgument().replaceSuggestions(
+                ArgumentSuggestions.strings<CommandSender?>(
+                    "light-block",
+                    "invisible-item-frame",
+                    "globe-banner-pattern"
+                )
+            )
+        )
+        longArgument("amount")
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import org.bukkit.entity.Player;
+        playerExecutor { player, args ->
+            val target = args.getOrDefaultUnchecked("target", player)
+            val amount = args.getUnchecked<Long>("amount") ?: return@playerExecutor
+            val trade = args.getUnchecked<Trade>("trade") ?: return@playerExecutor
 
-/**
- * The type Spawn trader set cooldown command.
- */
-public class SpawnTraderSetCooldownCommand extends CommandAPICommand {
-  private final ObjectList<String> availableTrades = new ObjectArrayList<>();
+            availableTrades.add(LightTrade().name())
+            availableTrades.add(FrameTrade().name())
+            availableTrades.add(GlobeTrade().name())
 
-  /**
-   * Instantiates a new Spawn trader set cooldown command.
-   *
-   * @param name the name
-   */
-  public SpawnTraderSetCooldownCommand(String name) {
-    super(name);
+            if (!availableTrades.contains(trade.name())) {
+                player.sendText {
+                    appendPrefix()
+                    error("Der Trade ")
+                    variableValue(trade.name())
+                    error(" existiert nicht.")
+                }
+            }
 
-    withArguments(new PlayerArgument("target"));
-    withArguments(tradeArgument().replaceSuggestions(ArgumentSuggestions.strings("light-block", "invisible-item-frame", "globe-banner-pattern")));
-    withArguments(new LongArgument("amount"));
+            val currentTime = System.currentTimeMillis()
+            val cooldownEndTime = currentTime + amount
 
-    executesPlayer((player, args) -> {
-      final Player target = args.getOrDefaultUnchecked("target", player);
-      final Long amount = args.getUnchecked("amount");
+            plugin.saveCooldown(target, trade, cooldownEndTime)
+            player.sendText {
+                appendPrefix()
+                success("Der Cooldown für den Trade ")
+                variableValue(trade.name())
+                success(" wurde für den Spieler ")
+                variableValue(target.name)
+                success(" auf ")
+                variableValue(amount.toString())
+                success(" Millisekunden gesetzt.")
+            }
+        }
+    }
 
-      Trade trade = args.getUnchecked("trade");
+    private fun tradeArgument(): Argument<Trade> {
+        return CustomArgument(
+            StringArgument("trade")
+        ) { info: CustomArgument.CustomArgumentInfo<String> ->
+            val trade = Trade.getTrade(info.input())
+                ?: throw CustomArgument.CustomArgumentException.fromAdventureComponent(
+                    buildText {
+                        appendPrefix()
+                        error("Der Trade wurde nicht gefunden.")
+                    }
+                )
 
-      availableTrades.add(new LightTrade().name());
-      availableTrades.add(new FrameTrade().name());
-      availableTrades.add(new GlobeTrade().name());
-
-      if (!availableTrades.contains(trade.name())) {
-        throw CommandAPI.failWithString("Der Trade wurde nicht gefunden!");
-      }
-
-      if (target == null) {
-        player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Spieler wurde nicht gefunden.").color(NamedTextColor.RED)));
-        return;
-      }
-
-      final long currentTime = System.currentTimeMillis();
-      final long cooldownEndTime = currentTime + amount.longValue();
-
-      SpawnTrader.instance().saveCooldown(target, trade, cooldownEndTime);
-      player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Cooldown f\u00FCr den Trade wurde erfolgreich neu gesetzt.")));
-    });
-  }
-
-  private Argument<Trade> tradeArgument() {
-    return new CustomArgument<>(new StringArgument("trade"), info -> {
-      Trade trade = Trade.getTrade(info.input());
-
-      if (trade == null) {
-        throw CustomArgument.CustomArgumentException.fromAdventureComponent(
-            Component.text("Der Trade wurde nicht gefunden.").color(NamedTextColor.RED));
-      } else {
-        return trade;
-      }
-    });
-  }
+            trade
+        }.replaceSuggestions(
+            ArgumentSuggestions.strings {
+                availableTrades.toTypedArray()
+            }
+        )
+    }
 }

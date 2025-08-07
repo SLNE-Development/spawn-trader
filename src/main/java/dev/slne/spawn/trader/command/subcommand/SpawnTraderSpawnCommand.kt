@@ -1,27 +1,28 @@
-package dev.slne.spawn.trader.command.subcommand;
+package dev.slne.spawn.trader.command.subcommand
 
-import dev.jorel.commandapi.CommandAPICommand;
-import dev.slne.spawn.trader.SpawnTrader;
-import dev.slne.spawn.trader.entity.impl.TraderNPC;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import dev.jorel.commandapi.CommandAPICommand
+import dev.jorel.commandapi.kotlindsl.playerExecutor
+import dev.slne.spawn.trader.plugin
+import dev.slne.spawn.trader.util.TraderPermissionRegistry
+import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
 
-/**
- * The type Spawn trader spawn command.
- */
-public class SpawnTraderSpawnCommand extends CommandAPICommand {
-  private final SpawnTrader instance = SpawnTrader.instance();
-  private final TraderNPC traderNPC = this.instance.traderNPC();
+class SpawnTraderSpawnCommand(commandName: String) : CommandAPICommand(commandName) {
+    private val traderNPC = plugin.traderNPC
 
-  public SpawnTraderSpawnCommand(String commandName) {
-    super(commandName);
-
-    executesPlayer((player, args) -> {
-      if(traderNPC.spawn(player.getLocation(), "spawn-trader")) {
-        player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Trader wurde gespawned.").color(NamedTextColor.GREEN)));
-      } else  {
-        player.sendMessage(SpawnTrader.prefix().append(Component.text("Der Trader existiert bereits, oder ein ZNPCsPlus-Fehler ist aufgetreten.").color(NamedTextColor.RED)));
-      }
-    });
-  }
+    init {
+        withPermission(TraderPermissionRegistry.COMMAND_SPAWN)
+        playerExecutor { player, _ ->
+            if (traderNPC.spawn(player.location, "spawn-trader")) {
+                player.sendText {
+                    appendPrefix()
+                    success("Der Trader wurde gespawned.")
+                }
+            } else {
+                player.sendText {
+                    appendPrefix()
+                    error("Der Trader existiert bereits, oder ein surf-npc-Fehler ist aufgetreten.")
+                }
+            }
+        }
+    }
 }

@@ -1,39 +1,35 @@
-package dev.slne.spawn.trader.manager.object.impl;
+package dev.slne.spawn.trader.manager.trade.impl
 
-import dev.slne.spawn.trader.manager.object.Trade;
-import dev.slne.spawn.trader.util.ItemBuilder;
-import it.unimi.dsi.fastutil.objects.ObjectList;
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
+import dev.slne.spawn.trader.manager.trade.Trade
+import dev.slne.surf.surfapi.bukkit.api.builder.buildItem
+import dev.slne.surf.surfapi.core.api.util.mutableObjectListOf
+import it.unimi.dsi.fastutil.objects.ObjectList
+import org.bukkit.Material
+import org.bukkit.inventory.ItemStack
 
-public class GlobeTrade implements Trade {
-    @Override
-    public ObjectList<ItemStack> requirements() {
-        return ObjectList.of(new ItemBuilder(Material.EMERALD, 20).build(), new ItemBuilder(Material.PAPER, 20).build());
+class GlobeTrade : Trade {
+    override fun requirements() = mutableObjectListOf(
+        buildItem(Material.EMERALD, 20) {},
+        buildItem(Material.PAPER, 20) {}
+    )
+
+    override fun rewards(): ObjectList<ItemStack> {
+        return mutableObjectListOf(buildItem(Material.GLOBE_BANNER_PATTERN) {})
     }
 
-    @Override
-    public ObjectList<ItemStack> rewards() {
-        return ObjectList.of(new ItemBuilder(Material.GLOBE_BANNER_PATTERN).build());
+    override fun id(): Int {
+        return 2
     }
 
-    @Override
-    public Integer id() {
-        return 2;
+    override fun name(): String {
+        return "globe-banner-pattern"
     }
 
-    @Override
-    public String name() {
-        return "globe-banner-pattern";
+    override fun rewardMessage(): String {
+        return "Danke für den Einkauf von einer Globe Banner Vorlage!"
     }
 
-    @Override
-    public String rewardMessage() {
-        return "Danke f\u00FCr den Einkauf von einer Globe Banner Vorlage!";
-    }
-
-    @Override
-    public Long cooldown() {
-        return 75600000L;
+    override fun cooldown(): Long {
+        return 75600000L
     }
 }

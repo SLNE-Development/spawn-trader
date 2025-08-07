@@ -1,206 +1,179 @@
-package dev.slne.spawn.trader.manager;
+package dev.slne.spawn.trader.manager
 
-import dev.slne.spawn.trader.SpawnTrader;
-import dev.slne.spawn.trader.manager.object.Trade;
+import dev.slne.spawn.trader.manager.trade.Trade
+import dev.slne.spawn.trader.plugin
+import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
+import net.kyori.adventure.sound.Sound
+import net.kyori.adventure.text.Component
+import net.kyori.adventure.text.format.NamedTextColor
+import net.kyori.adventure.text.format.TextDecoration
+import org.bukkit.entity.Player
+import org.bukkit.inventory.ItemStack
+import java.util.function.Consumer
 
-import java.util.HashMap;
+object TradeManager {
+    fun setCooldown(player: Player, trade: Trade) {
+        val currentTime = System.currentTimeMillis()
+        val cooldownEndTime: Long = currentTime + trade.cooldown()
 
-import lombok.Getter;
-import lombok.experimental.Accessors;
-
-import net.kyori.adventure.sound.Sound;
-import net.kyori.adventure.sound.Sound.Emitter;
-import net.kyori.adventure.sound.Sound.Source;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-
-import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-
-/**
- * The type Trade manager.
- */
-@Getter
-@Accessors(fluent = true)
-public class TradeManager {
-  /**
-   * Sets cooldown.
-   *
-   * @param player the player
-   * @param trade  the trade
-   */
-  public void setCooldown(Player player, Trade trade) {
-    final long currentTime = System.currentTimeMillis();
-    final long cooldownEndTime = currentTime + trade.cooldown();
-
-    this.saveCooldown(player, trade, cooldownEndTime);
-  }
-
-  /**
-   * Is on cooldown boolean.
-   *
-   * @param player the player
-   * @param trade  the trade
-   * @return the boolean
-   */
-  public boolean isOnCooldown(Player player, Trade trade) {
-      return this.getCooldown(player, trade) >= System.currentTimeMillis();
-  }
-
-  /**
-   * Remove requirements.
-   *
-   * @param player the player
-   * @param trade  the trade
-   */
-  public void removeRequirements(Player player, Trade trade) {
-    if (this.hasEnoughRequirements(player, trade)) {
-      trade.requirements().forEach(item -> this.removeItem(player, item));
-    } else {
-      player.sendMessage(SpawnTrader.prefix().append(Component.text("Du benötigst weitere Materialien!").color(NamedTextColor.RED)));
-    }
-  }
-
-  /**
-   * Has enough requirements boolean.
-   *
-   * @param player the player
-   * @param trade  the trade
-   * @return the boolean
-   */
-  public boolean hasEnoughRequirements(Player player, Trade trade) {
-    for (final ItemStack requirement : trade.requirements()) {
-      if (!this.hasItem(player, requirement)) {
-        return false;
-      }
+        this.saveCooldown(player, trade, cooldownEndTime)
     }
 
-    return true;
-  }
-
-  /**
-   * Give reward boolean.
-   *
-   * @param player the player
-   * @param trade  the trade
-   */
-  public void giveReward(Player player, Trade trade) {
-    player.sendMessage(SpawnTrader.prefix().append(Component.text(trade.rewardMessage())));
-
-    for (ItemStack reward : trade.rewards()) {
-      HashMap<Integer, ItemStack> remainingItems = player.getInventory().addItem(reward);
-
-      for (ItemStack stack : remainingItems.values()) {
-        player.getWorld().dropItem(player.getLocation(), stack).setOwner(player.getUniqueId());
-      }
-    }
-  }
-
-  /**
-   * Has item boolean.
-   *
-   * @param player the player
-   * @param item   the item
-   * @return the boolean
-   */
-  private boolean hasItem(Player player, ItemStack item) {
-    int found = 0;
-
-    for (final ItemStack stack : player.getInventory().getContents()) {
-      if (stack != null) {
-        if (stack.isSimilar(item)) {
-          found += stack.getAmount();
-
-          if (found >= item.getAmount()) {
-            return true;
-          }
-        }
-      }
+    fun isOnCooldown(player: Player, trade: Trade): Boolean {
+        return this.getCooldown(player, trade) >= System.currentTimeMillis()
     }
 
-    return false;
-  }
-
-  /**
-   * Remove item.
-   *
-   * @param player the player
-   * @param item   the item
-   */
-  private void removeItem(Player player, ItemStack item) {
-    int amountToRemove = item.getAmount();
-
-    for (ItemStack stack : player.getInventory().getContents()) {
-      if (stack != null && stack.isSimilar(item)) {
-        int stackAmount = stack.getAmount();
-
-        if (stackAmount > amountToRemove) {
-          stack.setAmount(stackAmount - amountToRemove);
-          break;
+    fun removeRequirements(player: Player, trade: Trade) {
+        if (this.hasEnoughRequirements(player, trade)) {
+            trade.requirements()
+                .forEach(Consumer { item: ItemStack? -> this.removeItem(player, item!!) })
         } else {
-          amountToRemove -= stackAmount;
-          stack.setAmount(0);
+            player.sendText {
+                appendPrefix()
+                error("Du hast nicht genügend Rohstoffe für diesen Handel!")
+            }
+        }
+    }
+
+    fun hasEnoughRequirements(player: Player, trade: Trade): Boolean {
+        for (requirement in trade.requirements()) {
+            if (!this.hasItem(player, requirement)) {
+                return false
+            }
         }
 
-        if (amountToRemove <= 0) {
-          break;
+        return true
+    }
+
+    fun giveReward(player: Player, trade: Trade) {
+        player.sendText {
+            appendPrefix()
+            success(trade.rewardMessage())
         }
-      }
-    }
-  }
 
-  /**
-   * Buy.
-   *
-   * @param player the player
-   * @param trade  the trade
-   */
-  public void buy(Player player, Trade trade) {
-    if (this.isOnCooldown(player, trade)) {
-      player.sendActionBar(Component.text("ʙɪᴛᴛᴇ ᴋᴏᴍᴍᴇ ɪɴ ", NamedTextColor.RED)
-          .append(Component.text(SpawnTrader.instance().getFormattedCooldown(player, trade), NamedTextColor.GOLD))
-          .append(Component.text(" ᴡɪᴇᴅᴇʀ, ᴀᴋᴛᴜᴇʟʟ ʜᴀʙᴇ ɪᴄʜ ɴɪᴄʜᴛѕ ꜰüʀ ᴅɪᴄʜ.", NamedTextColor.RED)).decorate(TextDecoration.BOLD)
-      );
-      player.playSound(Sound.sound(org.bukkit.Sound.ENTITY_VILLAGER_NO, Source.PLAYER, 1f, 1f), Emitter.self());
-      player.sendMessage(SpawnTrader.prefix().append(Component.text("Bitte komme in " + SpawnTrader.instance().getFormattedCooldown(player, trade) + " wieder, aktuell habe ich nichts für dich.").color(NamedTextColor.RED)));
-      return;
+        for (reward in trade.rewards()) {
+            val remainingItems: HashMap<Int, ItemStack> = player.inventory.addItem(reward)
+
+            for (stack in remainingItems.values) {
+                player.world.dropItem(player.location, stack).owner = player.uniqueId
+            }
+        }
     }
 
-    if (this.hasEnoughRequirements(player, trade)) {
-      this.giveReward(player, trade);
-      this.removeRequirements(player, trade);
-      this.setCooldown(player, trade);
+    private fun hasItem(player: Player, item: ItemStack): Boolean {
+        var found = 0
 
-      player.playSound(Sound.sound(org.bukkit.Sound.ENTITY_WANDERING_TRADER_YES, Source.PLAYER, 1f, 1f), Emitter.self());
-    } else {
-      player.sendActionBar(Component.text("ᴅᴜ ʜᴀѕᴛ ɴɪᴄʜᴛ ɢᴇɴüɢᴇɴᴅ ʀᴏʜѕᴛᴏꜰꜰᴇ.", NamedTextColor.RED).decorate(TextDecoration.BOLD));
-      player.playSound(Sound.sound(org.bukkit.Sound.BLOCK_ANVIL_DESTROY, Source.PLAYER, 1f, 1f), Emitter.self());
-      player.sendMessage(SpawnTrader.prefix().append(Component.text("Du benötigst weitere Materialien!").color(NamedTextColor.RED)));
+        for (stack in player.inventory.contents) {
+            if (stack != null) {
+                if (stack.isSimilar(item)) {
+                    found += stack.amount
+
+                    if (found >= item.amount) {
+                        return true
+                    }
+                }
+            }
+        }
+
+        return false
     }
-  }
 
-  /**
-   * Saves a cooldown to a trade.
-   *
-   * @param player the player
-   * @param trade  the trade
-   * @param time  the time
-   */
+    private fun removeItem(player: Player, item: ItemStack) {
+        var amountToRemove = item.amount
 
-  public void saveCooldown(Player player, Trade trade, Long time){
-    SpawnTrader.instance().saveCooldown(player, trade, time);
-  }
+        for (stack in player.inventory.contents) {
+            if (stack != null && stack.isSimilar(item)) {
+                val stackAmount: Int = stack.amount
 
-  /**
-   * Get a cooldown from a trade by a player.
-   *
-   * @param player the player
-   * @param trade  the trade
-   * @return the cooldown from pdc - 0x8000000000000000L if not existing
-   */
+                if (stackAmount > amountToRemove) {
+                    stack.amount = stackAmount - amountToRemove
+                    break
+                } else {
+                    amountToRemove -= stackAmount
+                    stack.amount = 0
+                }
 
-  public Long getCooldown(Player player, Trade trade) {
-    return SpawnTrader.instance().getCooldown(player, trade);
-  }
+                if (amountToRemove <= 0) {
+                    break
+                }
+            }
+        }
+    }
+
+    fun buy(player: Player, trade: Trade) {
+        if (this.isOnCooldown(player, trade)) {
+            player.sendActionBar(
+                Component.text("ʙɪᴛᴛᴇ ᴋᴏᴍᴍᴇ ɪɴ ", NamedTextColor.RED)
+                    .append(
+                        Component.text(
+                            plugin.getFormattedCooldown(player, trade),
+                            NamedTextColor.GOLD
+                        )
+                    )
+                    .append(
+                        Component.text(
+                            " ᴡɪᴇᴅᴇʀ, ᴀᴋᴛᴜᴇʟʟ ʜᴀʙᴇ ɪᴄʜ ɴɪᴄʜᴛѕ ꜰüʀ ᴅɪᴄʜ.",
+                            NamedTextColor.RED
+                        )
+                    ).decorate(TextDecoration.BOLD)
+            )
+            player.playSound(
+                Sound.sound(
+                    org.bukkit.Sound.ENTITY_VILLAGER_NO,
+                    Sound.Source.PLAYER,
+                    1f,
+                    1f
+                ), Sound.Emitter.self()
+            )
+            player.sendText {
+                appendPrefix()
+                error("Bitte komme in ")
+                variableValue(plugin.getFormattedCooldown(player, trade))
+                error(" wieder, aktuell habe ich nichts für dich.")
+            }
+            return
+        }
+
+        if (this.hasEnoughRequirements(player, trade)) {
+            this.giveReward(player, trade)
+            this.removeRequirements(player, trade)
+            this.setCooldown(player, trade)
+
+            player.playSound(
+                Sound.sound(
+                    org.bukkit.Sound.ENTITY_WANDERING_TRADER_YES,
+                    Sound.Source.PLAYER,
+                    1f,
+                    1f
+                ), Sound.Emitter.self()
+            )
+        } else {
+            player.sendActionBar(
+                Component.text(
+                    "ᴅᴜ ʜᴀѕᴛ ɴɪᴄʜᴛ ɢᴇɴüɢᴇɴᴅ ʀᴏʜѕᴛᴏꜰꜰᴇ.",
+                    NamedTextColor.RED
+                ).decorate(TextDecoration.BOLD)
+            )
+            player.playSound(
+                Sound.sound(
+                    org.bukkit.Sound.BLOCK_ANVIL_DESTROY,
+                    Sound.Source.PLAYER,
+                    1f,
+                    1f
+                ), Sound.Emitter.self()
+            )
+            player.sendText {
+                appendPrefix()
+                error("Du hast nicht genügend Rohstoffe.")
+            }
+        }
+    }
+
+    fun saveCooldown(player: Player, trade: Trade, time: Long) {
+        plugin.saveCooldown(player, trade, time)
+    }
+
+    fun getCooldown(player: Player, trade: Trade): Long {
+        return plugin.getCooldown(player, trade)
+    }
 }
