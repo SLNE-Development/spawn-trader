@@ -21,10 +21,3 @@ surfPaperPluginApi {
         registerRequired("surf-npc-bukkit")
     }
 }
-
-tasks.shadowJar {
-    relocate(
-        "com.github.stefvanschie.inventoryframework",
-        "dev.slne.spawn.trader.inventoryframework"
-    )
-}

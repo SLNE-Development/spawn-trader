@@ -127,26 +127,23 @@ class SpawnTraderGUI(private val player: Player) :
             }
 
             buildLore {
+                emptyLine()
+
                 line {
-                    append(Component.empty())
+                    spacer("Preis: ")
+                    text("20x Redstone-Lampe und 5x Smaragd")
                 }
+
+                emptyLine()
+
                 line {
-                    text("Preis: ", NamedTextColor.GRAY)
-                        .append(text("20x Redstone-Lampe und 5x Smaragd", NamedTextColor.WHITE))
-                }
-                line {
-                    append(Component.empty())
-                }
-                line {
-                    text(
-                        "Eine magische und unsichtbare Lampe, mit Lichtstärke 15.",
-                        NamedTextColor.GRAY
+                    spacer(
+                        "Eine magische und unsichtbare Lampe, mit Lichtstärke 15."
                     )
                 }
                 line {
-                    text(
-                        "Erzeugt von einem alten Zauberer, der in der Tiefe des Vulkans lebte.",
-                        NamedTextColor.GRAY
+                    spacer(
+                        "Erzeugt von einem alten Zauberer, der in der Tiefe des Vulkans lebte."
                     )
                 }
             }
@@ -160,30 +157,24 @@ class SpawnTraderGUI(private val player: Player) :
             }
 
             buildLore {
-                line {
-                    append(Component.empty())
-                }
+                emptyLine()
 
                 line {
-                    text("Preis: ", NamedTextColor.GRAY)
-                        .append(text("20x Item-Rahmen und 5x Smaragd", NamedTextColor.WHITE))
+                    spacer("Preis: ")
+                    text("20x Item-Rahmen und 5x Smaragd")
                 }
 
-                line {
-                    append(Component.empty())
-                }
+                emptyLine()
 
                 line {
-                    text(
-                        "Ein fast unsichtbarer Rahmen für geheime Präsentationen.",
-                        NamedTextColor.GRAY
+                    spacer(
+                        "Ein fast unsichtbarer Rahmen für geheime Präsentationen."
                     )
                 }
 
                 line {
-                    text(
-                        "Wurde mit Illusionsmagie von alten Bibliothekaren verzaubert.",
-                        NamedTextColor.GRAY
+                    spacer(
+                        "Wurde mit Illusionsmagie von alten Bibliothekaren verzaubert."
                     )
                 }
             }
@@ -198,31 +189,21 @@ class SpawnTraderGUI(private val player: Player) :
             }
 
             buildLore {
+                emptyLine()
+
                 line {
-                    append(Component.empty())
+                    spacer("Preis: ")
+                    variableValue("20x Papier und 20x Smaragd")
+                }
+
+                emptyLine()
+
+                line {
+                    spacer("Ein uraltes Symbol, das einst nur Königen vorbehalten war.")
                 }
 
                 line {
-                    text("Preis: ", NamedTextColor.GRAY)
-                        .append(text("20x Papier und 20x Smaragd", NamedTextColor.WHITE))
-                }
-
-                line {
-                    append(Component.empty())
-                }
-
-                line {
-                    text(
-                        "Ein uraltes Symbol, das einst nur Königen vorbehalten war.",
-                        NamedTextColor.GRAY
-                    )
-                }
-
-                line {
-                    text(
-                        "Gefunden in den Ruinen einer vergessenen Zivilisation.",
-                        NamedTextColor.GRAY
-                    )
+                    spacer("Gefunden in den Ruinen einer vergessenen Zivilisation.")
                 }
             }
 

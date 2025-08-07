@@ -35,6 +35,7 @@ object TraderNPC : CustomTrader {
                 y = location.y
                 z = location.z
             }
+            persistent = true
         }
 
         if (result.isSuccess()) {
