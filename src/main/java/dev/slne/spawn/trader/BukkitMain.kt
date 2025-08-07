@@ -2,6 +2,7 @@ package dev.slne.spawn.trader
 
 import dev.slne.spawn.trader.command.SpawnTraderCommand
 import dev.slne.spawn.trader.entity.EntityInteractListener
+import dev.slne.spawn.trader.entity.impl.TraderNPC
 import dev.slne.spawn.trader.manager.trade.Trade
 import dev.slne.spawn.trader.manager.trade.impl.FrameTrade
 import dev.slne.spawn.trader.manager.trade.impl.GlobeTrade
@@ -22,6 +23,8 @@ class BukkitMain : JavaPlugin() {
     override fun onEnable() {
         SpawnTraderCommand("spawntrader").register()
         EntityInteractListener().register()
+
+        TraderNPC.load()
     }
 
 

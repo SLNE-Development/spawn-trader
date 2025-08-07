@@ -18,6 +18,12 @@ object TraderNPC : CustomTrader {
     private const val NPC_UNIQUE_NAME = "spawn-trader"
     lateinit var npc: Npc
 
+    fun load() {
+        surfNpcApi.getNpc(NPC_UNIQUE_NAME)?.let {
+            npc = it
+        }
+    }
+
     override fun spawn(location: Location, name: String): Boolean {
         val result = npc(plugin) {
             displayName = {
