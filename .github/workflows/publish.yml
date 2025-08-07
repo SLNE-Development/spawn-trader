@@ -39,7 +39,7 @@ jobs:
         uses: actions/setup-java@v4
         with:
           distribution: 'graalvm'
-          java-version: '21'
+          java-version: '24'
 
       - name: Build all modules with Gradle
         run: ./gradlew build shadowJar --parallel --no-scan
