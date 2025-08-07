@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "dev.slne.spawn.trader"
-version = "1.21.7-1.2.0-SNAPSHOT"
+version = findProperty("version")!!
 
 dependencies {
     compileOnly("dev.slne.surf.npc:surf-npc-api:1.21.7-1.4.0-SNAPSHOT")
