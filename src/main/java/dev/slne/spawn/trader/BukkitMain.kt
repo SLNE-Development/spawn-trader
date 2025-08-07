@@ -2,7 +2,6 @@ package dev.slne.spawn.trader
 
 import dev.slne.spawn.trader.command.SpawnTraderCommand
 import dev.slne.spawn.trader.entity.EntityInteractListener
-import dev.slne.spawn.trader.manager.TradeManager
 import dev.slne.spawn.trader.manager.trade.Trade
 import dev.slne.spawn.trader.manager.trade.impl.FrameTrade
 import dev.slne.spawn.trader.manager.trade.impl.GlobeTrade
@@ -20,13 +19,8 @@ class BukkitMain : JavaPlugin() {
     private val cooldownKeyTradeLight = NamespacedKey(this, "trader-cooldown-light-block")
     private val cooldownKeyTradeGlobe = NamespacedKey(this, "trader-cooldown-globe")
 
-    lateinit var tradeManager: TradeManager
-
     override fun onEnable() {
-        this.tradeManager = TradeManager()
-
         SpawnTraderCommand("spawntrader").register()
-
         EntityInteractListener().register()
     }
 

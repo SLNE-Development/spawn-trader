@@ -4,6 +4,7 @@ import com.github.stefvanschie.inventoryframework.adventuresupport.ComponentHold
 import com.github.stefvanschie.inventoryframework.gui.GuiItem
 import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.OutlinePane
+import com.github.stefvanschie.inventoryframework.pane.Pane
 import dev.slne.spawn.trader.manager.TradeManager
 import dev.slne.spawn.trader.manager.trade.impl.FrameTrade
 import dev.slne.spawn.trader.manager.trade.impl.GlobeTrade
