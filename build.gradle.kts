@@ -1,78 +1,23 @@
-import net.minecrell.pluginyml.paper.PaperPluginDescription
+import dev.slne.surf.surfapi.gradle.util.registerRequired
 
 plugins {
-    `kotlin-dsl`
-    `maven-publish`
-    `java-library`
-
-    id("net.minecrell.plugin-yml.paper") version "0.6.0"
-    id("com.gradleup.shadow") version "9.0.0-beta13"
-    id ("io.freefair.lombok") version "8.10"
+    id("dev.slne.surf.surfapi.gradle.paper-plugin")
 }
 
-group = "dev.slne.spawn"
-version = "1.21.4-1.1.0-SNAPSHOT"
-
-repositories {
-    mavenCentral()
-    gradlePluginPortal()
-
-    maven("https://repo.papermc.io/repository/maven-public/") {
-        name = "papermc-repo"
-    }
-
-    maven("https://repo.codemc.org/repository/maven-public/")
-
-    maven ("https://repo.pyr.lol/snapshots") {
-        name = "pyrSnapshots"
-    }
-}
+group = "dev.slne.spawn.trader"
+version = "1.21.7-1.2.0-SNAPSHOT"
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.21.4-R0.1-SNAPSHOT")
-    compileOnly ("dev.jorel:commandapi-bukkit-core:9.7.0")
-    compileOnly("lol.pyr:znpcsplus-api:2.1.0-SNAPSHOT")
-
-    implementation("com.github.stefvanschie.inventoryframework:IF:0.10.19")
+    compileOnly("dev.slne.surf.npc:surf-npc-api:1.21.7-1.4.0-SNAPSHOT")
 }
 
-paper {
-    name = "spawn-trader"
-    main = "dev.slne.spawn.trader.SpawnTrader"
-    apiVersion = "1.21"
-    authors = listOf("red")
-    prefix = "SpawnTrader"
-    version = "1.21.4-1.1.0-SNAPSHOT"
+surfPaperPluginApi {
+    mainClass("dev.slne.spawn.trader.BukkitMain")
+    generateLibraryLoader(false)
 
+    authors.add("red")
 
     serverDependencies {
-        register("CommandAPI") {
-            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
-            required = true
-        }
-
-        register("ZNPCsPlus") {
-            load = PaperPluginDescription.RelativeLoadOrder.BEFORE
-            required = false
-        }
+        registerRequired("surf-npc-bukkit")
     }
-}
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21))
-    }
-}
-
-tasks.compileJava {
-    options.encoding = Charsets.UTF_8.name()
-    options.compilerArgs.add("-parameters")
-}
-
-tasks.shadowJar {
-    relocate("com.github.stefvanschie.inventoryframework", "dev.slne.spawn.trader.inventoryframework")
-}
-
-tasks.build {
-    dependsOn("shadowJar")
 }
