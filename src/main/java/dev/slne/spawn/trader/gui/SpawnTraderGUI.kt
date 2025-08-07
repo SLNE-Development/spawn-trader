@@ -131,7 +131,7 @@ class SpawnTraderGUI(private val player: Player) :
 
                 line {
                     spacer("Preis: ")
-                    text("20x Redstone-Lampe und 5x Smaragd")
+                    variableValue("20x Redstone-Lampe und 5x Smaragd")
                 }
 
                 emptyLine()
@@ -161,7 +161,7 @@ class SpawnTraderGUI(private val player: Player) :
 
                 line {
                     spacer("Preis: ")
-                    text("20x Item-Rahmen und 5x Smaragd")
+                    variableValue("20x Item-Rahmen und 5x Smaragd")
                 }
 
                 emptyLine()

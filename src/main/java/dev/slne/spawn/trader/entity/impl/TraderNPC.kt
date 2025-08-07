@@ -52,7 +52,7 @@ object TraderNPC : CustomTrader {
         val spawnTraderNpc = surfNpcApi.getNpc(NPC_UNIQUE_NAME) ?: return false
         spawnTraderNpc.delete()
 
-        return false
+        return true
     }
 
     const val STRING_NAME: String = "<b><gradient:#9F0B00:#4C504F>ѕᴘᴀᴡɴ ᴛʀᴀᴅᴇʀ"
