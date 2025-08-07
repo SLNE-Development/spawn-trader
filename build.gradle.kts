@@ -7,7 +7,7 @@ version = "1.21.7-1.2.0-SNAPSHOT"
 
 dependencies {
     implementation("com.github.stefvanschie.inventoryframework:IF:0.10.19")
-    compileOnly("dev.slne.surf.npc:surf-npc-api:1.21.7-1.3.1-SNAPSHOT")
+    compileOnly("dev.slne.surf.npc:surf-npc-api:1.21.7-1.4.0-SNAPSHOT")
 }
 
 surfPaperPluginApi {
