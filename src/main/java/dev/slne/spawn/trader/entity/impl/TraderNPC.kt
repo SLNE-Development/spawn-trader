@@ -24,17 +24,14 @@ object TraderNPC : CustomTrader {
         }
     }
 
-    override fun spawn(location: Location, name: String): Boolean {
+    override suspend fun spawn(location: Location, name: String): Boolean {
+        val requestedSkin = surfNpcApi.getSkin("Trader")
         val result = npc(plugin) {
             displayName = {
                 append(COMPONENT_NAME)
             }
             uniqueName = NPC_UNIQUE_NAME
-            skin {
-                ownerName = "idk"
-                value = TEXTURE
-                signature = this@TraderNPC.SIGNATURE
-            }
+            skin = requestedSkin
             location {
                 world = location.world.name
                 x = location.x

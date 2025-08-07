@@ -11,7 +11,7 @@ interface CustomTrader {
      *
      * @param location the location
      */
-    fun spawn(location: Location, name: String): Boolean
+    suspend fun spawn(location: Location, name: String): Boolean
 
     /**
      * Clear.
