@@ -36,23 +36,14 @@ class SpawnTraderSetCooldownCommand(name: String) : CommandAPICommand(name) {
         )
         longArgument("amount")
 
+        availableTrades.add(LightTrade().name())
+        availableTrades.add(FrameTrade().name())
+        availableTrades.add(GlobeTrade().name())
+
         playerExecutor { player, args ->
             val target = args.getOrDefaultUnchecked("target", player)
             val amount = args.getUnchecked<Long>("amount") ?: return@playerExecutor
             val trade = args.getUnchecked<Trade>("trade") ?: return@playerExecutor
-
-            availableTrades.add(LightTrade().name())
-            availableTrades.add(FrameTrade().name())
-            availableTrades.add(GlobeTrade().name())
-
-            if (!availableTrades.contains(trade.name())) {
-                player.sendText {
-                    appendPrefix()
-                    error("Der Trade ")
-                    variableValue(trade.name())
-                    error(" existiert nicht.")
-                }
-            }
 
             val currentTime = System.currentTimeMillis()
             val cooldownEndTime = currentTime + amount
