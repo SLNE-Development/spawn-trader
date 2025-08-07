@@ -41,7 +41,7 @@ object TraderNPC : CustomTrader {
             npc = (result as NpcCreationResult.Success).npc
         }
 
-        return true
+        return result.isSuccess()
     }
 
     override fun clear(name: String): Boolean {
