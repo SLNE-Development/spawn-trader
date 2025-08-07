@@ -1,3 +1,5 @@
+import dev.slne.surf.surfapi.gradle.util.registerRequired
+
 plugins {
     id("dev.slne.surf.surfapi.gradle.paper-plugin")
 }
@@ -13,8 +15,13 @@ dependencies {
 surfPaperPluginApi {
     mainClass("dev.slne.spawn.trader.BukkitMain")
     generateLibraryLoader(false)
+    foliaSupported(true)
 
     authors.add("red")
+    
+    serverDependencies {
+        registerRequired("surf-npc-bukkit")
+    }
 }
 
 tasks.shadowJar {
