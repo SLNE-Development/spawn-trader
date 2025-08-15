@@ -6,6 +6,7 @@ import com.github.stefvanschie.inventoryframework.gui.type.ChestGui
 import com.github.stefvanschie.inventoryframework.pane.OutlinePane
 import com.github.stefvanschie.inventoryframework.pane.Pane
 import dev.slne.spawn.trader.manager.TradeManager
+import dev.slne.spawn.trader.manager.trade.impl.BushTrade
 import dev.slne.spawn.trader.manager.trade.impl.FrameTrade
 import dev.slne.spawn.trader.manager.trade.impl.GlobeTrade
 import dev.slne.spawn.trader.manager.trade.impl.LightTrade
@@ -34,19 +35,22 @@ class SpawnTraderGUI(private val player: Player) :
         addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
     }
 
-    private val lightStatusPane = OutlinePane(2, 3, 1, 1)
-    private val frameStatusPane = OutlinePane(6, 3, 1, 1)
-    private val globeStatusPane = OutlinePane(4, 3, 1, 1)
+    private val lightStatusPane = OutlinePane(1, 3, 1, 1)
+    private val frameStatusPane = OutlinePane(5, 3, 1, 1)
+    private val globeStatusPane = OutlinePane(3, 3, 1, 1)
+    private val bushStatusPane = OutlinePane(7, 3, 1, 1)
 
     private val frameTrade: FrameTrade = FrameTrade()
     private val lightTrade: LightTrade = LightTrade()
     private val globeTrade: GlobeTrade = GlobeTrade()
+    private val bushTrade: BushTrade = BushTrade()
 
     init {
 
-        val lightPane = OutlinePane(2, 2, 1, 1, Pane.Priority.LOW)
-        val framePane = OutlinePane(6, 2, 1, 1, Pane.Priority.LOW)
-        val globePane = OutlinePane(4, 2, 1, 1, Pane.Priority.LOW)
+        val lightPane = OutlinePane(1, 2, 1, 1, Pane.Priority.LOW)
+        val globePane = OutlinePane(3, 2, 1, 1, Pane.Priority.LOW)
+        val framePane = OutlinePane(5, 2, 1, 1, Pane.Priority.LOW)
+        val bushPane = OutlinePane(7, 2, 1, 1, Pane.Priority.LOW)
         val footer = OutlinePane(0, 5, 9, 1, Pane.Priority.LOW)
         val header = OutlinePane(0, 0, 9, 1, Pane.Priority.LOW)
 
@@ -81,13 +85,20 @@ class SpawnTraderGUI(private val player: Player) :
             TradeManager.buy(player, globeTrade)
             SpawnTraderGUI(player).show(player)
         })
+        bushPane.addItem(GuiItem(FIREFLY_BUSH_STACK) {
+            TradeManager.buy(player, bushTrade)
+            SpawnTraderGUI(player).show(player)
+        })
+
 
         this.addPane(framePane)
         this.addPane(lightPane)
+        this.addPane(bushPane)
         this.addPane(globePane)
         this.addPane(frameStatusPane)
         this.addPane(lightStatusPane)
         this.addPane(globeStatusPane)
+        this.addPane(bushStatusPane)
         this.addPane(header)
         this.addPane(footer)
 
@@ -111,6 +122,12 @@ class SpawnTraderGUI(private val player: Player) :
             frameStatusPane.addItem(GuiItem(locked))
         } else {
             frameStatusPane.addItem(GuiItem(available))
+        }
+
+        if (TradeManager.isOnCooldown(player, bushTrade)) {
+            bushStatusPane.addItem(GuiItem(locked))
+        } else {
+            bushStatusPane.addItem(GuiItem(available))
         }
 
         if (TradeManager.isOnCooldown(player, globeTrade)) {
@@ -204,6 +221,32 @@ class SpawnTraderGUI(private val player: Player) :
 
                 line {
                     spacer("Gefunden in den Ruinen einer vergessenen Zivilisation.")
+                }
+            }
+
+            addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ADDITIONAL_TOOLTIP)
+        }
+        val FIREFLY_BUSH_STACK = buildItem(Material.FIREFLY_BUSH) {
+            displayName {
+                text("1x Glühwürmchenbusch", NamedTextColor.YELLOW)
+            }
+
+            buildLore {
+                emptyLine()
+
+                line {
+                    spacer("Preis: ")
+                    variableValue("20x Gras und 20x Smaragd")
+                }
+
+                emptyLine()
+
+                line {
+                    spacer("Ein seltener Busch, dessen Blätter in der Nacht zu leuchten beginnen.")
+                }
+
+                line {
+                    spacer("Er soll aus einem Samen gewachsen sein, den ein Stern einst fallen ließ.")
                 }
             }
 

@@ -30,7 +30,8 @@ class SpawnTraderSetCooldownCommand(name: String) : CommandAPICommand(name) {
                 ArgumentSuggestions.strings<CommandSender?>(
                     "light-block",
                     "invisible-item-frame",
-                    "globe-banner-pattern"
+                    "globe-banner-pattern",
+                    "firefly-bush"
                 )
             )
         )
