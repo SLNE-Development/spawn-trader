@@ -4,6 +4,7 @@ import dev.slne.spawn.trader.command.SpawnTraderCommand
 import dev.slne.spawn.trader.entity.EntityInteractListener
 import dev.slne.spawn.trader.entity.impl.TraderNPC
 import dev.slne.spawn.trader.manager.trade.Trade
+import dev.slne.spawn.trader.manager.trade.impl.BushTrade
 import dev.slne.spawn.trader.manager.trade.impl.FrameTrade
 import dev.slne.spawn.trader.manager.trade.impl.GlobeTrade
 import dev.slne.spawn.trader.manager.trade.impl.LightTrade
@@ -19,6 +20,7 @@ class BukkitMain : JavaPlugin() {
     private val cooldownKeyTradeFrame = NamespacedKey(this, "trader-cooldown-item-frame")
     private val cooldownKeyTradeLight = NamespacedKey(this, "trader-cooldown-light-block")
     private val cooldownKeyTradeGlobe = NamespacedKey(this, "trader-cooldown-globe")
+    private val cooldownKeyFireflyBush = NamespacedKey(this, "trader-cooldown-bush")
 
     override fun onEnable() {
         SpawnTraderCommand("spawntrader").register()
@@ -43,6 +45,10 @@ class BukkitMain : JavaPlugin() {
             is GlobeTrade -> {
                 pdc.set(cooldownKeyTradeGlobe, PersistentDataType.LONG, time)
             }
+
+            is BushTrade -> {
+                pdc.set(cooldownKeyFireflyBush, PersistentDataType.LONG, time)
+            }
         }
     }
 
@@ -53,6 +59,7 @@ class BukkitMain : JavaPlugin() {
             is FrameTrade -> pdc.get(cooldownKeyTradeFrame, PersistentDataType.LONG)
             is LightTrade -> pdc.get(cooldownKeyTradeLight, PersistentDataType.LONG)
             is GlobeTrade -> pdc.get(cooldownKeyTradeGlobe, PersistentDataType.LONG)
+            is BushTrade -> pdc.get(cooldownKeyFireflyBush, PersistentDataType.LONG)
             else -> null
         } ?: Long.MIN_VALUE
     }

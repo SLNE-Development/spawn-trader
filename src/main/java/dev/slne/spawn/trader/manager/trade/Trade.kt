@@ -1,5 +1,6 @@
 package dev.slne.spawn.trader.manager.trade
 
+import dev.slne.spawn.trader.manager.trade.impl.BushTrade
 import dev.slne.spawn.trader.manager.trade.impl.FrameTrade
 import dev.slne.spawn.trader.manager.trade.impl.GlobeTrade
 import dev.slne.spawn.trader.manager.trade.impl.LightTrade
@@ -66,6 +67,10 @@ interface Trade {
 
                 "globe-banner-pattern" -> {
                     return GlobeTrade()
+                }
+
+                "firefly-bush" -> {
+                    return BushTrade()
                 }
 
                 else -> {
