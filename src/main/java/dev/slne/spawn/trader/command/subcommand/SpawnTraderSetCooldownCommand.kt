@@ -13,7 +13,7 @@ import dev.slne.spawn.trader.manager.trade.impl.FrameTrade
 import dev.slne.spawn.trader.manager.trade.impl.GlobeTrade
 import dev.slne.spawn.trader.manager.trade.impl.LightTrade
 import dev.slne.spawn.trader.plugin
-import dev.slne.spawn.trader.util.TraderPermissionRegistry
+import dev.slne.spawn.trader.util.PermissionRegistry
 import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
 import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
 import dev.slne.surf.surfapi.core.api.util.mutableObjectListOf
@@ -23,7 +23,7 @@ class SpawnTraderSetCooldownCommand(name: String) : CommandAPICommand(name) {
     private val availableTrades = mutableObjectListOf<String>()
 
     init {
-        withPermission(TraderPermissionRegistry.COMMAND_SET_COOLDOWN)
+        withPermission(PermissionRegistry.COMMAND_SET_COOLDOWN)
         playerArgument("target")
         withArguments(
             tradeArgument().replaceSuggestions(

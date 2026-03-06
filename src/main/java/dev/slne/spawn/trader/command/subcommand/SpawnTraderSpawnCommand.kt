@@ -5,12 +5,12 @@ import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.playerExecutor
 import dev.slne.spawn.trader.entity.impl.TraderNPC
 import dev.slne.spawn.trader.plugin
-import dev.slne.spawn.trader.util.TraderPermissionRegistry
+import dev.slne.spawn.trader.util.PermissionRegistry
 import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
 
 class SpawnTraderSpawnCommand(commandName: String) : CommandAPICommand(commandName) {
     init {
-        withPermission(TraderPermissionRegistry.COMMAND_SPAWN)
+        withPermission(PermissionRegistry.COMMAND_SPAWN)
         playerExecutor { player, _ ->
             player.sendText {
                 appendPrefix()

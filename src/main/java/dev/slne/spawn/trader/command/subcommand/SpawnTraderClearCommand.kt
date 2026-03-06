@@ -3,12 +3,12 @@ package dev.slne.spawn.trader.command.subcommand
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.playerExecutor
 import dev.slne.spawn.trader.entity.impl.TraderNPC
-import dev.slne.spawn.trader.util.TraderPermissionRegistry
+import dev.slne.spawn.trader.util.PermissionRegistry
 import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
 
 class SpawnTraderClearCommand(name: String) : CommandAPICommand(name) {
     init {
-        withPermission(TraderPermissionRegistry.COMMAND_CLEAR)
+        withPermission(PermissionRegistry.COMMAND_CLEAR)
         playerExecutor { player, _ ->
             if (TraderNPC.clear("spawn-trader")) {
                 player.sendText {
