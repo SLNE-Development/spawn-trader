@@ -16,20 +16,28 @@ fun spawnTraderCommand() = commandTree("spawnTrader") {
             val isVisible = traderVisibilityService.visible
 
             if (isVisible) {
+                val fullTime = TimeTask.world.fullTime
+                val currentDay = (fullTime / 24000).toInt()
+                val dayStartTick = currentDay * 24000L
+                val dayEndTick = dayStartTick + 24000L
+
+                val remainingTicks = dayEndTick - fullTime
+                val remainingSeconds = remainingTicks / 20
+                val remainingMinutes = remainingSeconds / 60
+                val remainingHours = remainingMinutes / 60
+                val minutesPart = remainingMinutes % 60
+
                 sender.sendText {
                     appendInfoPrefix()
-                    info("Der Spawn-Trader ist derzeit sichtbar.")
+                    info("Der Spawn-Trader ist derzeit sichtbar und verschwindet in ${remainingHours}h ${minutesPart}m Echtzeit.")
                 }
             } else {
                 val fullTime = TimeTask.world.fullTime
-
                 val currentDay = (fullTime / 24000).toInt()
                 val nextVisibleDay = ((currentDay / 10) + 1) * 10
                 val nextVisibleTick = nextVisibleDay * 24000L
 
                 val remainingTicks = nextVisibleTick - fullTime
-                val remainingDays = nextVisibleDay - currentDay
-
                 val realSeconds = remainingTicks / 20
                 val realMinutes = realSeconds / 60
                 val realHours = realMinutes / 60
@@ -37,7 +45,7 @@ fun spawnTraderCommand() = commandTree("spawnTrader") {
 
                 sender.sendText {
                     appendInfoPrefix()
-                    info("Der Spawn-Trader erscheint in $remainingDays Minecraft-Tagen (${realHours}h ${minutesPart}m Echtzeit).")
+                    info("Der Spawn-Trader erscheint in ${nextVisibleDay - currentDay} Minecraft-Tagen (${realHours}h ${minutesPart}m Echtzeit), solange es nicht regnet.")
                 }
             }
         }
