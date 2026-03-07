@@ -21,6 +21,6 @@ surfPaperPluginApi {
 
     serverDependencies {
         registerRequired("surf-npc-paper")
-        registerRequired("surf-transaction-paper-server")
+        registerRequired("surf-transaction-paper")
     }
 }
