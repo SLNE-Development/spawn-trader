@@ -14,6 +14,7 @@ dependencies {
 surfPaperPluginApi {
     mainClass("dev.slne.spawn.trader.PaperMain")
     generateLibraryLoader(false)
+    foliaSupported(true)
 
     authors.add("red")
 

@@ -7,7 +7,4 @@ object PermissionRegistry : PermissionRegistry() {
     const val PERMISSION_PREFIX_COMMAND = "$PERMISSION_PREFIX.command"
 
     val COMMAND = create(PERMISSION_PREFIX_COMMAND)
-    val COMMAND_SPAWN = create("$PERMISSION_PREFIX_COMMAND.spawn")
-    val COMMAND_CLEAR = create("$PERMISSION_PREFIX_COMMAND.clear")
-    val COMMAND_SET_COOLDOWN = create("$PERMISSION_PREFIX_COMMAND.setCooldown")
 }

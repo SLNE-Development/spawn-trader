@@ -10,6 +10,10 @@ import org.bukkit.event.Listener
 object NpcInteractListener : Listener {
     @EventHandler
     fun onNpcInteract(event: NpcInteractEvent) {
+        if (!event.npc.uniqueName.startsWith("spawn_trader_")) {
+            return
+        }
+
         if (traderVisibilityService.visible) {
             viewFrame.open(SpawnTraderView::class.java, event.player)
         }

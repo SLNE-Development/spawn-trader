@@ -1,7 +1,9 @@
 package dev.slne.spawn.trader
 
 import com.github.shynixn.mccoroutine.folia.SuspendingJavaPlugin
+import dev.slne.spawn.trader.command.spawnTraderCommand
 import dev.slne.spawn.trader.gui.SpawnTraderView
+import dev.slne.spawn.trader.listener.ConnectionListener
 import dev.slne.spawn.trader.listener.NpcInteractListener
 import dev.slne.spawn.trader.papi.PapiExpansion
 import dev.slne.spawn.trader.service.traderVisibilityService
@@ -22,7 +24,10 @@ class PaperMain : SuspendingJavaPlugin() {
         traderVisibilityService.create()
         papiHook.register(PapiExpansion)
 
+        spawnTraderCommand()
+
         NpcInteractListener.register()
+        ConnectionListener.register()
         TimeTask.create()
     }
 
