@@ -20,9 +20,7 @@ object TimeTask {
             if (day != lastDay) {
                 lastDay = day
 
-                if (world.isClearWeather) {
-                    traderVisibilityService.onNewSunnyDay(day)
-                }
+                traderVisibilityService.onNewDay(day)
             }
         }, 0L, 3L, TimeUnit.SECONDS)
     }

@@ -18,12 +18,28 @@ import org.bukkit.entity.EntityType
 
 val traderVisibilityService = TraderVisibilityService()
 
+private val leaveMessages = listOf(
+    "Der geheimnisvolle Händler zieht sich in die Schatten zurück...",
+    "Ein leiser Wind weht über den Spawn, der Händler ist verschwunden...",
+    "Der Wanderhändler verlässt den Spawn und verschwindet in der Ferne...",
+    "Die Präsenz des Händlers verblasst – er hat den Spawn verlassen...",
+    "Mit einem letzten Rascheln verschwindet der Händler aus dem Spawn..."
+)
+
+private val appearMessages = listOf(
+    "Ein geheimnisvoller Händler ist am Spawn erschienen!",
+    "Aus den Schatten tritt ein wandernder Händler am Spawn hervor...",
+    "Ein fremder Händler hat den Spawn betreten...",
+    "Ein leises Rascheln kündigt die Ankunft eines Händlers am Spawn an...",
+    "Der Wanderhändler ist am Spawn eingetroffen!"
+)
+
 class TraderVisibilityService {
     var visible = false
 
     val npcs = mutableObject2ObjectMapOf<String, Npc>()
 
-    fun onNewSunnyDay(day: Int) {
+    fun onNewDay(day: Int) {
         if (isVisible(day)) {
             if (!visible) {
                 showNpc()
@@ -49,7 +65,7 @@ class TraderVisibilityService {
 
     private fun getCurrentDay() = (TimeTask.world.fullTime / 24000).toInt()
 
-    private fun isVisible(day: Int): Boolean = day % 10 == 0
+    private fun isVisible(day: Int): Boolean = day % 10 == 0 && TimeTask.world.isClearWeather
 
     private fun showNpc() {
         SpawnTraderLocations.entries.forEach {
@@ -73,8 +89,8 @@ class TraderVisibilityService {
 
         Bukkit.broadcast(buildText {
             appendInfoPrefix()
-            info("Der Spawn-Trader ist erschienen!")
-        }) // TODO: Random mystery message from a list of messages
+            info(appearMessages.random())
+        })
     }
 
     private fun hideNpc() {
@@ -93,8 +109,8 @@ class TraderVisibilityService {
 
         Bukkit.broadcast(buildText {
             appendInfoPrefix()
-            info("Der Spawn-Trader ist verschwunden!")
-        }) // TODO: Random mystery message from a list of messages
+            info(leaveMessages.random())
+        })
     }
 
     enum class SpawnTraderLocations(
