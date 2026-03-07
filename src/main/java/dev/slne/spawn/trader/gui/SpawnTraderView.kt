@@ -1,5 +1,8 @@
 package dev.slne.spawn.trader.gui
 
+import com.github.shynixn.mccoroutine.folia.launch
+import dev.slne.spawn.trader.plugin
+import dev.slne.spawn.trader.service.traderTradeService
 import dev.slne.spawn.trader.trades.Trades
 import dev.slne.surf.surfapi.bukkit.api.builder.buildLore
 import dev.slne.surf.surfapi.bukkit.api.builder.displayName
@@ -30,11 +33,34 @@ object SpawnTraderView : View() {
 
     override fun onFirstRender(render: RenderContext) {
         render.layoutSlot('O', outlineItem)
-        render.layoutSlot('-', closeItem)
-        render.layoutSlot('A', frameItem)
-        render.layoutSlot('B', lightBlockItem)
-        render.layoutSlot('C', globeBannerPatternItem)
-        render.layoutSlot('D', fireflyBushItem)
+        render.layoutSlot('-', closeItem).onClick { click ->
+            click.playGeneralClickSound()
+            click.closeForPlayer()
+        }
+        render.layoutSlot('A', frameItem).onClick { onClick ->
+            onClick.playGeneralClickSound()
+            plugin.launch {
+                traderTradeService.buy(Trades.INVISIBLE_ITEM_FRAME, onClick.player)
+            }
+        }
+        render.layoutSlot('B', lightBlockItem).onClick { onClick ->
+            onClick.playGeneralClickSound()
+            plugin.launch {
+                traderTradeService.buy(Trades.LIGHT_BLOCK, onClick.player)
+            }
+        }
+        render.layoutSlot('C', globeBannerPatternItem).onClick { onClick ->
+            onClick.playGeneralClickSound()
+            plugin.launch {
+                traderTradeService.buy(Trades.GLOBE_BANNER_PATTERN, onClick.player)
+            }
+        }
+        render.layoutSlot('D', fireflyBushItem).onClick { onClick ->
+            onClick.playGeneralClickSound()
+            plugin.launch {
+                traderTradeService.buy(Trades.FIREFLY_BUSH, onClick.player)
+            }
+        }
     }
 
     private val frameItem = Trades.INVISIBLE_ITEM_FRAME.singleItem.clone().apply {

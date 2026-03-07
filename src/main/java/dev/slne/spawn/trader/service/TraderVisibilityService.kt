@@ -1,5 +1,6 @@
 package dev.slne.spawn.trader.service
 
+import dev.slne.spawn.trader.gui.SpawnTraderView
 import dev.slne.spawn.trader.task.TimeTask
 import dev.slne.surf.npc.api.dsl.npc
 import dev.slne.surf.npc.api.npc.Npc
@@ -9,6 +10,7 @@ import dev.slne.surf.surfapi.core.api.font.toSmallCaps
 import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
 import dev.slne.surf.surfapi.core.api.util.mutableObject2ObjectMapOf
 import dev.slne.surf.surfapi.core.api.util.toObjectSet
+import me.devnatan.inventoryframework.context.RenderContext
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit
 import org.bukkit.Location
@@ -78,6 +80,15 @@ class TraderVisibilityService {
     private fun hideNpc() {
         npcs.forEach {
             it.value.delete()
+        }
+
+        Bukkit.getOnlinePlayers().forEach {
+            val openChestInv =
+                it.openInventory.topInventory.holder as? RenderContext ?: return@forEach
+
+            if (openChestInv.root is SpawnTraderView) {
+                it.closeInventory()
+            }
         }
 
         Bukkit.broadcast(buildText {
