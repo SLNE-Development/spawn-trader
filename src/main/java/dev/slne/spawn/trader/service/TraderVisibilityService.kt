@@ -7,7 +7,6 @@ import dev.slne.surf.npc.api.npc.skin.NpcSkin
 import dev.slne.surf.npc.api.npc.skin.NpcSkinPart
 import dev.slne.surf.surfapi.core.api.font.toSmallCaps
 import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
-import dev.slne.surf.surfapi.core.api.util.emptyObjectSet
 import dev.slne.surf.surfapi.core.api.util.mutableObject2ObjectMapOf
 import dev.slne.surf.surfapi.core.api.util.toObjectSet
 import net.kyori.adventure.text.format.TextDecoration
@@ -37,6 +36,20 @@ class TraderVisibilityService {
     }
 
     fun create() {
+        if (isVisible(getCurrentDay())) {
+            showNpc()
+            visible = true
+        } else {
+            hideNpc()
+            visible = false
+        }
+    }
+
+    private fun getCurrentDay() = (TimeTask.world.fullTime / 24000).toInt()
+
+    private fun isVisible(day: Int): Boolean = day % 10 == 0
+
+    private fun showNpc() {
         SpawnTraderLocations.entries.forEach {
             val npc = npc {
                 displayName {
@@ -51,27 +64,9 @@ class TraderVisibilityService {
                     "OncYZhOLAQlU7jN5hTMw8U7MQsPS0rpUqlMGD6owDnsxcd4A099LBU1TtHJQTv/YsX+YO/cwduXud7xbZeky2seIiI9S203xCFS/SdvpS7DJH0Znpz3dqGUXndVkC19PRIyaaPDhL6LsTVt7P2ACnbI0LFZkZxd/YK0zqJPFN4XHM7G9bk3R+EXPRoAfQ5otXvW5RwSjetI4bvYL0aJrU5BrWkuIvbdxyUxLtaxEKivqBVjB82/mnf9YiDyX09pVmcmoYGNiu+ggThV2wb4Ru2JBzirA5q0f9v+QTrScIqa0dL28Va9QToQ/OwE16PGJEIPeN0ZBgYjbIjvKED1EzCgoi6xgsWqrAu/8aUesyroTlal8xfsUqAL7lx9crQKbd3A+R8wXrHgaTbYY+qbZIF47lP0/BVyCdNwn1FncoY2iK9pgchp3Qp/2puVgFjw0eVEChET83yFEowAa+aHpNu4ZLs4maJQXwkp4Ai+PBTJxBWHYN0OdgVDBNAGByt7z/zuF8Al8OqANj1oBR7y1Xdsy0K8T63aO02BfrvFWqjoLOXAaRDtS164J5b6siESQ9ZnI26/UEYMy+DpeI9sf2jmwnNliO2FpKVjH+TQHHVmLlvGVeIcNdV+nEu7PAQZyaL9kL2V4OSzj302zpktrPs5Nxe+KxY+qtJLDiVFFM8I=",
                     NpcSkinPart.entries.toObjectSet()
                 )
-                viewers = emptyObjectSet()
             }
 
             npcs[it.name] = npc
-        }
-
-        if (isVisible(getCurrentDay())) {
-            showNpc()
-            visible = true
-        } else {
-            visible = false
-        }
-    }
-
-    private fun getCurrentDay() = (TimeTask.world.fullTime / 24000).toInt()
-
-    private fun isVisible(day: Int): Boolean = day % 10 == 0
-
-    private fun showNpc() {
-        npcs.forEach { npc ->
-            npc.value.hide()
         }
 
         Bukkit.broadcast(buildText {
@@ -81,13 +76,13 @@ class TraderVisibilityService {
     }
 
     private fun hideNpc() {
-        npcs.values.forEach {
-            it.hide()
+        npcs.forEach {
+            it.value.delete()
         }
 
         Bukkit.broadcast(buildText {
             appendInfoPrefix()
-            info("Der Spawn-Trader ist erschienen!")
+            info("Der Spawn-Trader ist verschwunden!")
         }) // TODO: Random mystery message from a list of messages
     }
 
