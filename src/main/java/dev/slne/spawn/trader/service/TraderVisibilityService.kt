@@ -120,15 +120,15 @@ class TraderVisibilityService {
         yaw: Float,
         pitch: Float
     ) {
-        CENTRAL(0.0, 100.0, 0.0, 0f, 0f),
-        NORTH(0.0, 100.0, -25000.0, 0f, 0f),
-        NORTH_EAST(25000.0, 100.0, -25000.0, -45f, 0f),
-        NORTH_WEST(-25000.0, 100.0, -25000.0, 45f, 0f),
-        SOUTH(0.0, 100.0, 25000.0, 180f, 0f),
-        SOUTH_EAST(25000.0, 100.0, 25000.0, -135f, 0f),
-        SOUTH_WEST(-25000.0, 100.0, 25000.0, 135f, 0f),
-        EAST(25000.0, 100.0, 0.0, -90f, 0f),
-        WEST(-25000.0, 100.0, 0.0, 90f, 0f);
+        CENTRAL(14.5, 73.0, 15.5, 140f, 0f),
+        NORTH(-14.5, 75.0, -24993.5, -130f, 0f),
+        NORTH_EAST(25008.5, 81.0, -25001.5, 90f, 0f),
+        NORTH_WEST(-25008.5, 71.0, -23993.5, -120f, 0f),
+        SOUTH(18.5, 116.0, 25003.5, 145f, 0f),
+        SOUTH_EAST(24998.5, 114.0, 25011.5, -135f, 0f),
+        SOUTH_WEST(-24995.5, 100.0, 25013.5, -135f, 0f),
+        EAST(25005.5, 98.0, -4.5, 45f, 0f),
+        WEST(-25005.5, 76.0, 0.5, -90f, 0f);
 
         val location = Location(TimeTask.world, x, y, z, yaw, pitch)
     }
