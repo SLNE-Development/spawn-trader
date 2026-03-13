@@ -25,7 +25,7 @@ object SpawnTraderView : View() {
                 "O       O",
                 "O  A B  O",
                 "O  C D  O",
-                "O       O",
+                "O   L   O",
                 "OOOO-OOOO"
             )
             .cancelInteractions()
@@ -59,6 +59,35 @@ object SpawnTraderView : View() {
             onClick.playGeneralClickSound()
             plugin.launch {
                 traderTradeService.buy(Trades.FIREFLY_BUSH, onClick.player)
+            }
+        }
+        render.layoutSlot('L', clockItem).onClick { click ->
+            click.playGeneralClickSound()
+            plugin.launch {
+                traderTradeService.buy(Trades.TRADER_CLOCK, click.player)
+            }
+        }
+    }
+
+    private val clockItem = plugin.spawnTradersClockItem.clone().apply {
+        displayName {
+            append(Trades.TRADER_CLOCK.displayName)
+        }
+
+        buildLore {
+            line {
+                spacer("Eine uralte Uhr...".toSmallCaps())
+            }
+            emptyLine()
+            line {
+                darkSpacer("▪")
+                appendSpace()
+                white("Preis: ".toSmallCaps())
+                variableValue("${Trades.TRADER_CLOCK.price}CC")
+            }
+            emptyLine()
+            line {
+                variableValue("Klicke, um das Item zu kaufen.".toSmallCaps())
             }
         }
     }

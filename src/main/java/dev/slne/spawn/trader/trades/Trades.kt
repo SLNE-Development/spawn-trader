@@ -1,5 +1,6 @@
 package dev.slne.spawn.trader.trades
 
+import dev.slne.spawn.trader.plugin
 import dev.slne.spawn.trader.util.traderColored
 import dev.slne.surf.surfapi.bukkit.api.builder.buildLore
 import dev.slne.surf.surfapi.core.api.font.toSmallCaps
@@ -39,5 +40,10 @@ enum class Trades(val displayName: TextComponent, val singleItem: ItemStack, val
         buildText { traderColored("Glühwürmchen-Busch".toSmallCaps(), TextDecoration.BOLD) },
         ItemType.FIREFLY_BUSH.createItemStack(),
         500
+    ),
+    TRADER_CLOCK(
+        buildText { traderColored("Händlers Uhr".toSmallCaps(), TextDecoration.BOLD) },
+        plugin.spawnTradersClockItem,
+        50000
     )
 }
