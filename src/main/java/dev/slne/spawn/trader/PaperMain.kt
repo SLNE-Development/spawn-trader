@@ -39,21 +39,19 @@ class PaperMain : SuspendingJavaPlugin() {
         TimeTask.dismount()
     }
 
-    val spawnTradersClockItem
-        get() = buildItem(Material.CLOCK) {
-            editMeta {
-                it.setEnchantmentGlintOverride(true)
-            }
+    val spawnTradersClockItem = buildItem(Material.CLOCK) {
+        editMeta {
+            it.setEnchantmentGlintOverride(true)
+        }
 
-            displayName {
-                variableValue("Händlers Uhr")
-            }
+        displayName {
+            variableValue("Händlers Uhr")
+        }
 
-            buildLore {
-                line {
-                    spacer("Eine uralte Uhr...")
-                }
-                emptyLine()
+        buildLore {
+            line {
+                spacer("Eine uralte Uhr...")
             }
         }
+    }
 }
