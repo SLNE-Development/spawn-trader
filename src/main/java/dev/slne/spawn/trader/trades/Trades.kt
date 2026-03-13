@@ -18,9 +18,8 @@ enum class Trades(val displayName: TextComponent, val singleItem: ItemStack, val
             .createItemStack("item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}]")
             .apply {
                 buildLore {
-                    emptyLine()
                     line {
-                        darkSpacer("Unsichtbar")
+                        variableValue("Unsichtbar")
                     }
                 }
             },
