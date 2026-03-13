@@ -1,8 +1,11 @@
 package dev.slne.spawn.trader.command
 
+import com.github.shynixn.mccoroutine.folia.globalRegionDispatcher
+import com.github.shynixn.mccoroutine.folia.launch
 import dev.jorel.commandapi.kotlindsl.anyExecutor
 import dev.jorel.commandapi.kotlindsl.commandTree
 import dev.jorel.commandapi.kotlindsl.literalArgument
+import dev.slne.spawn.trader.plugin
 import dev.slne.spawn.trader.service.traderVisibilityService
 import dev.slne.spawn.trader.task.TimeTask
 import dev.slne.spawn.trader.util.PermissionRegistry
@@ -46,6 +49,40 @@ fun spawnTraderCommand() = commandTree("spawnTrader") {
                 sender.sendText {
                     appendInfoPrefix()
                     info("Der Spawn-Trader erscheint in ${nextVisibleDay - currentDay} Minecraft-Tagen (${realHours}h ${minutesPart}m Echtzeit), solange es nicht regnet.")
+                }
+            }
+        }
+    }
+
+    literalArgument("skip") {
+        anyExecutor { sender, _ ->
+            val world = TimeTask.world
+            val fullTime = world.fullTime
+            val currentDay = (fullTime / 24000).toInt()
+
+            if (traderVisibilityService.visible) {
+                val nextDayStart = ((currentDay + 1) * 24000L)
+
+                plugin.launch(plugin.globalRegionDispatcher) {
+                    world.fullTime = nextDayStart
+                }
+
+                sender.sendText {
+                    appendSuccessPrefix()
+                    success("Der aktuelle Spawn-Trader-Tag wurde übersprungen.")
+                }
+            } else {
+                val nextVisibleDay = ((currentDay / 10) + 1) * 10
+                val nextVisibleTick = nextVisibleDay * 24000L
+
+                plugin.launch(plugin.globalRegionDispatcher) {
+                    world.fullTime = nextVisibleTick
+                }
+
+
+                sender.sendText {
+                    appendSuccessPrefix()
+                    success("Die Zeit wurde bis zum nächsten Spawn-Trader-Tag vorgespult.")
                 }
             }
         }

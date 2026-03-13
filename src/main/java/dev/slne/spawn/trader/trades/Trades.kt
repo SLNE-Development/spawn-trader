@@ -1,6 +1,7 @@
 package dev.slne.spawn.trader.trades
 
 import dev.slne.spawn.trader.util.traderColored
+import dev.slne.surf.surfapi.bukkit.api.builder.buildLore
 import dev.slne.surf.surfapi.core.api.font.toSmallCaps
 import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
 import net.kyori.adventure.text.TextComponent
@@ -14,7 +15,15 @@ enum class Trades(val displayName: TextComponent, val singleItem: ItemStack, val
     INVISIBLE_ITEM_FRAME(
         buildText { traderColored("Unsichtbarer Itemrahmen".toSmallCaps(), TextDecoration.BOLD) },
         Bukkit.getItemFactory()
-            .createItemStack("item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}]"),
+            .createItemStack("item_frame[entity_data={id:\"minecraft:item_frame\",Invisible:1b}]")
+            .apply {
+                buildLore {
+                    emptyLine()
+                    line {
+                        darkSpacer("Unsichtbar")
+                    }
+                }
+            },
         500
     ),
     LIGHT_BLOCK(
