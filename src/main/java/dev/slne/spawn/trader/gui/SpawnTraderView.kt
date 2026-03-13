@@ -4,6 +4,7 @@ import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.spawn.trader.plugin
 import dev.slne.spawn.trader.service.traderTradeService
 import dev.slne.spawn.trader.trades.Trades
+import dev.slne.spawn.trader.util.formatPrice
 import dev.slne.surf.surfapi.bukkit.api.builder.buildLore
 import dev.slne.surf.surfapi.bukkit.api.builder.displayName
 import dev.slne.surf.surfapi.bukkit.api.inventory.framework.titleBuilder
@@ -83,7 +84,7 @@ object SpawnTraderView : View() {
                 darkSpacer("▪")
                 appendSpace()
                 white("Preis: ".toSmallCaps())
-                variableValue("${Trades.TRADER_CLOCK.price}CC")
+                variableValue(formatPrice(Trades.TRADER_CLOCK.price))
             }
             emptyLine()
             line {
@@ -106,7 +107,7 @@ object SpawnTraderView : View() {
                 darkSpacer("▪")
                 appendSpace()
                 white("Preis: ".toSmallCaps())
-                variableValue("${Trades.INVISIBLE_ITEM_FRAME.price}CC")
+                variableValue(formatPrice(Trades.INVISIBLE_ITEM_FRAME.price))
             }
             emptyLine()
             line {
@@ -129,7 +130,7 @@ object SpawnTraderView : View() {
                 darkSpacer("▪")
                 appendSpace()
                 white("Preis: ".toSmallCaps())
-                variableValue("${Trades.LIGHT_BLOCK.price}CC")
+                variableValue(formatPrice(Trades.LIGHT_BLOCK.price))
             }
             emptyLine()
             line {
@@ -152,7 +153,7 @@ object SpawnTraderView : View() {
                 darkSpacer("▪")
                 appendSpace()
                 white("Preis: ".toSmallCaps())
-                variableValue("${Trades.GLOBE_BANNER_PATTERN.price}CC")
+                variableValue(formatPrice(Trades.GLOBE_BANNER_PATTERN.price))
             }
             emptyLine()
             line {
@@ -175,7 +176,7 @@ object SpawnTraderView : View() {
                 darkSpacer("▪")
                 appendSpace()
                 white("Preis: ".toSmallCaps())
-                variableValue("${Trades.FIREFLY_BUSH.price}CC")
+                variableValue(formatPrice(Trades.FIREFLY_BUSH.price))
             }
             emptyLine()
             line {
