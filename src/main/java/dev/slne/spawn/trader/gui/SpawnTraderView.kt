@@ -4,6 +4,7 @@ import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.spawn.trader.plugin
 import dev.slne.spawn.trader.service.traderTradeService
 import dev.slne.spawn.trader.trades.Trades
+import dev.slne.spawn.trader.util.formatPrice
 import dev.slne.surf.surfapi.bukkit.api.builder.buildLore
 import dev.slne.surf.surfapi.bukkit.api.builder.displayName
 import dev.slne.surf.surfapi.bukkit.api.inventory.framework.titleBuilder
@@ -25,7 +26,7 @@ object SpawnTraderView : View() {
                 "O       O",
                 "O  A B  O",
                 "O  C D  O",
-                "O       O",
+                "O   L   O",
                 "OOOO-OOOO"
             )
             .cancelInteractions()
@@ -61,6 +62,35 @@ object SpawnTraderView : View() {
                 traderTradeService.buy(Trades.FIREFLY_BUSH, onClick.player)
             }
         }
+        render.layoutSlot('L', clockItem).onClick { click ->
+            click.playGeneralClickSound()
+            plugin.launch {
+                traderTradeService.buy(Trades.TRADER_CLOCK, click.player)
+            }
+        }
+    }
+
+    private val clockItem = plugin.spawnTradersClockItem.clone().apply {
+        displayName {
+            append(Trades.TRADER_CLOCK.displayName)
+        }
+
+        buildLore {
+            line {
+                spacer("Eine uralte Uhr...".toSmallCaps())
+            }
+            emptyLine()
+            line {
+                darkSpacer("▪")
+                appendSpace()
+                white("Preis: ".toSmallCaps())
+                variableValue(formatPrice(Trades.TRADER_CLOCK.price))
+            }
+            emptyLine()
+            line {
+                variableValue("Klicke, um das Item zu kaufen.".toSmallCaps())
+            }
+        }
     }
 
     private val frameItem = Trades.INVISIBLE_ITEM_FRAME.singleItem.clone().apply {
@@ -77,7 +107,7 @@ object SpawnTraderView : View() {
                 darkSpacer("▪")
                 appendSpace()
                 white("Preis: ".toSmallCaps())
-                variableValue("${Trades.INVISIBLE_ITEM_FRAME.price}CC")
+                variableValue(formatPrice(Trades.INVISIBLE_ITEM_FRAME.price))
             }
             emptyLine()
             line {
@@ -100,7 +130,7 @@ object SpawnTraderView : View() {
                 darkSpacer("▪")
                 appendSpace()
                 white("Preis: ".toSmallCaps())
-                variableValue("${Trades.LIGHT_BLOCK.price}CC")
+                variableValue(formatPrice(Trades.LIGHT_BLOCK.price))
             }
             emptyLine()
             line {
@@ -123,7 +153,7 @@ object SpawnTraderView : View() {
                 darkSpacer("▪")
                 appendSpace()
                 white("Preis: ".toSmallCaps())
-                variableValue("${Trades.GLOBE_BANNER_PATTERN.price}CC")
+                variableValue(formatPrice(Trades.GLOBE_BANNER_PATTERN.price))
             }
             emptyLine()
             line {
@@ -146,7 +176,7 @@ object SpawnTraderView : View() {
                 darkSpacer("▪")
                 appendSpace()
                 white("Preis: ".toSmallCaps())
-                variableValue("${Trades.FIREFLY_BUSH.price}CC")
+                variableValue(formatPrice(Trades.FIREFLY_BUSH.price))
             }
             emptyLine()
             line {

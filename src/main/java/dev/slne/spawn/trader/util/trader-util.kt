@@ -6,3 +6,5 @@ import net.kyori.adventure.text.format.TextDecoration
 
 fun SurfComponentBuilder.traderColored(text: Any, vararg decoration: TextDecoration) =
     coloredComponent(text.toString(), TextColor.color(167, 245, 66), *decoration)
+
+fun formatPrice(price: Int) = "%,d".format(price).replace(',', '.') + "CC"
