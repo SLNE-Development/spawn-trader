@@ -36,11 +36,6 @@ enum class Trades(val displayName: TextComponent, val singleItem: ItemStack, val
         ItemType.GLOBE_BANNER_PATTERN.createItemStack(),
         1000
     ),
-    FIREFLY_BUSH(
-        buildText { traderColored("Glühwürmchen-Busch".toSmallCaps(), TextDecoration.BOLD) },
-        ItemType.FIREFLY_BUSH.createItemStack(),
-        500
-    ),
     TRADER_CLOCK(
         buildText { traderColored("Händlers Uhr".toSmallCaps(), TextDecoration.BOLD) },
         plugin.spawnTradersClockItem,

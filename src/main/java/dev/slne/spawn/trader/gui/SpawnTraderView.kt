@@ -25,8 +25,8 @@ object SpawnTraderView : View() {
                 "OOOOOOOOO",
                 "O       O",
                 "O  A B  O",
-                "O  C D  O",
-                "O   L   O",
+                "O  C L  O",
+                "O       O",
                 "OOOO-OOOO"
             )
             .cancelInteractions()
@@ -54,12 +54,6 @@ object SpawnTraderView : View() {
             onClick.playGeneralClickSound()
             plugin.launch {
                 traderTradeService.buy(Trades.GLOBE_BANNER_PATTERN, onClick.player)
-            }
-        }
-        render.layoutSlot('D', fireflyBushItem).onClick { onClick ->
-            onClick.playGeneralClickSound()
-            plugin.launch {
-                traderTradeService.buy(Trades.FIREFLY_BUSH, onClick.player)
             }
         }
         render.layoutSlot('L', clockItem).onClick { click ->
@@ -154,29 +148,6 @@ object SpawnTraderView : View() {
                 appendSpace()
                 white("Preis: ".toSmallCaps())
                 variableValue(formatPrice(Trades.GLOBE_BANNER_PATTERN.price))
-            }
-            emptyLine()
-            line {
-                variableValue("Klicke, um das Item zu kaufen.".toSmallCaps())
-            }
-        }
-    }
-
-    private val fireflyBushItem = Trades.FIREFLY_BUSH.singleItem.clone().apply {
-        displayName {
-            append(Trades.FIREFLY_BUSH.displayName)
-        }
-
-        buildLore {
-            line {
-                spacer("Glühwürmchen-Busch".toSmallCaps())
-            }
-            emptyLine()
-            line {
-                darkSpacer("▪")
-                appendSpace()
-                white("Preis: ".toSmallCaps())
-                variableValue(formatPrice(Trades.FIREFLY_BUSH.price))
             }
             emptyLine()
             line {
