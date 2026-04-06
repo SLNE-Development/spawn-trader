@@ -2,8 +2,8 @@ package dev.slne.spawn.trader.listener
 
 import dev.slne.spawn.trader.gui.SpawnTraderView
 import dev.slne.spawn.trader.service.traderVisibilityService
+import dev.slne.surf.api.paper.inventory.framework.viewFrame
 import dev.slne.surf.npc.api.event.NpcInteractEvent
-import dev.slne.surf.surfapi.bukkit.api.inventory.framework.viewFrame
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 

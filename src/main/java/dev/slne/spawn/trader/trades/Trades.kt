@@ -2,9 +2,9 @@ package dev.slne.spawn.trader.trades
 
 import dev.slne.spawn.trader.plugin
 import dev.slne.spawn.trader.util.traderColored
-import dev.slne.surf.surfapi.bukkit.api.builder.buildLore
-import dev.slne.surf.surfapi.core.api.font.toSmallCaps
-import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
+import dev.slne.surf.api.core.font.toSmallCaps
+import dev.slne.surf.api.core.messages.adventure.buildText
+import dev.slne.surf.api.paper.builder.buildLore
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Bukkit

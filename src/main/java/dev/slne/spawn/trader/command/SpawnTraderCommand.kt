@@ -9,7 +9,7 @@ import dev.slne.spawn.trader.plugin
 import dev.slne.spawn.trader.service.traderVisibilityService
 import dev.slne.spawn.trader.task.TimeTask
 import dev.slne.spawn.trader.util.PermissionRegistry
-import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
+import dev.slne.surf.api.core.messages.adventure.sendText
 
 fun spawnTraderCommand() = commandTree("spawnTrader") {
     withPermission(PermissionRegistry.COMMAND)

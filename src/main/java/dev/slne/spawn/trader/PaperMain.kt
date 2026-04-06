@@ -8,12 +8,12 @@ import dev.slne.spawn.trader.listener.TraderClockInteractListener
 import dev.slne.spawn.trader.papi.PapiExpansion
 import dev.slne.spawn.trader.service.traderVisibilityService
 import dev.slne.spawn.trader.task.TimeTask
-import dev.slne.surf.surfapi.bukkit.api.builder.buildItem
-import dev.slne.surf.surfapi.bukkit.api.builder.buildLore
-import dev.slne.surf.surfapi.bukkit.api.builder.displayName
-import dev.slne.surf.surfapi.bukkit.api.event.register
-import dev.slne.surf.surfapi.bukkit.api.hook.papi.papiHook
-import dev.slne.surf.surfapi.bukkit.api.inventory.framework.viewFrame
+import dev.slne.surf.api.paper.builder.buildItem
+import dev.slne.surf.api.paper.builder.buildLore
+import dev.slne.surf.api.paper.builder.displayName
+import dev.slne.surf.api.paper.event.register
+import dev.slne.surf.api.paper.hook.papi.SurfPaperPAPIHook
+import dev.slne.surf.api.paper.inventory.framework.viewFrame
 import org.bukkit.Material
 import org.bukkit.plugin.java.JavaPlugin
 
@@ -26,7 +26,7 @@ class PaperMain : SuspendingJavaPlugin() {
 
     override suspend fun onEnableAsync() {
         traderVisibilityService.create()
-        papiHook.register(PapiExpansion)
+        SurfPaperPAPIHook.register(PapiExpansion)
 
         spawnTraderCommand()
 

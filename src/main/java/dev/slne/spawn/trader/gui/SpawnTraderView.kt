@@ -5,10 +5,10 @@ import dev.slne.spawn.trader.plugin
 import dev.slne.spawn.trader.service.traderTradeService
 import dev.slne.spawn.trader.trades.Trades
 import dev.slne.spawn.trader.util.formatPrice
-import dev.slne.surf.surfapi.bukkit.api.builder.buildLore
-import dev.slne.surf.surfapi.bukkit.api.builder.displayName
-import dev.slne.surf.surfapi.bukkit.api.inventory.framework.titleBuilder
-import dev.slne.surf.surfapi.core.api.font.toSmallCaps
+import dev.slne.surf.api.core.font.toSmallCaps
+import dev.slne.surf.api.paper.builder.buildLore
+import dev.slne.surf.api.paper.builder.displayName
+import dev.slne.surf.api.paper.inventory.framework.titleBuilder
 import me.devnatan.inventoryframework.View
 import me.devnatan.inventoryframework.ViewConfigBuilder
 import me.devnatan.inventoryframework.context.RenderContext

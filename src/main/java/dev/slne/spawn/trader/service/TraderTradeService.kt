@@ -2,7 +2,7 @@ package dev.slne.spawn.trader.service
 
 import dev.slne.spawn.trader.trades.Trades
 import dev.slne.spawn.trader.util.formatPrice
-import dev.slne.surf.surfapi.core.api.messages.adventure.sendText
+import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.transaction.api.currency.Currency
 import dev.slne.surf.transaction.api.transaction.TransactionResult
 import dev.slne.surf.transaction.api.user.TransactionUser

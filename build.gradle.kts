@@ -1,15 +1,15 @@
-import dev.slne.surf.surfapi.gradle.util.registerRequired
+import dev.slne.surf.api.gradle.util.registerRequired
 
 plugins {
-    id("dev.slne.surf.surfapi.gradle.paper-plugin") version "1.21.11+"
+    id("dev.slne.surf.api.gradle.paper-plugin") version "+"
 }
 
 group = "dev.slne.spawn.trader"
-version = findProperty("version")!!
+version = findProperty("version") as String
 
 dependencies {
-    compileOnly("dev.slne.surf.npc:surf-npc-api:1.21.11-1.6.1-SNAPSHOT")
-    compileOnly("dev.slne.surf.transaction:surf-transaction-api:1.21.11-3.0.1")
+    compileOnly("dev.slne.surf.npc:surf-npc-api:+")
+    compileOnly("dev.slne.surf.transaction:surf-transaction-api:+")
 }
 
 surfPaperPluginApi {

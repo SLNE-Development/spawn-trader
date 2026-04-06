@@ -6,14 +6,14 @@ import com.github.shynixn.mccoroutine.folia.launch
 import dev.slne.spawn.trader.gui.SpawnTraderView
 import dev.slne.spawn.trader.plugin
 import dev.slne.spawn.trader.task.TimeTask
+import dev.slne.surf.api.core.font.toSmallCaps
+import dev.slne.surf.api.core.messages.adventure.buildText
+import dev.slne.surf.api.core.util.mutableObject2ObjectMapOf
+import dev.slne.surf.api.core.util.toObjectSet
 import dev.slne.surf.npc.api.dsl.npc
 import dev.slne.surf.npc.api.npc.Npc
 import dev.slne.surf.npc.api.npc.skin.NpcSkin
 import dev.slne.surf.npc.api.npc.skin.NpcSkinPart
-import dev.slne.surf.surfapi.core.api.font.toSmallCaps
-import dev.slne.surf.surfapi.core.api.messages.adventure.buildText
-import dev.slne.surf.surfapi.core.api.util.mutableObject2ObjectMapOf
-import dev.slne.surf.surfapi.core.api.util.toObjectSet
 import kotlinx.coroutines.withContext
 import me.devnatan.inventoryframework.context.RenderContext
 import net.kyori.adventure.text.format.TextDecoration
@@ -26,7 +26,6 @@ val traderVisibilityService = TraderVisibilityService()
 private val leaveMessages = listOf(
     "Der geheimnisvolle Händler zieht sich in die Schatten zurück...",
     "Ein leiser Wind weht über den Spawn, der Händler ist verschwunden...",
-    "Der Wanderhändler verlässt den Spawn und verschwindet in der Ferne...",
     "Die Präsenz des Händlers verblasst – er hat den Spawn verlassen...",
     "Mit einem letzten Rascheln verschwindet der Händler aus dem Spawn..."
 )
@@ -36,7 +35,6 @@ private val appearMessages = listOf(
     "Aus den Schatten tritt ein wandernder Händler am Spawn hervor...",
     "Ein fremder Händler hat den Spawn betreten...",
     "Ein leises Rascheln kündigt die Ankunft eines Händlers am Spawn an...",
-    "Der Wanderhändler ist am Spawn eingetroffen!"
 )
 
 class TraderVisibilityService {
