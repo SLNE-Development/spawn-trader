@@ -24,12 +24,12 @@ enum class Trades(val displayName: TextComponent, val singleItem: ItemStack, val
                     }
                 }
             },
-        500
+        100
     ),
     LIGHT_BLOCK(
         buildText { traderColored("Lichtblock".toSmallCaps(), TextDecoration.BOLD) },
         ItemType.LIGHT.createItemStack(),
-        250
+        50
     ),
     GLOBE_BANNER_PATTERN(
         buildText { traderColored("Globus Banner-Muster".toSmallCaps(), TextDecoration.BOLD) },
@@ -39,6 +39,6 @@ enum class Trades(val displayName: TextComponent, val singleItem: ItemStack, val
     TRADER_CLOCK(
         buildText { traderColored("Händlers Uhr".toSmallCaps(), TextDecoration.BOLD) },
         plugin.spawnTradersClockItem,
-        50000
+        10000
     )
 }
