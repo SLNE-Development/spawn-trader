@@ -1,24 +1,28 @@
 package dev.slne.spawn.trader.service
 
+import com.github.shynixn.mccoroutine.folia.entityDispatcher
+import dev.slne.spawn.trader.plugin
 import dev.slne.spawn.trader.trades.Trades
 import dev.slne.spawn.trader.util.formatPrice
 import dev.slne.surf.api.core.messages.adventure.sendText
 import dev.slne.surf.transaction.api.currency.Currency
 import dev.slne.surf.transaction.api.transaction.TransactionResult
 import dev.slne.surf.transaction.api.user.TransactionUser
-import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.withContext
 import org.bukkit.entity.Player
 import java.util.*
+import java.util.concurrent.ConcurrentHashMap
 
 val traderTradeService = TraderTradeService()
 
 class TraderTradeService {
-    private val locks = mutableMapOf<UUID, Mutex>()
+    private val inProcess = ConcurrentHashMap.newKeySet<UUID>()
 
     suspend fun buy(trade: Trades, player: Player) {
-        val mutex = locks.getOrPut(player.uniqueId) { Mutex() }
+        val uuid = player.uniqueId
+        val started = inProcess.add(uuid)
 
-        if (!mutex.tryLock()) {
+        if (!started) {
             player.sendText {
                 appendErrorPrefix()
                 error("Bitte warte, bis dein aktueller Kauf abgeschlossen ist.")
@@ -30,7 +34,7 @@ class TraderTradeService {
             val price = trade.price
 
             val result =
-                TransactionUser[player.uniqueId].withdraw(price.toBigDecimal(), Currency.default())
+                TransactionUser[uuid].withdraw(price.toBigDecimal(), Currency.default())
 
             when (result) {
                 is TransactionResult.DatabaseError -> {
@@ -55,8 +59,10 @@ class TraderTradeService {
                 }
 
                 else -> {
-                    player.inventory.addItem(trade.singleItem).forEach { (_, stack) ->
-                        player.world.dropItem(player.location, stack).owner = player.uniqueId
+                    withContext(plugin.entityDispatcher(player)) {
+                        player.inventory.addItem(trade.singleItem).forEach { (_, stack) ->
+                            player.world.dropItem(player.location, stack).owner = uuid
+                        }
                     }
 
                     player.sendText {
@@ -71,7 +77,7 @@ class TraderTradeService {
                 }
             }
         } finally {
-            mutex.unlock()
+            inProcess.remove(uuid)
         }
     }
 }
